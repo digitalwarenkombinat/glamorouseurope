@@ -1,1 +1,1 @@
-# glamorouseurope
+# GLAMorous Europe
