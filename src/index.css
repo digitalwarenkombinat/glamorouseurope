@@ -70,3 +70,9 @@ h1 {
     background-color: #ffffff;
   }
 }
+
+@media screen and (prefers-reduced-motion) { 
+  h1 {
+    animation: none;
+  }
+}
