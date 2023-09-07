@@ -14,7 +14,7 @@ export default defineConfig({
         name: "GLAMorous Europe",
         short_name: "GLAM EU",
         description: "Wir machen Kulturerbe digital erfahrbar.",
-        theme_color: "#f09",
+        theme_color: "#bc13fe",
         icons: [
           {
             src: "pwa-192x192.png",
