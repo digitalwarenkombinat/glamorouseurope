@@ -14,6 +14,15 @@
   -webkit-text-size-adjust: 100%;
 }
 
+@font-face {
+  font-family: 'BeautySchoolDropout';
+  src: url('./fonts/BeautySchoolDropout.woff2') format('woff2'),
+       url('./fonts/BeautySchoolDropout.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   margin: 0;
   display: flex;
@@ -24,12 +33,15 @@ body {
 }
 
 h1 {
+  font-family: 'BeautySchoolDropout';
+  font-size: 3rem;
   line-height: 1.1;
   font-weight: 400;
   animation: pulsate 1.5s infinite alternate;  
   border: 0.2rem solid #fff;
   border-radius: 2rem;
   padding: 0.4em;
+  margin: 0;
   box-shadow: 0 0 .2rem #fff,
               0 0 .2rem #fff,
               0 0 2rem #bc13fe,
