@@ -1,5 +1,9 @@
-#root {
-  margin: 0 auto;
+.app {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .neonText {

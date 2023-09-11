@@ -1,7 +1,11 @@
 import "./App.css";
 
 function App() {
-  return <h1 className="neonText">GLAMorous Europe</h1>;
+  return (
+    <div className="app">
+      <h1 className="neonText">GLAMorouS Europe</h1>
+    </div>
+  );
 }
 
 export default App;
