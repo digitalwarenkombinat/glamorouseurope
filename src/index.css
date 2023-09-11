@@ -21,8 +21,8 @@
 
 @font-face {
   font-family: 'BeautySchoolDropout';
-  src: url('./fonts/BeautySchoolDropout.woff2') format('woff2'),
-       url('./fonts/BeautySchoolDropout.woff') format('woff');
+  src: url('assets/fonts/BeautySchoolDropout.woff2') format('woff2'),
+       url('assets/fonts/BeautySchoolDropout.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
