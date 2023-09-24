@@ -27,7 +27,7 @@ export default {
     LIMIT 10
     `;
 
-    const url = wbk.sparqlQuery(sparql);
-    return url;
+    const queryURL = wbk.sparqlQuery(sparql);
+    return queryURL;
   },
 };
