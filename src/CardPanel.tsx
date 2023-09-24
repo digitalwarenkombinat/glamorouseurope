@@ -1,49 +1,43 @@
 import "./CardPanel.css";
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef, useEffect, createRef } from "react";
 import axios from "axios";
 import TinderCard from "react-tinder-card";
 import Viewer from "@samvera/clover-iiif/viewer";
 import api from "./api";
 import utils from "./utils";
-import cropping from "./cropping";
 
 export interface Images {
+  countryLabel: { value: string };
+  iiif: { value: string };
+  locationLabel: { value: string };
   work: { value: string };
   workLabel: { value: string };
   year: { value: string };
-  countryLabel: { value: string };
-  locationLabel: { value: string };
-  iiif: { value: string };
 }
-
-// const images: Images[] = [];
 
 type Direction = "left" | "right" | "up" | "down";
 
 export interface API {
-  swipe(dir?: Direction): Promise<void>;
   restoreCard(): Promise<void>;
+  swipe(dir?: Direction): Promise<void>;
 }
 
 const options = {
-  // Primary title (Manifest label) for top level canvas.  Defaults to true
-  showTitle: false,
-  showZoomControl: false,
-
-  // Set canvas zooming onScoll (this defaults to false)
+  informationPanel: {
+    open: false,
+  },
   openSeadragon: {
     loadTilesWithAjax: true,
     showNavigationControl: false,
   },
-  informationPanel: {
-    open: false,
-  },
+  showTitle: false,
+  showZoomControl: false,
 };
 
-function Card() {
+function CardPanel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [data, setData] = useState([] as Images[]);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageURL, setImageURL] = useState("");
 
   const getData = async () => {
     try {
@@ -53,6 +47,7 @@ function Card() {
       console.error(error);
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
@@ -63,7 +58,7 @@ function Card() {
     () =>
       Array(data.length)
         .fill(0)
-        .map(() => React.createRef()),
+        .map(() => createRef()),
     [data],
   );
 
@@ -91,7 +86,6 @@ function Card() {
     }
   };
 
-  // increase current index and show card
   const goBack = async () => {
     if (!canGoBack) return;
     const newIndex = currentIndex - 1;
@@ -100,26 +94,28 @@ function Card() {
   };
 
   const handleCanvasIdCallback = (activeCanvasId: string) => {
-    if (activeCanvasId) console.log(activeCanvasId);
+    if (activeCanvasId) {
+      console.log("Active canvas ID: ", activeCanvasId);
+    }
   };
 
-  const getCroppedImage = async (url: string) => {
+  const liftSubjectFromBackground = async (iiifURL: string) => {
     try {
-      const path = await cropping.getCroppedImagePath(url);
-      console.log(path);
-      if (path) {
-        removeBackground(path);
+      const croppedImagePath = await utils.getCroppedImagePath(iiifURL);
+      console.log("Cropped image path: ", croppedImagePath);
+      if (croppedImagePath) {
+        // removeBackground(croppedImagePath);
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  const removeBackground = async (path: string) => {
+  const removeBackground = async (imagePath: string) => {
     try {
-      const url = await utils.bgRemoval(path);
-      setImageUrl(url);
-      console.log("Resulting URL:", url);
+      const imageURL = await utils.bgRemoval(imagePath);
+      setImageURL(imageURL);
+      console.log("Resulting image URL: ", imageURL);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -164,22 +160,17 @@ function Card() {
         <button onClick={() => swipe("left")}>Left</button>
         <button onClick={() => goBack()}>Undo</button>
         <button onClick={() => swipe("right")}>Right</button>
-        <button onClick={() => getCroppedImage(data[currentIndex].iiif.value)}>
-          Get Cropped Image
-        </button>
         <button
           onClick={() =>
-            removeBackground(
-              "https://iiif.kmska.be/c/iiif/2/public@1115.tif/full/full/0/default.jpg",
-            )
+            liftSubjectFromBackground(data[currentIndex].iiif.value)
           }
         >
-          Remove Background
+          Lift subject
         </button>
-        {imageUrl && <img src={imageUrl} alt="Background Removed" />}
+        {imageURL && <img src={imageURL} alt="Background Removed" />}
       </div>
     </div>
   );
 }
 
-export default Card;
+export default CardPanel;
