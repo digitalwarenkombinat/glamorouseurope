@@ -117,7 +117,7 @@ function CardPanel() {
     currentIndexRef.current = val;
   };
 
-  const canGoBack = currentIndex < data.length - 1;
+  const canGoBack = currentIndex < data.length + 1;
 
   const canSwipe = currentIndex >= 0;
 
@@ -205,7 +205,9 @@ function CardPanel() {
         >
           Lift subject
         </button>
-        {imageURL && <img src={imageURL} alt="Background Removed" />}
+        {imageURL && (
+          <img className="image" src={imageURL} alt="Background Removed" />
+        )}
       </div>
     </div>
   );

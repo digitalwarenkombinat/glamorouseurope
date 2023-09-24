@@ -59,6 +59,11 @@
   transform: scale(1.05);
 }
 
+.image {
+  width: 80%;
+  margin: auto;
+}
+
 header.clover-header, div.clover-canvases, #openseadragon-controls, div.clover-content button {
   display: none;
 }
