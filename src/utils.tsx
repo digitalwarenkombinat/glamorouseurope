@@ -161,12 +161,19 @@ function getImageSelectionData(
     `Selection region (x, y, width, height): ${selectionX},${selectionY},${selectionWidth},${selectionHeight}`,
   );
 
-  const calculatedSelectionX = Math.round(
-    (selectionX - calculatedCanvasLeft) * multiplier,
+  const calculatedSelectionX = Math.max(
+    Math.round((selectionX - calculatedCanvasLeft) * multiplier),
+    0,
   );
-  const calculatedSelectionY = Math.round(selectionY * multiplier);
-  const calculatedSelectionWidth = Math.round(selectionWidth * multiplier);
-  const calculatedSelectionHeight = Math.round(selectionHeight * multiplier);
+  const calculatedSelectionY = Math.max(Math.round(selectionY * multiplier), 0);
+  const calculatedSelectionWidth = Math.min(
+    Math.round(selectionWidth * multiplier),
+    imageWidth,
+  );
+  const calculatedSelectionHeight = Math.min(
+    Math.round(selectionHeight * multiplier),
+    imageHeight,
+  );
 
   selectionRegion = `${calculatedSelectionX},${calculatedSelectionY},${calculatedSelectionWidth},${calculatedSelectionHeight}`;
   console.log(
