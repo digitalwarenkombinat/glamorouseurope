@@ -70,7 +70,6 @@ function loadv2(manifest: { sequences: any }): string | null {
       if ("canvases" in sequence) {
         foundCanvas = true;
         for (const canvas of sequence.canvases) {
-          console.log("Canvas: ", canvas);
           const iiifURL = canvas.images[0]?.resource?.service?.["@id"];
           if (iiifURL) {
             return iiifURL;
@@ -194,12 +193,7 @@ export default {
   },
   getIIIFImageURL: async (iiifURL: string) => {
     try {
-      const imageURL = await findIIIFImageURL(iiifURL);
-      if (!imageURL) {
-        console.log("No IIIF image URL found for: ", iiifURL);
-      }
-
-      return imageURL;
+      return await findIIIFImageURL(iiifURL);
     } catch (error) {
       console.error(error);
       return null;
