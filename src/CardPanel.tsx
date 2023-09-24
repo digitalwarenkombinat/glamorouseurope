@@ -104,7 +104,7 @@ function CardPanel() {
       const croppedImagePath = await utils.getCroppedImagePath(iiifURL);
       console.log("Cropped image path: ", croppedImagePath);
       if (croppedImagePath) {
-        // removeBackground(croppedImagePath);
+        removeBackground(croppedImagePath);
       }
     } catch (error) {
       console.error("Error:", error);
