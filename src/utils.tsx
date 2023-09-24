@@ -192,16 +192,23 @@ export default {
       throw error;
     }
   },
-  getCroppedImagePath: async (iiifURL: string) => {
-    console.log("IIIF URL: ", iiifURL);
-
+  getIIIFImageURL: async (iiifURL: string) => {
     try {
       const imageURL = await findIIIFImageURL(iiifURL);
       if (!imageURL) {
         console.log("No IIIF image URL found for: ", iiifURL);
       }
-      console.log("IIIF image URLs: ", imageURL);
 
+      return imageURL;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+  getCroppedImagePath: async (imageURL: string) => {
+    console.log("Image URL: ", imageURL);
+
+    try {
       const infoUrl = imageURL + "/info.json";
       const infoResponse = await fetch(infoUrl);
       if (!infoResponse.ok) {
@@ -209,7 +216,6 @@ export default {
       }
       const data = await infoResponse.json();
       const imageSelectionPath = getImageSelectionData(imageURL, data);
-      console.log("Cropped image selection path: ", imageSelectionPath);
       return imageSelectionPath;
     } catch (error) {
       console.error(error);

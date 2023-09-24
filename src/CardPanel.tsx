@@ -6,13 +6,23 @@ import Viewer from "@samvera/clover-iiif/viewer";
 import api from "./api";
 import utils from "./utils";
 
-export interface Images {
-  countryLabel: { value: string };
-  iiif: { value: string };
-  locationLabel: { value: string };
+export interface Element {
   work: { value: string };
   workLabel: { value: string };
   year: { value: string };
+  countryLabel: { value: string };
+  locationLabel: { value: string };
+  iiif: { value: string };
+}
+
+export interface Image {
+  id: string;
+  name: string;
+  year: string;
+  country: string;
+  location: string;
+  url: string;
+  image: string;
 }
 
 type Direction = "left" | "right" | "up" | "down";
@@ -36,13 +46,53 @@ const options = {
 
 function CardPanel() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [data, setData] = useState([] as Images[]);
+  const [data, setData] = useState([] as Image[]);
   const [imageURL, setImageURL] = useState("");
+
+  const getValidIIIFImageURL = async (manifestURL: string) => {
+    try {
+      const imageURL = await utils.getIIIFImageURL(manifestURL);
+      console.log("Image URL: ", imageURL);
+      return imageURL;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  };
+
+  const validateData = async (elements: Element[]) => {
+    if (!elements) return;
+
+    const imagePromises: Promise<Image | null>[] = elements.map(
+      async (element: Element) => {
+        const imageURL = await getValidIIIFImageURL(element.iiif.value);
+        if (imageURL !== null) {
+          return {
+            id: element.work.value,
+            name: element.workLabel.value,
+            year: element.year.value,
+            country: element.countryLabel.value,
+            location: element.locationLabel.value,
+            url: element.iiif.value,
+            image: imageURL,
+          };
+        }
+        return null;
+      },
+    );
+
+    const imageResults = await Promise.all(imagePromises);
+    const images = imageResults.filter((image) => image !== null) as Image[];
+
+    console.log("Data elements: ", elements);
+    console.log("Data images: ", images);
+    setData(images);
+  };
 
   const getData = async () => {
     try {
       const { data: response } = await axios.get(api.sparqlQuery());
-      setData(response.results.bindings);
+      validateData(response.results.bindings);
     } catch (error) {
       console.error(error);
     }
@@ -99,9 +149,9 @@ function CardPanel() {
     }
   };
 
-  const liftSubjectFromBackground = async (iiifURL: string) => {
+  const liftSubjectFromBackground = async (imageURL: string) => {
     try {
-      const croppedImagePath = await utils.getCroppedImagePath(iiifURL);
+      const croppedImagePath = await utils.getCroppedImagePath(imageURL);
       console.log("Cropped image path: ", croppedImagePath);
       if (croppedImagePath) {
         removeBackground(croppedImagePath);
@@ -125,17 +175,7 @@ function CardPanel() {
     <div className="cardWrapper">
       <div className="cardContainer">
         {data.map(
-          (
-            {
-              work: { value: id },
-              workLabel: { value: name },
-              year: { value: year },
-              countryLabel: { value: country },
-              locationLabel: { value: location },
-              iiif: { value: url },
-            }: Images,
-            index,
-          ) =>
+          ({ id, name, year, country, location, url }, index) =>
             currentIndex === index && (
               <TinderCard
                 ref={childRefs[index]}
@@ -161,9 +201,7 @@ function CardPanel() {
         <button onClick={() => goBack()}>Undo</button>
         <button onClick={() => swipe("right")}>Right</button>
         <button
-          onClick={() =>
-            liftSubjectFromBackground(data[currentIndex].iiif.value)
-          }
+          onClick={() => liftSubjectFromBackground(data[currentIndex].image)}
         >
           Lift subject
         </button>
