@@ -33,6 +33,14 @@ export interface API {
 }
 
 const options = {
+  canvasBackgroundColor: "010A01",
+  gestureSettingsTouch: {
+    dragToPan: false,
+    dblClickToZoom: false,
+    dblClickDragToZoom: false,
+    flickEnabled: false,
+    pinchRotate: true,
+  },
   informationPanel: {
     open: false,
   },
