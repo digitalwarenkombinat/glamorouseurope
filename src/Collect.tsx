@@ -1,8 +1,9 @@
-import "./CardPanel.css";
+import "./Collect.css";
 import { useState, useMemo, useRef, useEffect, createRef } from "react";
 import axios from "axios";
 import TinderCard from "react-tinder-card";
 import Viewer from "@samvera/clover-iiif/viewer";
+import { Card, Button } from "konsta/react";
 import api from "./api";
 import utils from "./utils";
 
@@ -52,7 +53,7 @@ const options = {
   showZoomControl: false,
 };
 
-function CardPanel() {
+function Collect() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [data, setData] = useState([] as Image[]);
   const [imageURL, setImageURL] = useState("");
@@ -180,45 +181,52 @@ function CardPanel() {
   };
 
   return (
-    <div className="cardWrapper">
-      <div className="cardContainer">
-        {data.map(
-          ({ id, name, year, country, location, url }, index) =>
-            currentIndex === index && (
+    <Card className="h-full rounded-none" margin={0}>
+      {data.map(
+        ({ id, name, year, country, location, url }, index) =>
+          currentIndex === index && (
+            <>
               <TinderCard
                 ref={childRefs[index]}
-                className="swipe"
+                className="swipe relative h-full"
                 key={id}
                 onSwipe={() => swiped(index)}
                 onCardLeftScreen={() => outOfFrame(name, index)}
+                preventSwipe={["up", "down"]}
               >
                 <Viewer
                   iiifContent={url}
                   options={options}
                   canvasIdCallback={handleCanvasIdCallback}
                 />
-                <h3 className="cardName">
-                  {name} ({year}) - {location} {country}
-                </h3>
               </TinderCard>
-            ),
-        )}
-      </div>
-      <div className="buttons">
-        <button onClick={() => swipe("left")}>Left</button>
-        <button onClick={() => goBack()}>Undo</button>
-        <button onClick={() => swipe("right")}>Right</button>
-        <button
+              <p className="px-4 py-2 space-x-2">
+                {name} ({year}) - {location} {country}
+              </p>
+            </>
+          ),
+      )}
+      <div className="px-4 py-2 space-x-2">
+        <Button
           onClick={() => liftSubjectFromBackground(data[currentIndex].image)}
+          rounded
+          inline
         >
           Lift subject
-        </button>
-        {imageURL && (
-          <img className="image" src={imageURL} alt="Background Removed" />
-        )}
+        </Button>
+        <Button onClick={() => swipe("left")} rounded inline outline>
+          Left
+        </Button>
+        <Button onClick={() => goBack()} rounded inline outline>
+          Undo
+        </Button>
+        <Button onClick={() => swipe("right")} rounded inline outline>
+          Right
+        </Button>
+        {imageURL && <img src={imageURL} alt="Background Removed" />}
       </div>
-    </div>
+    </Card>
   );
 }
 
-export default CardPanel;
+export default Collect;
