@@ -1,20 +1,61 @@
-.app {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+.neonFont {
+  font-family: 'BeautySchoolDropout', sans-serif;
+  font-size: 4rem;
 }
 
-.neonText {
-  color: #fff;
+.neon {
+  text-align: center;
+  animation: pulsate 1.5s infinite alternate;  
+  border: 0.2rem solid var(--text-color);
+  border-radius: 2rem;
+  padding: 0.4em;
+  box-shadow: 0 0 .2rem var(--text-color),
+              0 0 .2rem var(--text-color),
+              0 0 2rem var(--primary-color),
+              0 0 0.8rem var(--primary-color),
+              0 0 2.8rem var(--primary-color),
+              inset 0 0 1.3rem var(--primary-color);
+  color: var(--text-color);
   text-shadow:
-    0 0 7px #fff,
-    0 0 10px #fff,
-    0 0 21px #fff,
-    0 0 42px #bc13fe,
-    0 0 82px #bc13fe,
-    0 0 92px #bc13fe,
-    0 0 102px #bc13fe,
-    0 0 151px #bc13fe;
+    0 0 7px var(--text-color),
+    0 0 10px var(--text-color),
+    0 0 21px var(--text-color),
+    0 0 42px var(--primary-color),
+    0 0 82px var(--primary-color),
+    0 0 92px var(--primary-color),
+    0 0 102px var(--primary-color),
+    0 0 151px var(--primary-color);
+}
+
+
+@keyframes pulsate {
+  100% {
+      text-shadow:
+      0 0 4px var(--text-color),
+      0 0 11px var(--text-color),
+      0 0 19px var(--text-color),
+      0 0 40px var(--primary-color),
+      0 0 80px var(--primary-color),
+      0 0 90px var(--primary-color),
+      0 0 100px var(--primary-color),
+      0 0 150px var(--primary-color);
+  }
+  
+  0% {
+    text-shadow:
+    0 0 2px var(--text-color),
+    0 0 4px var(--text-color),
+    0 0 6px var(--text-color),
+    0 0 10px var(--primary-color),
+    0 0 45px var(--primary-color),
+    0 0 55px var(--primary-color),
+    0 0 70px var(--primary-color),
+    0 0 80px var(--primary-color);
+  }
+}
+
+@media screen and (prefers-reduced-motion) { 
+  .neon {
+    animation: none;
+  }
 }

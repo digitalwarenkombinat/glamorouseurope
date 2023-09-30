@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
@@ -13,64 +17,54 @@
   --text-color: #FFF;
 }
 
-/* Box sizing rules */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Prevent font size inflation */
 html {
   -moz-text-size-adjust: none;
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
 }
 
-/* Remove default margin in favour of better control in authored CSS */
 body, h1, h2, h3, h4, p,
 figure, blockquote, dl, dd {
   margin: 0;
 }
 
-/* Set core body defaults */
 body {
   min-height: 100vh;
   line-height: 1.5;
 }
 
-/* Set shorter line heights on headings and interactive elements */
 h1, h2, h3, h4,
 button, input, label {
   line-height: 1.1;
 }
 
-/* Balance text wrapping on headings */
-h1, h2,
-h3, h4 {
+h1, h2, h3, h4 {
+  font-family: 'BernardoModaBold', sans-serif;
   text-wrap: balance;
 }
 
-/* A elements that don't have a class get default styles */
 a:not([class]) {
   text-decoration-skip-ink: auto;
   color: currentColor;
 }
 
-/* Make images easier to work with */
 img,
 picture {
   max-width: 100%;
   display: block;
 }
 
-/* Inherit fonts for inputs and buttons */
 input, button,
 textarea, select {
   font: inherit;
 }
 
-/* Anything that has been anchored to should have extra scroll margin */
 :target {
   scroll-margin-block: 5ex;
 }
@@ -103,69 +97,7 @@ textarea, select {
 
 html, body {
   background-color: var(--background-color); 
-  font-family: 'Dante';
+  font-family: 'Dante', sans-serif;
   margin: 0;
 }
 
-#root {
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  width: 100vw;
-  min-height: 100vh;
-  overflow: hidden;
-}
-
-h1 {
-  font-family: 'BeautySchoolDropout';
-  font-size: 4.2rem;
-  width: 90%;
-  line-height: 1.1;
-  font-weight: 400;
-  animation: pulsate 1.5s infinite alternate;  
-  border: 0.2rem solid var(--text-color);
-  border-radius: 2rem;
-  padding: 0.4em;
-  box-shadow: 0 0 .2rem var(--text-color),
-              0 0 .2rem var(--text-color),
-              0 0 2rem var(--primary-color),
-              0 0 0.8rem var(--primary-color),
-              0 0 2.8rem var(--primary-color),
-              inset 0 0 1.3rem var(--primary-color); 
-}
-
-h2, h3, h4 {
-  font-family: 'BernardoModaBold';
-}
-
-@keyframes pulsate {
-  100% {
-      text-shadow:
-      0 0 4px var(--text-color),
-      0 0 11px var(--text-color),
-      0 0 19px var(--text-color),
-      0 0 40px var(--primary-color),
-      0 0 80px var(--primary-color),
-      0 0 90px var(--primary-color),
-      0 0 100px var(--primary-color),
-      0 0 150px var(--primary-color);
-  }
-  
-  0% {
-    text-shadow:
-    0 0 2px var(--text-color),
-    0 0 4px var(--text-color),
-    0 0 6px var(--text-color),
-    0 0 10px var(--primary-color),
-    0 0 45px var(--primary-color),
-    0 0 55px var(--primary-color),
-    0 0 70px var(--primary-color),
-    0 0 80px var(--primary-color);
-  }
-}
-
-@media screen and (prefers-reduced-motion) { 
-  h1 {
-    animation: none;
-  }
-}
