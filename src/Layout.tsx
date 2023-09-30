@@ -1,13 +1,7 @@
 import { NavLink, Outlet, useMatch, useResolvedPath } from "react-router-dom";
 import "./App.css";
-import {
-  App as KonstaApp,
-  Icon,
-  Page,
-  Navbar,
-  Tabbar,
-  TabbarLink,
-} from "konsta/react";
+// @ts-ignore
+import { App, Icon, Page, Navbar, Tabbar, TabbarLink } from "konsta/react";
 import { MdHome, MdCreate, MdCollections } from "react-icons/md";
 import LogoIcon from "/logo.svg";
 
@@ -23,7 +17,7 @@ const Logo = () => {
 
 function Layout() {
   return (
-    <KonstaApp theme="material">
+    <App theme="material">
       <Page className="flex flex-col">
         <Navbar
           centerTitle
@@ -66,7 +60,7 @@ function Layout() {
           <Outlet />
         </main>
       </Page>
-    </KonstaApp>
+    </App>
   );
 }
 

@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Block, Button, Link } from "konsta/react";
 import { NavLink } from "react-router-dom";
 
