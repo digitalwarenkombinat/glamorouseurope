@@ -14,10 +14,11 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
       manifest: {
+        display: "fullscreen",
         name: "GLAMorous Europe",
         short_name: "GLAM EU",
         description: "Wir machen Kulturerbe digital erfahrbar.",
-        theme_color: "#bc13fe",
+        theme_color: "#BC13FE",
         icons: [
           {
             src: "pwa-192x192.png",
