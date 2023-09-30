@@ -1,8 +1,9 @@
 import "./Collect.css";
-import { useState, useMemo, useRef, useEffect, createRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 import TinderCard from "react-tinder-card";
 import Viewer from "@samvera/clover-iiif/viewer";
+// @ts-ignore
 import { Card, Button } from "konsta/react";
 import api from "./api";
 import utils from "./utils";
@@ -55,40 +56,42 @@ const options = {
 
 function Collect() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [data, setData] = useState([] as Image[]);
+  const [data, setData] = useState<Image[]>([]);
   const [imageURL, setImageURL] = useState("");
 
-  const getValidIIIFImageURL = async (manifestURL: string) => {
-    try {
-      const imageURL = await utils.getIIIFImageURL(manifestURL);
-      console.log("Image URL: ", imageURL);
-      return imageURL;
-    } catch (error) {
-      console.error("Error:", error);
-      return null;
-    }
-  };
+  const currentIndexRef = useRef(currentIndex);
 
-  const validateData = async (elements: Element[]) => {
+  const childRef = useRef<API | null>(null);
+
+  const validateData = useCallback(async (elements: Element[]) => {
     if (!elements) return;
 
-    const imagePromises: Promise<Image | null>[] = elements.map(
-      async (element: Element) => {
-        const imageURL = await getValidIIIFImageURL(element.iiif.value);
-        if (imageURL !== null) {
-          return {
-            id: element.work.value,
-            name: element.workLabel.value,
-            year: element.year.value,
-            country: element.countryLabel.value,
-            location: element.locationLabel.value,
-            url: element.iiif.value,
-            image: imageURL,
-          };
-        }
+    const getValidIIIFImageURL = async (manifestURL: string) => {
+      try {
+        const imageURL = await utils.getIIIFImageURL(manifestURL);
+        console.log("Image URL: ", imageURL);
+        return imageURL;
+      } catch (error) {
+        console.error("Error:", error);
         return null;
-      },
-    );
+      }
+    };
+
+    const imagePromises = elements.map(async (element) => {
+      const imageURL = await getValidIIIFImageURL(element.iiif.value);
+      if (imageURL !== null) {
+        return {
+          id: element.work.value,
+          name: element.workLabel.value,
+          year: element.year.value,
+          country: element.countryLabel.value,
+          location: element.locationLabel.value,
+          url: element.iiif.value,
+          image: imageURL,
+        };
+      }
+      return null;
+    });
 
     const imageResults = await Promise.all(imagePromises);
     const images = imageResults.filter((image) => image !== null) as Image[];
@@ -96,30 +99,20 @@ function Collect() {
     console.log("Data elements: ", elements);
     console.log("Data images: ", images);
     setData(images);
-  };
-
-  const getData = async () => {
-    try {
-      const { data: response } = await axios.get(api.sparqlQuery());
-      validateData(response.results.bindings);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getData();
   }, []);
 
-  const currentIndexRef = useRef(currentIndex);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data: response } = await axios.get(api.sparqlQuery());
+        validateData(response.results.bindings);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  const childRefs: React.RefObject<API>[] = useMemo(
-    () =>
-      Array(data.length)
-        .fill(0)
-        .map(() => createRef()),
-    [data],
-  );
+    fetchData();
+  }, [validateData]);
 
   const updateCurrentIndex = (val: number) => {
     setCurrentIndex(val);
@@ -127,7 +120,6 @@ function Collect() {
   };
 
   const canGoBack = currentIndex < data.length + 1;
-
   const canSwipe = currentIndex >= 0;
 
   const swiped = (index: number) => {
@@ -136,12 +128,12 @@ function Collect() {
 
   const outOfFrame = (name: string, idx: number) => {
     console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
-    currentIndexRef.current >= idx && childRefs[idx].current?.restoreCard();
+    currentIndexRef.current >= idx && childRef.current?.restoreCard();
   };
 
   const swipe = async (dir: Direction) => {
     if (canSwipe && currentIndex < data.length) {
-      await childRefs[currentIndex].current?.swipe(dir);
+      await childRef.current?.swipe(dir);
     }
   };
 
@@ -149,8 +141,10 @@ function Collect() {
     if (!canGoBack) return;
     const newIndex = currentIndex - 1;
     updateCurrentIndex(newIndex);
-    await childRefs[newIndex].current?.restoreCard();
+    await childRef.current?.restoreCard();
   };
+
+  const currentImage = data[currentIndex];
 
   const handleCanvasIdCallback = (activeCanvasId: string) => {
     if (activeCanvasId) {
@@ -182,29 +176,27 @@ function Collect() {
 
   return (
     <Card className="h-full rounded-none" margin={0}>
-      {data.map(
-        ({ id, name, year, country, location, url }, index) =>
-          currentIndex === index && (
-            <>
-              <TinderCard
-                ref={childRefs[index]}
-                className="swipe relative h-full"
-                key={id}
-                onSwipe={() => swiped(index)}
-                onCardLeftScreen={() => outOfFrame(name, index)}
-                preventSwipe={["up", "down"]}
-              >
-                <Viewer
-                  iiifContent={url}
-                  options={options}
-                  canvasIdCallback={handleCanvasIdCallback}
-                />
-              </TinderCard>
-              <p className="px-4 py-2 space-x-2">
-                {name} ({year}) - {location} {country}
-              </p>
-            </>
-          ),
+      {currentImage && (
+        <>
+          <TinderCard
+            ref={childRef}
+            className="swipe relative h-full"
+            key={currentImage.id}
+            onSwipe={() => swiped(currentIndex)}
+            onCardLeftScreen={() => outOfFrame(currentImage.name, currentIndex)}
+            preventSwipe={["up", "down"]}
+          >
+            <Viewer
+              iiifContent={currentImage.url}
+              options={options}
+              canvasIdCallback={handleCanvasIdCallback}
+            />
+          </TinderCard>
+          <p className="px-4 py-2 space-x-2">
+            {currentImage.name} ({currentImage.year}) - {currentImage.location}{" "}
+            {currentImage.country}
+          </p>
+        </>
       )}
       <div className="px-4 py-2 space-x-2">
         <Button
