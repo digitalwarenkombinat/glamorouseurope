@@ -1,12 +1,19 @@
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import CardPanel from "./CardPanel";
+import Layout from "./Layout";
+import Collect from "./Collect";
+import Start from "./Start";
+import Create from "./Create";
 
 function App() {
   return (
-    <div className="app">
-      <h1 className="neonText">GLAMorouS Europe</h1>
-      <CardPanel />
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Start />} />
+        <Route path="collect" element={<Collect />} />
+        <Route path="create" element={<Create />} />
+      </Route>
+    </Routes>
   );
 }
 
