@@ -9,6 +9,11 @@ export default konstaConfig({
       "brand-background": "#2B2829",
       "brand-text": "#FFF",
     },
+    fontFamily: {
+      ios: "Dante",
+      material: "Dante",
+    },
   },
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+  darkMode: "class",
 });
