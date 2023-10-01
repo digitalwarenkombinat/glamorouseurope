@@ -6,7 +6,7 @@ export default konstaConfig({
       primary: "#BC13FE",
       "brand-secondary": "#69C0B0",
       "brand-tertiary": "#EDECEA",
-      "brand-background": "#010A01",
+      "brand-background": "#2B2829",
       "brand-text": "#FFF",
     },
   },

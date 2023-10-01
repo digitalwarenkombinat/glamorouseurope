@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'BeautySchoolDropout';
+  src: url('./fonts/BeautySchoolDropout.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'BernardoModalBold';
+  src: url('./fonts/BernardoModalBold.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Dante';
+  src: url('./fonts/Dante.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
@@ -9,12 +33,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  --primary-color: #BC13FE;
-  --secondary-color: #69C0B0;
-  --tertiary-color: #EDECEA;
-  --background-color: #010A01;
-  --text-color: #FFF;
 }
 
 *,
@@ -29,29 +47,12 @@ html {
   text-size-adjust: none;
 }
 
-body, h1, h2, h3, h4, p,
-figure, blockquote, dl, dd {
-  margin: 0;
-}
-
-body {
-  min-height: 100vh;
-  line-height: 1.5;
-}
-
-h1, h2, h3, h4,
-button, input, label {
-  line-height: 1.1;
+html, body {
+  font-family: 'Dante', sans-serif;
 }
 
 h1, h2, h3, h4 {
   font-family: 'BernardoModaBold', sans-serif;
-  text-wrap: balance;
-}
-
-a:not([class]) {
-  text-decoration-skip-ink: auto;
-  color: currentColor;
 }
 
 img,
@@ -59,45 +60,3 @@ picture {
   max-width: 100%;
   display: block;
 }
-
-input, button,
-textarea, select {
-  font: inherit;
-}
-
-:target {
-  scroll-margin-block: 5ex;
-}
-
-@font-face {
-  font-family: 'BeautySchoolDropout';
-  src: url('./fonts/BeautySchoolDropout.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-
-@font-face {
-  font-family: 'BernardoModalBold';
-  src: url('./fonts/BernardoModalBold.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-
-@font-face {
-  font-family: 'Dante';
-  src: url('./fonts/Dante.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-html, body {
-  background-color: var(--background-color); 
-  font-family: 'Dante', sans-serif;
-  margin: 0;
-}
-

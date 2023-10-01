@@ -10,7 +10,7 @@ const Logo = () => {
     <img
       src={LogoIcon}
       alt="Logo GLAMorous Europe"
-      className="bg-white h-8 w-8 mr-2"
+      className="bg-white h-16 w-16"
     />
   );
 };
@@ -22,7 +22,7 @@ function Layout() {
         <Navbar
           centerTitle
           title="GLAMorouS Europe"
-          titleClassName="neonFont text-white text-2xl"
+          titleClassName="neonFont text-white text-3xl"
           className="top-0 sticky p-4"
           left={<Icon material={<Logo />} />}
         />
