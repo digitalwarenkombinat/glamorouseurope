@@ -10,7 +10,7 @@
 
 ## About [_GLAMorous Europe_](https://www.glam-europe.de/)
 
-**GLAMorous Europe** is a project within the Prototype Fund Round 15 (September 2023 to February 2024).
+**GLAMorous Europe** is a project within the Prototype Fund Round 14 (September 2023 to February 2024).
 
 The project aims to bring together users and digital collections from European GLAM institutions (Galleries, Libraries, Archives & Museums) in an artistic and creative way. 
 
