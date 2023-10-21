@@ -34,6 +34,10 @@ export interface API {
   swipe(dir?: Direction): Promise<void>;
 }
 
+interface CollectProps {
+  setImageURL: (url: string) => void;
+}
+
 const options = {
   canvasBackgroundColor: "010A01",
   gestureSettingsTouch: {
@@ -54,10 +58,9 @@ const options = {
   showZoomControl: false,
 };
 
-function Collect() {
+function Collect({ setImageURL }: CollectProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [data, setData] = useState<Image[]>([]);
-  const [imageURL, setImageURL] = useState("");
 
   const currentIndexRef = useRef(currentIndex);
 
@@ -215,7 +218,6 @@ function Collect() {
         <Button onClick={() => swipe("right")} rounded inline outline>
           Right
         </Button>
-        {imageURL && <img src={imageURL} alt="Background Removed" />}
       </div>
     </Card>
   );

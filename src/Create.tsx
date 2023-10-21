@@ -1,16 +1,15 @@
 // @ts-ignore
-import { Block, Button, Link } from "konsta/react";
-import { NavLink } from "react-router-dom";
+import { Block } from "konsta/react";
 
-function Create() {
+interface CreateProps {
+  imageURL: string;
+}
+
+function Create({ imageURL }: CreateProps) {
   return (
     <Block className="flex flex-col gap-16 container mx-auto justify-center content-evenly">
       <h1 className="neon neonFont">GLAMorouS Europe</h1>
-      <Link to="/collect" component={NavLink}>
-        <Button large rounded className="k-color-brand-secondary">
-          Collect the items
-        </Button>
-      </Link>
+      {imageURL && <img src={imageURL} alt="Background Removed" />}
     </Block>
   );
 }
