@@ -17,7 +17,13 @@ function App() {
         <Route path="selection" element={<Select />} />
         <Route
           path="collection"
-          element={<Collection setImageURL={setImageURL} />}
+          element={
+            <Collection
+              images={[
+                "https://iiif-manifest.library.vanderbilt.edu/gallery/1988/1988.077.json",
+              ]}
+            />
+          }
         />
         <Route path="creation" element={<Creation imageURL={imageURL} />} />
       </Route>
