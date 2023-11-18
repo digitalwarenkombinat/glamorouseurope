@@ -2,9 +2,9 @@
 import { Block } from "konsta/react";
 // import LogoIcon from "/logo_neon.svg";
 
-const Logo = () => {
+/* const Logo = () => {
   return <img src={LogoIcon} alt="Logo GLAMorous Europe" />;
-};
+}; */
 
 function Start() {
   return (

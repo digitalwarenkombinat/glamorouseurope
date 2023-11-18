@@ -44,8 +44,9 @@ const options = {
   showZoomControl: false,
 };
 
-function Collection(images) {
-  const liftSubjectFromBackground = async (imageURL: string) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function Collection(images: any) {
+  /*   const liftSubjectFromBackground = async (imageURL: string) => {
     try {
       const croppedImagePath = await utils.getCroppedImagePath(imageURL);
       console.log("Cropped image path: ", croppedImagePath);
@@ -65,10 +66,10 @@ function Collection(images) {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
+  }; */
 
   return (
-    <Card className="h-full rounded-none" margin={0}>
+    <Card className="h-full rounded-none">
       <Viewer iiifContent={images[0]} options={options} />
     </Card>
   );

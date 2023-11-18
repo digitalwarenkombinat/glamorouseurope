@@ -8,7 +8,7 @@ import Start from "./Start";
 import "./App.css";
 
 function App() {
-  const [imageURL, setImageURL] = useState("");
+  const [imageURL] = useState("");
 
   return (
     <Routes>
