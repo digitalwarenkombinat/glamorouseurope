@@ -233,20 +233,42 @@ See http://msdn.microsoft.com/en-us/library/ms537505(v=vs.85).aspx#xdomain`),$.c
 those are also exposed directly on the module object. Exemple:
 import { isItemId, simplify } from 'wikibase-sdk'`,common=Object.assign(Object.assign(Object.assign(Object.assign({simplify,parse},helpers),sitelinksHelpers),rankHelpers),timeHelpers);function WBK(Nr){if(!isPlainObject(Nr))throw new Error("invalid config");const{instance:_r,sparqlEndpoint:Ur}=Nr;let{wgScriptPath:jr="w"}=Nr;if(jr=jr.replace(/^\//,""),!(_r||Ur))throw new Error(`one of instance or sparqlEndpoint should be set at initialization.
 ${tip}`);let Gr,Wr,Zr;if(_r){validateEndpoint("instance",_r),Wr=_r.replace(/\/$/,"").replace(`/${jr}/api.php`,""),Zr=`${Wr}/${jr}/api.php`;const ts=buildUrlFactory(Zr);Gr={searchEntities:searchEntitiesFactory(ts),cirrusSearchPages:cirrusSearchPagesFactory(ts),getEntities:getEntitiesFactory(ts),getManyEntities:getManyEntitiesFactory(ts),getRevisions:getRevisionsFactory(ts),getEntityRevision:getEntityRevisionFactory(_r,jr),getEntitiesFromSitelinks:getEntitiesFromSitelinksFactory(ts)}}else Gr={searchEntities:missingInstance("searchEntities"),cirrusSearchPages:missingInstance("cirrusSearchPages"),getEntities:missingInstance("getEntities"),getManyEntities:missingInstance("getManyEntities"),getRevisions:missingInstance("getRevisions"),getEntityRevision:missingInstance("getEntityRevision"),getEntitiesFromSitelinks:missingInstance("getEntitiesFromSitelinks")};let Yr;return Ur?(validateEndpoint("sparqlEndpoint",Ur),Yr={sparqlQuery:sparqlQueryFactory(Ur),getReverseClaims:getReverseClaimsFactory(Ur)}):Yr={sparqlQuery:missingSparqlEndpoint("sparqlQuery"),getReverseClaims:missingSparqlEndpoint("getReverseClaims")},Object.assign(Object.assign(Object.assign({instance:{root:Wr,apiEndpoint:Zr}},common),Gr),Yr)}const validateEndpoint=(Nr,_r)=>{if(!(typeof _r=="string"&&_r.startsWith("http")))throw new Error(`invalid ${Nr}: ${_r}`)},missingConfig=Nr=>_r=>()=>{throw new Error(`${_r} requires ${Nr} to be set at initialization`)},missingSparqlEndpoint=missingConfig("a sparqlEndpoint"),missingInstance=missingConfig("an instance"),api={sparqlQuery:()=>{const Nr=WBK({instance:"https://www.wikidata.org",sparqlEndpoint:"https://query.wikidata.org/sparql"}),jr=`
-    SELECT ?work ?workLabel (YEAR(?inception) as ?year) ?countryLabel ?locationLabel ?iiif
-    WHERE
-    {
-      ?work wdt:P31 wd:Q3305213.
-      ?work wdt:P17 ?country.
-      ?work wdt:P186 wd:Q12321255.
-      ?work wdt:P571 ?inception.
-      ?work wdt:P276 ?location.
-      ?work wdt:P6108 ?iiif
-    FILTER (?country IN ( wd:Q31, wd:Q213, wd:Q35, wd:Q142, wd:Q36, wd:Q39, wd:Q32, wd:Q40, wd:Q55 ) )
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
-    }
-    ORDER BY ?year ?work ?workLabel
-    LIMIT 10
+      SELECT ?item ?itemLabel ?artworkLabel ?countryLabel ?genreLabel ?year ?locationLabel ?creatorLabel ?materialLabel ?depictsLabel ?collectionLabel ?copyrightLabel ?iiifManifest
+      WITH {
+      
+        SELECT ?item (SAMPLE(?artwork) as ?artwork) (SAMPLE(?country) as ?country) (SAMPLE(?genre) as ?genre) (SAMPLE(YEAR(?inception)) as ?year) (SAMPLE(?location) as ?location) (SAMPLE(?creator) as ?creator) (SAMPLE(?material) as ?material) (SAMPLE(?depicts) as ?depicts) (SAMPLE(?collection) as ?collection) (SAMPLE(?copyright) as ?copyright) (SAMPLE(?iiifManifest) as ?iiifManifest)
+      
+        WHERE {
+        # Find paintings
+        ?item wdt:P31/wdt:P279* ?artwork.
+        ?item wdt:P18 ?image. # Image exists
+        ?item wdt:P6108 ?iiifManifest. # IIIF manifest exists
+        ?item wdt:P17 ?country. # Get the country of the painting
+      
+        OPTIONAL { ?item wdt:P136 ?genre. }
+        OPTIONAL { ?item wdt:P571 ?inception. }
+        OPTIONAL { ?item wdt:P276 ?location. }
+        OPTIONAL { ?item wdt:P170 ?creator. }
+        OPTIONAL { ?item wdt:P186 ?material. }
+        OPTIONAL { ?item wdt:P180 ?depicts. }
+        OPTIONAL { ?item wdt:P195 ?collection. }
+        OPTIONAL { ?item wdt:P6216 ?copyright. }
+        
+        # Filter countries that share a border with Germany
+        FILTER (?country IN ( wd:Q31, wd:Q213, wd:Q35, wd:Q142, wd:Q36, wd:Q39, wd:Q32, wd:Q40, wd:Q55 ) )
+        # Filter Artwork that is one of the following: painting, print, sculpture
+        FILTER (?artwork IN ( wd:Q3305213, wd:Q11060274, wd:Q860861 ) )
+      
+        }
+        GROUP BY ?item
+        #ORDER BY DESC(?year)
+        LIMIT 10
+            
+      } AS %result
+      WHERE {
+        INCLUDE %result
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+      } ORDER BY ?itemLabel
     `;return Nr.sparqlQuery(jr)}};var ort_min={exports:{}};/*!
 * ONNX Runtime Web v1.16.1
 * Copyright (c) Microsoft Corporation. All rights reserved.
