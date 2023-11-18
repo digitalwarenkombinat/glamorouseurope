@@ -7,9 +7,11 @@ const config: Config = {
   },
 };
 
-async function findIIIFImageURL(iiifURL: string): Promise<string | null> {
+async function fetchIIIFIdentifier(
+  iiifManifest: string,
+): Promise<string | null> {
   try {
-    const response = await fetch(iiifURL);
+    const response = await fetch(iiifManifest);
     if (!response.ok) {
       throw new Error(response.statusText);
     }
@@ -198,9 +200,9 @@ export default {
       throw error;
     }
   },
-  getIIIFImageURL: async (iiifURL: string) => {
+  fetchIIIFIdentifier: async (iiifManifest: string) => {
     try {
-      return await findIIIFImageURL(iiifURL);
+      return await fetchIIIFIdentifier(iiifManifest);
     } catch (error) {
       console.error(error);
       return null;
