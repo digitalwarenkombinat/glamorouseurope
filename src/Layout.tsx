@@ -12,7 +12,7 @@ import {
 function Layout() {
   return (
     <App theme="material">
-      <Page className="flex flex-col">
+      <Page>
         <Tabbar labels={true} icons={true} className="left-0 bottom-0 fixed">
           <TabbarLink
             active={useMatch({
@@ -64,7 +64,7 @@ function Layout() {
             label={"Meine Leinwand"}
           />
         </Tabbar>
-        <main className="flex-1">
+        <main className="h-[calc(100%_-_80px)]">
           <Outlet />
         </main>
       </Page>

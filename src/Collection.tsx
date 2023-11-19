@@ -3,7 +3,6 @@ import "./Collection.css";
 import Viewer from "@samvera/clover-iiif/viewer";
 // @ts-ignore
 import { Card } from "konsta/react";
-import utils from "./utils";
 
 export interface Element {
   work: { value: string };

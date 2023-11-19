@@ -2,9 +2,10 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 import TinderCard from "react-tinder-card";
 // @ts-ignore
-import { Card, Button } from "konsta/react";
+import { Card, Button, Icon } from "konsta/react";
 import api from "./api";
 import utils from "./utils";
+import { MdOutlineThumbDown, MdOutlineThumbUp } from "react-icons/md";
 
 export interface Element {
   artworkLabel: { value: string };
@@ -129,48 +130,52 @@ function Selection() {
   const currentImage = data[currentIndex];
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <Card className="flex items-center mb-4">
-        {currentImage && (
-          <>
-            <TinderCard
-              ref={childRef}
-              className="mb-4"
-              key={currentImage.id}
-              onSwipe={() => swiped(currentIndex)}
-              onCardLeftScreen={() =>
-                outOfFrame(currentImage.name, currentIndex)
-              }
-              preventSwipe={["up", "down"]}
-            >
-              <img alt={currentImage.name} src={currentImage.image}></img>
-            </TinderCard>
-            <div className="flex justify-between">
-              <Button
-                className="px-4 py-2 rounded-full mr-2"
-                onClick={() => swipe("left")}
-                rounded
-                inline
-                outline
+    <div className="flex flex-col justify-evenly">
+      <div className="max-w-2xl mx-auto h-2/3">
+        <Card className="flex">
+          {currentImage && (
+            <>
+              <TinderCard
+                ref={childRef}
+                className="mb-4"
+                key={currentImage.id}
+                onSwipe={() => swiped(currentIndex)}
+                onCardLeftScreen={() =>
+                  outOfFrame(currentImage.name, currentIndex)
+                }
+                preventSwipe={["up", "down"]}
               >
-                Left
-              </Button>
-              <Button
-                className="px-4 py-2 rounded-full"
-                onClick={() => swipe("right")}
-                rounded
-                inline
-                outline
-              >
-                Right
-              </Button>
-            </div>
-          </>
-        )}
-      </Card>
+                <img alt={currentImage.name} src={currentImage.image}></img>
+              </TinderCard>
+              <div className="flex justify-between">
+                <Button
+                  className="px-4 py-2 rounded-full mr-2"
+                  onClick={() => swipe("left")}
+                  rounded
+                  inline
+                  outline
+                >
+                  <Icon material={<MdOutlineThumbDown className="w-6 h-6" />} />
+                </Button>
+                <Button
+                  className="px-4 py-2 rounded-full"
+                  onClick={() => swipe("right")}
+                  rounded
+                  inline
+                  outline
+                >
+                  <Icon material={<MdOutlineThumbUp className="w-6 h-6" />} />
+                </Button>
+              </div>
+            </>
+          )}
+        </Card>
+      </div>
 
-      <div className="p-4 rounded">
-        <h2 className="text-2xl font-bold mb-2">{currentImage?.name}</h2>
+      <div className="p-2 bg-white rounded m-4 h-1/3">
+        <h2 className="text-2xl font-bold mb-2 text-black">
+          {currentImage?.name}
+        </h2>
         <p className="text-gray-600">Year: {currentImage?.year}</p>
         <p className="text-gray-600">Creator: {currentImage?.creator}</p>
         <p className="text-gray-600">Location: {currentImage?.location}</p>
