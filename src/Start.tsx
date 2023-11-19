@@ -9,7 +9,6 @@ const Logo = () => {
 function Start() {
   return (
     <Block className="flex flex-col gap-16 container mx-auto justify-center content-evenly">
-      <h1 className="neon neonFont">GLAM</h1>
       <Logo />
     </Block>
   );

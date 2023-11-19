@@ -5,7 +5,6 @@ import Collection from "./Collection";
 import Creation from "./Creation";
 import Select from "./Select";
 import Start from "./Start";
-import "./App.css";
 
 function App() {
   const [imageURL] = useState("");

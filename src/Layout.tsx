@@ -1,5 +1,4 @@
 import { NavLink, Outlet, useMatch, useResolvedPath } from "react-router-dom";
-import "./App.css";
 // @ts-ignore
 import { App, Icon, Page, Tabbar, TabbarLink } from "konsta/react";
 import {
