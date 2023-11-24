@@ -14,16 +14,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Start />} />
         <Route path="selection" element={<Select />} />
-        <Route
-          path="collection"
-          element={
-            <Collection
-              images={[
-                "https://iiif-manifest.library.vanderbilt.edu/gallery/1988/1988.077.json",
-              ]}
-            />
-          }
-        />
+        <Route path="collection" element={<Collection />} />
         <Route path="creation" element={<Creation imageURL={imageURL} />} />
       </Route>
     </Routes>
