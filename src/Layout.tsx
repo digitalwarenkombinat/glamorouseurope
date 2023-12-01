@@ -10,9 +10,13 @@ import {
 
 function Layout() {
   return (
-    <App theme="material">
+    <App theme="material" touchRipple={false}>
       <Page>
-        <Tabbar labels={true} icons={true} className="left-0 bottom-0 fixed">
+        <Tabbar
+          labels={true}
+          icons={true}
+          className="left-0 bottom-0 fixed k-color-brand-secondary"
+        >
           <TabbarLink
             active={useMatch({
               path: useResolvedPath("/").pathname,
@@ -21,7 +25,15 @@ function Layout() {
             to="/"
             component={NavLink}
             icon={
-              <Icon material={<MdOutlineDoorFront className="w-6 h-6" />} />
+              <Icon
+                material={<MdOutlineDoorFront className="w-10 h-10" />}
+                className={`transition duration-300 ${
+                  useMatch({
+                    path: useResolvedPath("/").pathname,
+                    end: true,
+                  }) && "animate-pulse"
+                }`}
+              />
             }
             label={"Portal"}
           />
@@ -33,7 +45,17 @@ function Layout() {
             })}
             to="/selection"
             component={NavLink}
-            icon={<Icon material={<MdFavoriteBorder className="w-6 h-6" />} />}
+            icon={
+              <Icon
+                material={<MdFavoriteBorder className="w-10 h-10" />}
+                className={`transition duration-300 ${
+                  useMatch({
+                    path: useResolvedPath("/selection").pathname,
+                    end: true,
+                  }) && "animate-pulse"
+                }`}
+              />
+            }
             label={"Meine Auswahl"}
           />
 
@@ -45,7 +67,15 @@ function Layout() {
             to="/collection"
             component={NavLink}
             icon={
-              <Icon material={<MdOutlineCollections className="w-6 h-6" />} />
+              <Icon
+                material={<MdOutlineCollections className="w-10 h-10" />}
+                className={`transition duration-300 ${
+                  useMatch({
+                    path: useResolvedPath("/collection").pathname,
+                    end: true,
+                  }) && "animate-pulse"
+                }`}
+              />
             }
             label={"Meine Sammlung"}
           />
@@ -58,7 +88,15 @@ function Layout() {
             to="/creation"
             component={NavLink}
             icon={
-              <Icon material={<MdOutlineAssignmentInd className="w-6 h-6" />} />
+              <Icon
+                material={<MdOutlineAssignmentInd className="w-10 h-10" />}
+                className={`transition duration-300 ${
+                  useMatch({
+                    path: useResolvedPath("/creation").pathname,
+                    end: true,
+                  }) && "animate-pulse"
+                }`}
+              />
             }
             label={"Meine Leinwand"}
           />
