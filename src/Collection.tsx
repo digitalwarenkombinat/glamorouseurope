@@ -105,9 +105,11 @@ function Collection({ imageLikeList, handleCanvasList }: CollectionProps) {
             <Block className="space-y-4">
               <Viewer iiifContent={selectedImage.url} options={options} />
               <Button
+                className="px-4 py-2 rounded-full mr-2"
                 onClick={() => liftSubjectFromBackground(selectedImage.url)}
                 rounded
                 inline
+                outline
               >
                 Add to canvas
               </Button>

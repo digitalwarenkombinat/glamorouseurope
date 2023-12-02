@@ -54,9 +54,3 @@ html, body {
 h1, h2, h3, h4 {
   font-family: 'BernardoModaBold', sans-serif;
 }
-
-img,
-picture {
-  max-width: 100%;
-  display: block;
-}
