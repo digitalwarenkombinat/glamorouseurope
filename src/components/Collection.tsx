@@ -104,7 +104,9 @@ function Collection() {
               <Viewer iiifContent={selectedImage.url} options={options} />
               <Button
                 className="px-4 py-2 rounded-full mr-2"
-                onClick={() => liftSubjectFromBackground(selectedImage.url)}
+                onClick={() =>
+                  liftSubjectFromBackground(selectedImage.identifier)
+                }
                 rounded
                 inline
                 outline

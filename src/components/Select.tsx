@@ -70,6 +70,7 @@ function Selection() {
           location: element?.locationLabel?.value,
           creator: element.creatorLabel?.value,
           url: element.iiifManifest?.value,
+          identifier: identifier,
           image: `${identifier}/full/full/0/default.jpg`,
           thumbnail: `${identifier}/full/100,100/0/default.jpg`,
         };
