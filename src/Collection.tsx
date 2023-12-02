@@ -3,8 +3,9 @@ import { Masonry } from "react-plock";
 import Viewer from "@samvera/clover-iiif/viewer";
 
 // @ts-ignore
-import { Block, Card, Page, Navbar, Link, Popup } from "konsta/react";
+import { Block, Button, Card, Page, Navbar, Link, Popup } from "konsta/react";
 
+import utils from "./utils";
 import { Image } from "./types";
 
 const options = {
@@ -41,19 +42,20 @@ function Collection({ imageLikeList, handleCanvasList }: CollectionProps) {
     setPopupOpened(true);
   };
 
-  /*   const liftSubjectFromBackground = async (imageURL: string) => {
+  const liftSubjectFromBackground = async (imageURL: string) => {
     try {
       const croppedImagePath = await utils.getCroppedImagePath(imageURL);
       console.log("Cropped image path: ", croppedImagePath);
       if (croppedImagePath) {
-        removeBackground(croppedImagePath);
+        // removeBackground(croppedImagePath);
+        handleCanvasList(croppedImagePath);
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  const removeBackground = async (imagePath: string) => {
+  /* const removeBackground = async (imagePath: string) => {
     try {
       const imageURL = await utils.bgRemoval(imagePath);
       handleCanvasList(imageURL);
@@ -101,6 +103,13 @@ function Collection({ imageLikeList, handleCanvasList }: CollectionProps) {
             />
             <Block className="space-y-4">
               <Viewer iiifContent={selectedImage.url} options={options} />
+              <Button
+                onClick={() => liftSubjectFromBackground(selectedImage.url)}
+                rounded
+                inline
+              >
+                Add to canvas
+              </Button>
             </Block>
           </Page>
         </Popup>
