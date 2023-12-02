@@ -3,36 +3,11 @@ import axios from "axios";
 import TinderCard from "react-tinder-card";
 // @ts-ignore
 import { Card, Button, Icon } from "konsta/react";
-import api from "./api";
-import utils from "./utils";
 import { MdOutlineThumbDown, MdOutlineThumbUp } from "react-icons/md";
 
-export interface Element {
-  artworkLabel: { value: string };
-  collectionLabel: { value: string };
-  copyrightLabel: { value: string };
-  countryLabel: { value: string };
-  creatorLabel: { value: string };
-  depictsLabel: { value: string };
-  genreLabel: { value: string };
-  iiifManifest: { value: string };
-  item: { value: string };
-  itemLabel: { value: string };
-  locationLabel: { value: string };
-  materialLabel: { value: string };
-  year: { value: string };
-}
-
-export interface Image {
-  creator: string;
-  country: string;
-  id: string;
-  image: string;
-  location: string;
-  name: string;
-  url: string;
-  year: string;
-}
+import api from "./api";
+import utils from "./utils";
+import { Element, Image } from "./types";
 
 type Direction = "left" | "right" | "up" | "down";
 
@@ -41,7 +16,11 @@ export interface API {
   swipe(dir?: Direction): Promise<void>;
 }
 
-function Selection() {
+interface SelectionProps {
+  handleImageLikeList: (image: Image) => void;
+}
+
+function Selection({ handleImageLikeList }: SelectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [data, setData] = useState<Image[]>([]);
 
@@ -77,7 +56,7 @@ function Selection() {
           location: element?.locationLabel?.value,
           creator: element.creatorLabel?.value,
           url: element.iiifManifest?.value,
-          image: `${identifier}/full/,800/0/default.jpg`,
+          image: `${identifier}/full/full/0/default.jpg`,
           thumbnail: `${identifier}/full/100,100/0/default.jpg`,
         };
       }
@@ -112,7 +91,11 @@ function Selection() {
 
   const canSwipe = currentIndex >= 0;
 
-  const swiped = (index: number) => {
+  const swiped = (direction: Direction, index: number) => {
+    if (direction === "right") {
+      console.log(currentImage);
+      handleImageLikeList(currentImage);
+    }
     updateCurrentIndex(index + 1);
   };
 
@@ -139,7 +122,7 @@ function Selection() {
                 ref={childRef}
                 className="mb-4"
                 key={currentImage.id}
-                onSwipe={() => swiped(currentIndex)}
+                onSwipe={(dir) => swiped(dir, currentIndex)}
                 onCardLeftScreen={() =>
                   outOfFrame(currentImage.name, currentIndex)
                 }
