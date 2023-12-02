@@ -6,7 +6,7 @@ import Viewer from "@samvera/clover-iiif/viewer";
 import { Block, Button, Card, Page, Navbar, Link, Popup } from "konsta/react";
 
 import utils from "../utils";
-import { Image } from "../types";
+import useStore, { Image } from "../store";
 
 const options = {
   canvasBackgroundColor: "010A01",
@@ -28,12 +28,10 @@ const options = {
   showZoomControl: false,
 };
 
-interface CollectionProps {
-  imageLikeList: Image[];
-  handleCanvasList: (imageURL: string) => void;
-}
+function Collection() {
+  const { imageLikeList } = useStore();
+  const addToCanvas = useStore((state) => state.addToCanvas);
 
-function Collection({ imageLikeList, handleCanvasList }: CollectionProps) {
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
   const [popupOpened, setPopupOpened] = useState(false);
 
@@ -48,7 +46,7 @@ function Collection({ imageLikeList, handleCanvasList }: CollectionProps) {
       console.log("Cropped image path: ", croppedImagePath);
       if (croppedImagePath) {
         // removeBackground(croppedImagePath);
-        handleCanvasList(croppedImagePath);
+        addToCanvas(croppedImagePath);
       }
     } catch (error) {
       console.error("Error:", error);

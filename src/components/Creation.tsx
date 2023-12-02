@@ -1,6 +1,8 @@
 // @ts-ignore
 import { Block, Button, Icon } from "konsta/react";
 import { MdDownloadForOffline, MdShare } from "react-icons/md";
+
+import useStore from "../store";
 import CanvasIcon from "/canvas.webp";
 
 const Canvas = () => {
@@ -12,11 +14,9 @@ const Canvas = () => {
     />
   );
 };
-interface CreationProps {
-  canvasList: string[];
-}
 
-function Creation({ canvasList }: CreationProps) {
+function Creation() {
+  const { canvasList } = useStore();
   return (
     <Block className="flex flex-col flex-wrap gap-4 container mx-auto justify-center content-center">
       {canvasList && <Canvas />}

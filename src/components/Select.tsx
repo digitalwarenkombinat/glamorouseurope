@@ -7,7 +7,23 @@ import { MdOutlineThumbDown, MdOutlineThumbUp } from "react-icons/md";
 
 import api from "../api";
 import utils from "../utils";
-import { Element, Image } from "../types";
+import useStore, { Image } from "../store";
+
+export interface Element {
+  artworkLabel: { value: string };
+  collectionLabel: { value: string };
+  copyrightLabel: { value: string };
+  countryLabel: { value: string };
+  creatorLabel: { value: string };
+  depictsLabel: { value: string };
+  genreLabel: { value: string };
+  iiifManifest: { value: string };
+  item: { value: string };
+  itemLabel: { value: string };
+  locationLabel: { value: string };
+  materialLabel: { value: string };
+  year: { value: string };
+}
 
 type Direction = "left" | "right" | "up" | "down";
 
@@ -16,13 +32,11 @@ export interface API {
   swipe(dir?: Direction): Promise<void>;
 }
 
-interface SelectionProps {
-  handleImageLikeList: (image: Image) => void;
-}
-
-function Selection({ handleImageLikeList }: SelectionProps) {
+function Selection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [data, setData] = useState<Image[]>([]);
+
+  const likeImage = useStore((state) => state.likeImage);
 
   const currentIndexRef = useRef(currentIndex);
 
@@ -94,7 +108,7 @@ function Selection({ handleImageLikeList }: SelectionProps) {
   const swiped = (direction: Direction, index: number) => {
     if (direction === "right") {
       console.log(currentImage);
-      handleImageLikeList(currentImage);
+      likeImage(currentImage);
     }
     updateCurrentIndex(index + 1);
   };
