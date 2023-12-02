@@ -91,6 +91,7 @@ function Collection({ imageLikeList, handleCanvasList }: CollectionProps) {
         <Popup
           opened={popupOpened}
           onBackdropClick={() => setPopupOpened(false)}
+          size="w-screen h-screen"
         >
           <Page>
             <Navbar
