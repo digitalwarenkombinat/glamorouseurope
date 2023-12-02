@@ -6,7 +6,7 @@ import Creation from "./Creation";
 import Select from "./Select";
 import Start from "./Start";
 
-import { Image } from "./types";
+import { Image } from "../types";
 
 function App() {
   const [imageLikeList, setImageLikeList] = useState([] as Image[]);

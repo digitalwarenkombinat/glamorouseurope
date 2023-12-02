@@ -5,8 +5,8 @@ import Viewer from "@samvera/clover-iiif/viewer";
 // @ts-ignore
 import { Block, Button, Card, Page, Navbar, Link, Popup } from "konsta/react";
 
-import utils from "./utils";
-import { Image } from "./types";
+import utils from "../utils";
+import { Image } from "../types";
 
 const options = {
   canvasBackgroundColor: "010A01",

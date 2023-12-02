@@ -1,8 +1,0 @@
-.swipe {
-  position: absolute;
-  width: inherit;
-}
-
-header.clover-header, div.clover-canvases, #openseadragon-controls, div.clover-content button {
-  display: none;
-}

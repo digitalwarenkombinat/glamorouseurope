@@ -5,9 +5,9 @@ import TinderCard from "react-tinder-card";
 import { Card, Button, Icon } from "konsta/react";
 import { MdOutlineThumbDown, MdOutlineThumbUp } from "react-icons/md";
 
-import api from "./api";
-import utils from "./utils";
-import { Element, Image } from "./types";
+import api from "../api";
+import utils from "../utils";
+import { Element, Image } from "../types";
 
 type Direction = "left" | "right" | "up" | "down";
 
