@@ -1,14 +1,15 @@
 // @ts-ignore
 import { Block } from "konsta/react";
 
+import CanvasIcon from "/canvas.webp";
 interface CreationProps {
-  imageURL: string;
+  canvasList: string[];
 }
 
-function Creation({ imageURL }: CreationProps) {
+function Creation({ canvasList }: CreationProps) {
   return (
     <Block className="flex flex-col gap-16 container mx-auto justify-center content-evenly">
-      {imageURL && <img src={imageURL} alt="Background Removed" />}
+      {canvasList && <img src={CanvasIcon} alt="Background canvas" />}
     </Block>
   );
 }
