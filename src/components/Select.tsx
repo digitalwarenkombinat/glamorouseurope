@@ -1,13 +1,13 @@
-import { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
-import TinderCard from "react-tinder-card";
 // @ts-ignore
-import { Card, Button, Icon } from "konsta/react";
+import { Button, Card, Icon } from "konsta/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MdOutlineThumbDown, MdOutlineThumbUp } from "react-icons/md";
+import TinderCard from "react-tinder-card";
 
 import api from "../api";
-import utils from "../utils";
 import useStore, { Image } from "../store";
+import utils from "../utils";
 
 export interface Element {
   artworkLabel: { value: string };

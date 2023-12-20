@@ -1,12 +1,12 @@
-import { NavLink, Outlet, useMatch, useResolvedPath } from "react-router-dom";
 // @ts-ignore
 import { App, Icon, Page, Tabbar, TabbarLink } from "konsta/react";
 import {
-  MdOutlineDoorFront,
   MdFavoriteBorder,
-  MdOutlineCollections,
   MdOutlineAssignmentInd,
+  MdOutlineCollections,
+  MdOutlineDoorFront,
 } from "react-icons/md";
+import { NavLink, Outlet, useMatch, useResolvedPath } from "react-router-dom";
 
 function Layout() {
   return (

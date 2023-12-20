@@ -1,12 +1,13 @@
-import { useState } from "react";
-import { Masonry } from "react-plock";
-import Viewer from "@samvera/clover-iiif/viewer";
-
+// import Viewer from "@samvera/clover-iiif/viewer";
 // @ts-ignore
-import { Block, Button, Card, Page, Navbar, Link, Popup } from "konsta/react";
+import { Block, Button, Card, Link, Navbar, Page, Popup } from "konsta/react";
+import { Suspense, lazy, useState } from "react";
+import { Masonry } from "react-plock";
 
-import utils from "../utils";
 import useStore, { Image } from "../store";
+import utils from "../utils";
+
+const Viewer = lazy(() => import("@samvera/clover-iiif/viewer"));
 
 const options = {
   canvasBackgroundColor: "010A01",
@@ -101,7 +102,9 @@ function Collection() {
               }
             />
             <Block className="space-y-4">
-              <Viewer iiifContent={selectedImage.url} options={options} />
+              <Suspense fallback={<h2>🌀 Loading...</h2>}>
+                <Viewer iiifContent={selectedImage.url} options={options} />
+              </Suspense>
               <Button
                 className="px-4 py-2 rounded-full mr-2"
                 onClick={() =>

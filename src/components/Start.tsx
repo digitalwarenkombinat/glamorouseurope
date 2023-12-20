@@ -1,7 +1,8 @@
 // @ts-ignore
 import { Block } from "konsta/react";
-import LogoIcon from "/logo_animated.svg";
+
 import CollageIcon from "/collage.webp";
+import LogoIcon from "/logo_animated.svg";
 
 const Logo = () => {
   return <img src={LogoIcon} alt="Logo GLAMorous Europe" className="w-160" />;

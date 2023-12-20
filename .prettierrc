@@ -1,0 +1,20 @@
+{
+    "bracketSpacing": true,
+    "jsonRecursiveSort": true,
+    "importOrder": [
+      "<THIRD_PARTY_MODULES>",
+      "^@material-ui/(.*)$",
+      "src",
+      "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true,
+    "plugins": [
+      "prettier-plugin-sort-json",
+      "@trivago/prettier-plugin-sort-imports"
+    ], 
+    "semi": true,
+    "singleQuote": false,
+    "printWidth": 80,
+    "trailingComma": "all"
+  }

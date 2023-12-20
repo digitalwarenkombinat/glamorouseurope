@@ -1,11 +1,11 @@
-import removeBackground, { Config } from "@imgly/background-removal";
+/* import removeBackground, { Config } from "@imgly/background-removal";
 
 const config: Config = {
   model: "small",
   progress: (key: unknown, current: unknown, total: unknown) => {
     console.log(`Downloading ${key}: ${current} of ${total}`);
   },
-};
+}; */
 
 async function fetchIIIFIdentifier(
   iiifManifest: string,
@@ -186,7 +186,7 @@ function getImageSelectionData(
 }
 
 export default {
-  bgRemoval: async (path: string) => {
+  /*   bgRemoval: async (path: string) => {
     const startTime = Date.now();
     try {
       const blob: Blob = await removeBackground(path, config);
@@ -199,7 +199,7 @@ export default {
       console.error(error);
       throw error;
     }
-  },
+  }, */
   fetchIIIFIdentifier: async (iiifManifest: string) => {
     try {
       return await fetchIIIFIdentifier(iiifManifest);
