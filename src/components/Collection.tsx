@@ -1,5 +1,4 @@
-// import Viewer from "@samvera/clover-iiif/viewer";
-// @ts-ignore
+// @ts-expect-error konsta typing
 import { Block, Button, Card, Link, Navbar, Page, Popup } from "konsta/react";
 import { Suspense, lazy, useState } from "react";
 import { Masonry } from "react-plock";

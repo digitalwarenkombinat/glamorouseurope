@@ -1,5 +1,5 @@
 import axios from "axios";
-// @ts-ignore
+// @ts-expect-error konsta typing
 import { Button, Card, Icon } from "konsta/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MdOutlineThumbDown, MdOutlineThumbUp } from "react-icons/md";

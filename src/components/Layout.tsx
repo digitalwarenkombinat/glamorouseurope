@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error konsta typing
 import { App, Icon, Page, Tabbar, TabbarLink } from "konsta/react";
 import {
   MdFavoriteBorder,

@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error konsta typing
 import { Block, Button, Icon } from "konsta/react";
 import { MdDownloadForOffline, MdShare } from "react-icons/md";
 
