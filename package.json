@@ -21,7 +21,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-plock": "^3.0.2",
-    "react-router-dom": "^6.21.0",
+    "react-router-dom": "^6.21.1",
     "react-tinder-card": "^1.6.4",
     "wikibase-sdk": "^9.2.4",
     "zustand": "^4.4.7"
