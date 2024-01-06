@@ -101,7 +101,7 @@ function Layout() {
             label={"Meine Leinwand"}
           />
         </Tabbar>
-        <main className="h-[calc(100%_-_80px)]">
+        <main className="h-[calc(100%_-_80px)] overflow-auto">
           <Outlet />
         </main>
       </Page>

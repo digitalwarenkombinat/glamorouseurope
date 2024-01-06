@@ -2,34 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @font-face {
+@font-face {
   font-family: 'BeautySchoolDropout';
   src: url('./fonts/BeautySchoolDropout.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-} */
-
-@font-face {
-  font-family: 'BernardoModalBold';
-  src: url('./fonts/BernardoModalBold.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Dante';
-  src: url('./fonts/Dante.woff2') format('woff2');
+  font-family: 'CrimsonRoman';
+  src: url('./fonts/CrimsonRoman.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 body {
-  font-family: 'Dante', sans-serif;
+  font-family: 'CrimsonRoman', sans-serif;
 }
 
-h1, h2, h3, h4 {
-  font-family: 'BernardoModaBold', sans-serif;
+a > span > span {
+  font-family: 'BeautySchoolDropout', sans-serif;
+  text-transform: uppercase;
+  font-size: 4rem;
 }

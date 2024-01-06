@@ -40,28 +40,17 @@ function Collection() {
     setPopupOpened(true);
   };
 
-  const liftSubjectFromBackground = async (imageURL: string) => {
+  const addFrameToCanvas = async (imageURL: string) => {
     try {
       const croppedImagePath = await utils.getCroppedImagePath(imageURL);
       console.log("Cropped image path: ", croppedImagePath);
       if (croppedImagePath) {
-        // removeBackground(croppedImagePath);
         addToCanvas(croppedImagePath);
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
-  /* const removeBackground = async (imagePath: string) => {
-    try {
-      const imageURL = await utils.bgRemoval(imagePath);
-      handleCanvasList(imageURL);
-      console.log("Resulting image URL: ", imageURL);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }; */
 
   return (
     <>
@@ -89,7 +78,7 @@ function Collection() {
         <Popup
           opened={popupOpened}
           onBackdropClick={() => setPopupOpened(false)}
-          size="w-screen h-screen"
+          size="w-screen h-4/5"
         >
           <Page>
             <Navbar
@@ -101,20 +90,18 @@ function Collection() {
               }
             />
             <Block className="space-y-4">
-              <Suspense fallback={<h2>🌀 Loading...</h2>}>
-                <Viewer iiifContent={selectedImage.url} options={options} />
-              </Suspense>
               <Button
                 className="px-4 py-2 rounded-full mr-2"
-                onClick={() =>
-                  liftSubjectFromBackground(selectedImage.identifier)
-                }
+                onClick={() => addFrameToCanvas(selectedImage.identifier)}
                 rounded
                 inline
                 outline
               >
-                Add to canvas
+                Add frame to canvas
               </Button>
+              <Suspense fallback={<h2>🌀 Loading...</h2>}>
+                <Viewer iiifContent={selectedImage.url} options={options} />
+              </Suspense>
             </Block>
           </Page>
         </Popup>
