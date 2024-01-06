@@ -1,12 +1,3 @@
-/* import removeBackground, { Config } from "@imgly/background-removal";
-
-const config: Config = {
-  model: "small",
-  progress: (key: unknown, current: unknown, total: unknown) => {
-    console.log(`Downloading ${key}: ${current} of ${total}`);
-  },
-}; */
-
 async function fetchIIIFIdentifier(
   iiifManifest: string,
 ): Promise<string | null> {

@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
+/* @font-face {
   font-family: 'BeautySchoolDropout';
   src: url('./fonts/BeautySchoolDropout.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
+} */
 
 @font-face {
   font-family: 'BernardoModalBold';
@@ -26,28 +26,7 @@
   font-display: swap;
 }
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  -moz-text-size-adjust: none;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
-}
-
-html, body {
+body {
   font-family: 'Dante', sans-serif;
 }
 

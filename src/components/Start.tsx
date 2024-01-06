@@ -10,7 +10,13 @@ const Logo = () => {
 
 const Collage = () => {
   return (
-    <img src={CollageIcon} alt="Collage GLAMorous Europe" className="w-160" />
+    <img
+      src={CollageIcon}
+      alt="Collage GLAMorous Europe"
+      className="w-160"
+      decoding="async"
+      fetchpriority="high"
+    />
   );
 };
 
