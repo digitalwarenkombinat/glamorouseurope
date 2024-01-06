@@ -1,17 +1,28 @@
 // @ts-expect-error konsta typing
 import { Block, Button, Icon } from "konsta/react";
 import { MdDownloadForOffline, MdShare } from "react-icons/md";
+import { Image, Layer, Stage } from "react-konva";
+import useImage from "use-image";
 
 import useStore from "../store";
-import CanvasIcon from "/canvas.webp";
+
+const CanvasImage = ({ canvas }: { canvas: string }) => {
+  const [image] = useImage(canvas);
+
+  return <Image image={image} />;
+};
 
 const Canvas = () => {
+  const { canvasList } = useStore();
+
   return (
-    <img
-      src={CanvasIcon}
-      alt="Background canvas"
-      className="w-160 h-160 mb-8"
-    />
+    <Stage width={window.innerWidth} height={800}>
+      <Layer>
+        {canvasList.map((canvas: string) => (
+          <CanvasImage key={canvas} canvas={canvas} />
+        ))}
+      </Layer>
+    </Stage>
   );
 };
 
