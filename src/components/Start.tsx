@@ -15,7 +15,6 @@ const Collage = () => {
       alt="Collage GLAMorous Europe"
       className="w-160"
       decoding="async"
-      fetchpriority="high"
     />
   );
 };
