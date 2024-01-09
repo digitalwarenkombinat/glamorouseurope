@@ -119,9 +119,8 @@ function Selection() {
     updateCurrentIndex(index + 1);
   };
 
-  const outOfFrame = (name: string, idx: number) => {
-    // console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
-    currentIndexRef.current >= idx && childRef.current?.restoreCard();
+  const outOfFrame = (index: number) => {
+    currentIndexRef.current >= index && childRef.current?.restoreCard();
   };
 
   const swipe = async (dir: Direction) => {
@@ -147,9 +146,7 @@ function Selection() {
                 className="mb-4"
                 key={currentImage.id}
                 onSwipe={(dir) => swiped(dir, currentIndex)}
-                onCardLeftScreen={() =>
-                  outOfFrame(currentImage.name, currentIndex)
-                }
+                onCardLeftScreen={() => outOfFrame(currentIndex)}
                 preventSwipe={["up", "down"]}
               >
                 <img alt={currentImage.name} src={currentImage.image}></img>
