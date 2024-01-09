@@ -12,17 +12,9 @@ import useImage from "use-image";
 
 import useStore, { CanvasImageProps } from "../store";
 
-const FrameImage = ({
-  handleEvent,
-}: {
-  handleEvent: (
-    e: Konva.KonvaEventObject<TouchEvent> | Konva.KonvaEventObject<MouseEvent>,
-  ) => void;
-}) => {
+const FrameImage = () => {
   const [image] = useImage("/canvas.webp");
-  return (
-    <Image image={image} onMouseDown={handleEvent} onTouchStart={handleEvent} />
-  );
+  return <Image image={image} />;
 };
 
 const CanvasImage = ({
@@ -156,8 +148,13 @@ const Canvas = () => {
     };
   }, []);
 
-  const checkDeselect = () => {
-    setSelectedId("");
+  const checkDeselect = (
+    e: Konva.KonvaEventObject<TouchEvent> | Konva.KonvaEventObject<MouseEvent>,
+  ) => {
+    const clickedOnEmpty = e.target === e.target.getStage();
+    if (clickedOnEmpty) {
+      setSelectedId("");
+    }
   };
 
   const bringToFront = () => {
@@ -227,7 +224,7 @@ const Canvas = () => {
           onTouchStart={checkDeselect}
         >
           <Layer>
-            <FrameImage handleEvent={checkDeselect} />
+            <FrameImage />
             {canvasList.map((canvasImage) => (
               <CanvasImage
                 key={canvasImage.id}
