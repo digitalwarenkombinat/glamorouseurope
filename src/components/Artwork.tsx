@@ -1,6 +1,7 @@
 // @ts-expect-error konsta typing
 import { Block, Button, Icon } from "konsta/react";
 import Konva from "konva";
+import { KonvaEventObject } from "konva/lib/Node";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MdDownloadForOffline, MdShare } from "react-icons/md";
@@ -48,7 +49,7 @@ const CanvasImage = ({
   const handleDragStart = () => {
     transformCanvasImage({ ...canvasImage, isDragging: true });
   };
-  const handleDragEnd = (e: any) => {
+  const handleDragEnd = (e: KonvaEventObject<DragEvent>) => {
     transformCanvasImage({
       ...canvasImage,
       isDragging: false,
@@ -133,7 +134,9 @@ const Canvas = () => {
     };
   }, []);
 
-  const checkDeselect = (e: any) => {
+  const checkDeselect = (
+    e: Konva.KonvaEventObject<TouchEvent> | Konva.KonvaEventObject<MouseEvent>,
+  ) => {
     const clickedOnEmpty = e.target === e.target.getStage();
     if (clickedOnEmpty) {
       selectShape("");
