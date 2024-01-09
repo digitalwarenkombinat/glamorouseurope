@@ -115,9 +115,8 @@ function getImageSelectionData(
   const imageWidth = imageData.width;
   const imageHeight = imageData.height;
 
-  const defaultSelectionWidth = 1280;
+  const defaultSelectionWidth = 1080;
 
-  let selectionRegion = "full";
   const selectionRotation = "0";
   const selectionQuality = "default";
   const selectionFormat = ".jpg";
@@ -132,14 +131,6 @@ function getImageSelectionData(
     (canvasElement.clientWidth - calculatedCanvasWidth) / 2;
   const multiplier = imageWidth / calculatedCanvasWidth;
 
-  console.log("Multiplier: ", multiplier);
-
-  console.log(`Image resolution (width, height): ${imageWidth},${imageHeight}`);
-
-  console.log(
-    `Canvas resolution (width, height): ${calculatedCanvasWidth},${canvasElement.clientHeight}`,
-  );
-
   const selectionBorderWidth = 9;
   const selectionX = getStyle(selectionElement, "left");
   const selectionY = getStyle(selectionElement, "top");
@@ -148,10 +139,6 @@ function getImageSelectionData(
   );
   const selectionHeight = Math.round(
     selectionElement.clientHeight + selectionBorderWidth,
-  );
-
-  console.log(
-    `Selection region (x, y, width, height): ${selectionX},${selectionY},${selectionWidth},${selectionHeight}`,
   );
 
   const calculatedSelectionX = Math.max(
@@ -168,7 +155,7 @@ function getImageSelectionData(
     imageHeight,
   );
 
-  selectionRegion = `${calculatedSelectionX},${calculatedSelectionY},${calculatedSelectionWidth},${calculatedSelectionHeight}`;
+  const selectionRegion = `${calculatedSelectionX},${calculatedSelectionY},${calculatedSelectionWidth},${calculatedSelectionHeight}`;
   console.log(
     `Calculated selection region (x, y, width, height): ${calculatedSelectionX},${calculatedSelectionY},${calculatedSelectionWidth},${calculatedSelectionHeight}`,
   );
@@ -200,8 +187,6 @@ export default {
     }
   },
   getCroppedImagePath: async (imageURL: string) => {
-    console.log("Image URL: ", imageURL);
-
     try {
       const infoUrl = imageURL + "/info.json";
       const infoResponse = await fetch(infoUrl);

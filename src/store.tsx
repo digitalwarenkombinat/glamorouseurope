@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-export interface Image {
+export interface ImageProps {
   creator: string;
   country: string;
   id: string;
@@ -14,11 +14,20 @@ export interface Image {
   thumbnail: string;
 }
 
+export interface CanvasImageProps {
+  id: string;
+  image: string;
+  x: number;
+  y: number;
+  isDragging: boolean;
+}
+
 interface GlamState {
-  imageLikeList: Image[];
-  canvasList: string[];
-  likeImage: (image: Image) => void;
-  addToCanvas: (imageURL: string) => void;
+  imageLikeList: ImageProps[];
+  canvasList: CanvasImageProps[];
+  likeImage: (image: ImageProps) => void;
+  addToCanvas: (id: string, imageURL: string) => void;
+  transformCanvasImage: (canvasImage: CanvasImageProps) => void;
 }
 
 const useStore = create<GlamState>()(
@@ -29,8 +38,32 @@ const useStore = create<GlamState>()(
         canvasList: [],
         likeImage: (image) =>
           set((state) => ({ imageLikeList: [...state.imageLikeList, image] })),
-        addToCanvas: (imageURL) =>
-          set((state) => ({ canvasList: [...state.canvasList, imageURL] })),
+        addToCanvas: (id, imageURL) =>
+          set((state) => ({
+            canvasList: [
+              ...state.canvasList,
+              {
+                id: id,
+                image: imageURL,
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                isDragging: false,
+              },
+            ],
+          })),
+        transformCanvasImage: (canvasImage) =>
+          set((state) => ({
+            canvasList: state.canvasList.map((canvas) => {
+              if (canvas.id !== canvasImage.id) {
+                return canvas;
+              }
+              return {
+                ...canvas,
+                x: canvasImage.x,
+                y: canvasImage.y,
+              };
+            }),
+          })),
       }),
       { name: "glamStore" },
     ),

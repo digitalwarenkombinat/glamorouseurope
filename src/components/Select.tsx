@@ -2,11 +2,12 @@ import axios from "axios";
 // @ts-expect-error konsta typing
 import { Button, Card, Icon } from "konsta/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MdOutlineThumbDown, MdOutlineThumbUp } from "react-icons/md";
 import TinderCard from "react-tinder-card";
 
 import api from "../api";
-import useStore, { Image } from "../store";
+import useStore, { ImageProps } from "../store";
 import utils from "../utils";
 
 export interface Element {
@@ -33,8 +34,10 @@ export interface API {
 }
 
 function Selection() {
+  const { t } = useTranslation();
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [data, setData] = useState<Image[]>([]);
+  const [data, setData] = useState<ImageProps[]>([]);
 
   const likeImage = useStore((state) => state.likeImage);
 
@@ -48,7 +51,7 @@ function Selection() {
     const getValidIIIFIdentifier = async (iiifManifest: string) => {
       try {
         const imageURL = await utils.fetchIIIFIdentifier(iiifManifest);
-        console.log("Image URL: ", imageURL);
+        // console.log("Image URL: ", imageURL);
 
         return imageURL;
       } catch (error) {
@@ -71,7 +74,7 @@ function Selection() {
           creator: element.creatorLabel?.value,
           url: element.iiifManifest?.value,
           identifier: identifier,
-          image: `${identifier}/full/full/0/default.jpg`,
+          image: `${identifier}/full/400,/0/default.jpg`,
           thumbnail: `${identifier}/full/100,100/0/default.jpg`,
         };
       }
@@ -79,10 +82,12 @@ function Selection() {
     });
 
     const imageResults = await Promise.all(imagePromises);
-    const images = imageResults.filter((image) => image !== null) as Image[];
+    const images = imageResults.filter(
+      (image) => image !== null,
+    ) as ImageProps[];
 
-    console.log("Data elements: ", elements);
-    console.log("Data images: ", images);
+    // console.log("Data elements: ", elements);
+    // console.log("Data images: ", images);
     setData(images);
   }, []);
 
@@ -108,14 +113,14 @@ function Selection() {
 
   const swiped = (direction: Direction, index: number) => {
     if (direction === "right") {
-      console.log(currentImage);
+      // console.log(currentImage);
       likeImage(currentImage);
     }
     updateCurrentIndex(index + 1);
   };
 
   const outOfFrame = (name: string, idx: number) => {
-    console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
+    // console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
     currentIndexRef.current >= idx && childRef.current?.restoreCard();
   };
 
@@ -128,7 +133,11 @@ function Selection() {
   const currentImage = data[currentIndex];
 
   return (
-    <div className="flex flex-col justify-evenly">
+    <div className="flex flex-col justify-evenly text-center">
+      <div className="p-2 m-4">
+        <h1 className="text-2xl">{t("selectionTitle")}</h1>
+      </div>
+
       <div className="max-w-2xl mx-auto h-2/3">
         <Card className="flex">
           {currentImage && (
@@ -174,9 +183,17 @@ function Selection() {
         <h2 className="text-2xl font-bold mb-2 text-black">
           {currentImage?.name}
         </h2>
-        <p className="text-gray-600">Year: {currentImage?.year}</p>
-        <p className="text-gray-600">Creator: {currentImage?.creator}</p>
-        <p className="text-gray-600">Location: {currentImage?.location}</p>
+        <p className="text-gray-600">
+          {t("selectionYear")} {currentImage?.year || t("selectionUnknown")}
+        </p>
+        <p className="text-gray-600">
+          {t("selectionCreator")}{" "}
+          {currentImage?.creator || t("selectionUnknown")}
+        </p>
+        <p className="text-gray-600">
+          {t("selectionLocation")}{" "}
+          {currentImage?.location || t("selectionUnknown")}
+        </p>
       </div>
     </div>
   );
