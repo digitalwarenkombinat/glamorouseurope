@@ -1,23 +1,49 @@
 // @ts-expect-error konsta typing
 import { Block, Button, Icon } from "konsta/react";
 import Konva from "konva";
-import { MutableRefObject, ReactElement, useEffect, useRef } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MdDownloadForOffline, MdShare } from "react-icons/md";
-import { Image, Layer, Stage } from "react-konva";
+import { Image, Layer, Stage, Transformer } from "react-konva";
 import { Link } from "react-router-dom";
 import useImage from "use-image";
 
 import useStore, { CanvasImageProps } from "../store";
+
+function downloadURI(uri: string, name: string) {
+  const link = document.createElement("a");
+  link.download = name;
+  link.href = uri;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 
 const FrameImage = () => {
   const [image] = useImage("/canvas.webp");
   return <Image image={image} />;
 };
 
-const CanvasImage = ({ canvasImage }: { canvasImage: CanvasImageProps }) => {
+const CanvasImage = ({
+  canvasImage,
+  isSelected,
+  onSelect,
+}: {
+  canvasImage: CanvasImageProps;
+  isSelected: boolean;
+  onSelect: () => void;
+}) => {
+  const imageRef = useRef() as MutableRefObject<Konva.Image>;
+  const trRef = useRef() as MutableRefObject<Konva.Transformer>;
   const [image] = useImage(canvasImage.image);
   const transformCanvasImage = useStore((state) => state.transformCanvasImage);
+
+  useEffect(() => {
+    if (isSelected) {
+      trRef.current.nodes([imageRef.current]);
+      trRef.current.getLayer()?.batchDraw();
+    }
+  }, [isSelected]);
 
   const handleDragStart = () => {
     transformCanvasImage({ ...canvasImage, isDragging: true });
@@ -31,25 +57,58 @@ const CanvasImage = ({ canvasImage }: { canvasImage: CanvasImageProps }) => {
     });
   };
 
+  const handleTransformEnd = () => {
+    const node = imageRef.current;
+    const scaleX = node.scaleX();
+    const scaleY = node.scaleY();
+
+    node.scaleX(1);
+    node.scaleY(1);
+    transformCanvasImage({
+      ...canvasImage,
+      x: node.x(),
+      y: node.y(),
+      width: Math.max(5, node.width() * scaleX),
+      height: Math.max(node.height() * scaleY),
+    });
+  };
+
   return (
-    <Image
-      image={image}
-      key={canvasImage.id}
-      id={canvasImage.id}
-      x={canvasImage.x}
-      y={canvasImage.y}
-      draggable
-      scaleX={canvasImage.isDragging ? 1.2 : 1}
-      scaleY={canvasImage.isDragging ? 1.2 : 1}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    />
+    <>
+      <Image
+        draggable
+        id={canvasImage.id}
+        image={image}
+        key={canvasImage.id}
+        onClick={onSelect}
+        onDragEnd={handleDragEnd}
+        onDragStart={handleDragStart}
+        onTap={onSelect}
+        onTransformEnd={handleTransformEnd}
+        ref={imageRef}
+        x={canvasImage.x}
+        y={canvasImage.y}
+      />
+      {isSelected && (
+        <Transformer
+          ref={trRef}
+          flipEnabled={false}
+          boundBoxFunc={(oldBox, newBox) => {
+            if (Math.abs(newBox.width) < 5 || Math.abs(newBox.height) < 5) {
+              return oldBox;
+            }
+            return newBox;
+          }}
+        />
+      )}
+    </>
   );
 };
 
 const Canvas = () => {
   const { canvasList } = useStore();
   const stageRef = useRef() as MutableRefObject<Konva.Stage>;
+  const [selectedId, selectShape] = useState("");
   const sceneWidth = 1080;
   const sceneHeight = 1296;
 
@@ -74,17 +133,62 @@ const Canvas = () => {
     };
   }, []);
 
+  const checkDeselect = (e: any) => {
+    const clickedOnEmpty = e.target === e.target.getStage();
+    if (clickedOnEmpty) {
+      selectShape("");
+    }
+  };
+
+  const handleDownload = () => {
+    const uri = stageRef.current.toDataURL();
+    downloadURI(uri, "GLAMorousEurope.png");
+  };
+
   return (
-    <div>
-      <Stage width={sceneWidth} height={sceneHeight} ref={stageRef}>
-        <Layer>
-          <FrameImage />
-          {canvasList.map((canvasImage) => (
-            <CanvasImage key={canvasImage.id} canvasImage={canvasImage} />
-          ))}
-        </Layer>
-      </Stage>
-    </div>
+    <>
+      <div>
+        <Stage
+          width={sceneWidth}
+          height={sceneHeight}
+          ref={stageRef}
+          onMouseDown={checkDeselect}
+          onTouchStart={checkDeselect}
+        >
+          <Layer>
+            <FrameImage />
+            {canvasList.map((canvasImage) => (
+              <CanvasImage
+                key={canvasImage.id}
+                canvasImage={canvasImage}
+                isSelected={canvasImage.id === selectedId}
+                onSelect={() => {
+                  selectShape(canvasImage.id);
+                }}
+              />
+            ))}
+          </Layer>
+        </Stage>
+      </div>
+      <Button
+        className="p-2 rounded-full"
+        rounded
+        inline
+        outline
+        onClick={() => handleDownload()}
+      >
+        <Icon material={<MdShare className="w-6 h-6" />} />
+      </Button>
+      <Button
+        className="p-2 rounded-full"
+        rounded
+        inline
+        outline
+        onClick={() => handleDownload()}
+      >
+        <Icon material={<MdDownloadForOffline className="w-6 h-6" />} />
+      </Button>
+    </>
   );
 };
 
@@ -104,12 +208,6 @@ function Artwork() {
       ) : (
         <Canvas />
       )}
-      <Button className="p-2 rounded-full" rounded inline outline>
-        <Icon material={<MdShare className="w-6 h-6" />} />
-      </Button>
-      <Button className="p-2 rounded-full" rounded inline outline>
-        <Icon material={<MdDownloadForOffline className="w-6 h-6" />} />
-      </Button>
     </Block>
   );
 }
