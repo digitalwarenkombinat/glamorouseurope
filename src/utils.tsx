@@ -102,18 +102,16 @@ function loadv3(manifest: { items: any }): string | null {
   return null;
 }
 
-function getStyle(element: Element, property: string) {
-  return parseFloat(
-    window.getComputedStyle(element).getPropertyValue(property),
-  );
+function getStyle(element: HTMLElement, styleProperty: string): number {
+  const computedStyle = window.getComputedStyle(element);
+  return parseInt(computedStyle.getPropertyValue(styleProperty), 10);
 }
 
 function getImageSelectionData(
   identifier: string | null,
   imageData: { width: number; height: number },
 ): string {
-  const imageWidth = imageData.width;
-  const imageHeight = imageData.height;
+  const { width: imageWidth, height: imageHeight } = imageData;
 
   const defaultSelectionWidth = 1080;
 
@@ -121,14 +119,22 @@ function getImageSelectionData(
   const selectionQuality = "default";
   const selectionFormat = ".jpg";
 
-  const canvasElement = document.getElementsByClassName(
-    "displayregioncontainer",
-  )[0];
-  const selectionElement = document.getElementsByClassName("displayregion")[0];
-  const calculatedCanvasWidth =
-    (imageWidth * canvasElement.clientHeight) / imageHeight;
-  const calculatedCanvasLeft =
-    (canvasElement.clientWidth - calculatedCanvasWidth) / 2;
+  const canvasElement = document.querySelector(
+    ".displayregioncontainer",
+  ) as HTMLElement;
+  const selectionElement = document.querySelector(
+    ".displayregion",
+  ) as HTMLElement;
+
+  if (!canvasElement || !selectionElement) {
+    throw new Error("Canvas or selection element not found");
+  }
+
+  const { clientWidth: canvasWidth, clientHeight: canvasHeight } =
+    canvasElement;
+
+  const calculatedCanvasWidth = (imageWidth * canvasHeight) / imageHeight;
+  const calculatedCanvasLeft = (canvasWidth - calculatedCanvasWidth) / 2;
   const multiplier = imageWidth / calculatedCanvasWidth;
 
   const selectionBorderWidth = 9;
@@ -157,8 +163,9 @@ function getImageSelectionData(
 
   const selectionRegion = `${calculatedSelectionX},${calculatedSelectionY},${calculatedSelectionWidth},${calculatedSelectionHeight}`;
   console.log(
-    `Calculated selection region (x, y, width, height): ${calculatedSelectionX},${calculatedSelectionY},${calculatedSelectionWidth},${calculatedSelectionHeight}`,
+    `Calculated selection region (x, y, width, height): ${selectionRegion}`,
   );
+
   const selectionURL = `${identifier}/${selectionRegion}/${defaultSelectionWidth},/${selectionRotation}/${selectionQuality}${selectionFormat}`;
   return selectionURL;
 }

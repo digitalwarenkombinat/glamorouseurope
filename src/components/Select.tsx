@@ -33,6 +33,24 @@ export interface API {
   swipe(dir?: Direction): Promise<void>;
 }
 
+const SwipeButton = ({
+  onClick,
+  materialIcon,
+}: {
+  onClick: () => void;
+  materialIcon: React.ReactNode;
+}) => (
+  <Button
+    className="px-4 py-2 rounded-full"
+    onClick={onClick}
+    rounded
+    inline
+    outline
+  >
+    <Icon material={materialIcon} />
+  </Button>
+);
+
 function Selection() {
   const { t } = useTranslation();
 
@@ -51,8 +69,6 @@ function Selection() {
     const getValidIIIFIdentifier = async (iiifManifest: string) => {
       try {
         const imageURL = await utils.fetchIIIFIdentifier(iiifManifest);
-        // console.log("Image URL: ", imageURL);
-
         return imageURL;
       } catch (error) {
         console.error("Error:", error);
@@ -60,42 +76,46 @@ function Selection() {
       }
     };
 
-    const imagePromises = elements.map(async (element) => {
-      const identifier = await getValidIIIFIdentifier(
-        element.iiifManifest.value,
-      );
-      if (identifier !== null) {
-        return {
-          id: element.item.value,
-          name: element.itemLabel.value,
-          year: element.year?.value,
-          country: element.countryLabel?.value,
-          location: element?.locationLabel?.value,
-          creator: element.creatorLabel?.value,
-          url: element.iiifManifest?.value,
-          identifier: identifier,
-          image: `${identifier}/full/400,/0/default.jpg`,
-          thumbnail: `${identifier}/full/100,100/0/default.jpg`,
-        };
-      }
-      return null;
-    });
+    const imagePromises = await Promise.all(
+      elements.map(async (element) => {
+        try {
+          const identifier = await getValidIIIFIdentifier(
+            element.iiifManifest.value,
+          );
+          if (identifier !== null) {
+            return {
+              id: element.item.value,
+              name: element.itemLabel.value,
+              year: element.year?.value,
+              country: element.countryLabel?.value,
+              location: element?.locationLabel?.value,
+              creator: element.creatorLabel?.value,
+              url: element.iiifManifest?.value,
+              identifier: identifier,
+              image: `${identifier}/full/400,/0/default.jpg`,
+              thumbnail: `${identifier}/full/100,100/0/default.jpg`,
+            };
+          }
+          return null;
+        } catch (error) {
+          console.error("Error processing image:", error);
+          return null;
+        }
+      }),
+    );
 
-    const imageResults = await Promise.all(imagePromises);
-    const images = imageResults.filter(
-      (image) => image !== null,
-    ) as ImageProps[];
+    const fulfilledImages = imagePromises.filter(
+      (result): result is ImageProps => result !== null,
+    );
 
-    // console.log("Data elements: ", elements);
-    // console.log("Data images: ", images);
-    setData(images);
+    setData(fulfilledImages);
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: response } = await axios.get(api.sparqlQuery());
-        validateData(response.results.bindings);
+        const { data } = await axios.get(api.sparqlQuery());
+        validateData(data.results.bindings);
       } catch (error) {
         console.error(error);
       }
@@ -152,24 +172,14 @@ function Selection() {
                 <img alt={currentImage.name} src={currentImage.image}></img>
               </TinderCard>
               <div className="flex justify-between">
-                <Button
-                  className="px-4 py-2 rounded-full mr-2"
+                <SwipeButton
                   onClick={() => swipe("left")}
-                  rounded
-                  inline
-                  outline
-                >
-                  <Icon material={<MdOutlineThumbDown className="w-6 h-6" />} />
-                </Button>
-                <Button
-                  className="px-4 py-2 rounded-full"
+                  materialIcon={<MdOutlineThumbDown className="w-6 h-6" />}
+                />
+                <SwipeButton
                   onClick={() => swipe("right")}
-                  rounded
-                  inline
-                  outline
-                >
-                  <Icon material={<MdOutlineThumbUp className="w-6 h-6" />} />
-                </Button>
+                  materialIcon={<MdOutlineThumbUp className="w-6 h-6" />}
+                />
               </div>
             </>
           )}

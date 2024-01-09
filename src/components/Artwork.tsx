@@ -1,3 +1,4 @@
+import { saveAs } from "file-saver";
 // @ts-expect-error konsta typing
 import { Block, Button, Icon } from "konsta/react";
 import Konva from "konva";
@@ -11,18 +12,17 @@ import useImage from "use-image";
 
 import useStore, { CanvasImageProps } from "../store";
 
-function downloadURI(uri: string, name: string) {
-  const link = document.createElement("a");
-  link.download = name;
-  link.href = uri;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-const FrameImage = () => {
+const FrameImage = ({
+  handleEvent,
+}: {
+  handleEvent: (
+    e: Konva.KonvaEventObject<TouchEvent> | Konva.KonvaEventObject<MouseEvent>,
+  ) => void;
+}) => {
   const [image] = useImage("/canvas.webp");
-  return <Image image={image} />;
+  return (
+    <Image image={image} onMouseDown={handleEvent} onTouchStart={handleEvent} />
+  );
 };
 
 const CanvasImage = ({
@@ -46,9 +46,23 @@ const CanvasImage = ({
     }
   }, [isSelected]);
 
+  useEffect(() => {
+    const imageObj = new window.Image();
+    imageObj.crossOrigin = "Anonymous";
+    imageObj.src = canvasImage.image;
+
+    imageObj.onload = () => {
+      if (imageRef.current) {
+        imageRef.current.image(imageObj);
+        imageRef.current.getLayer()?.batchDraw();
+      }
+    };
+  }, [canvasImage.image]);
+
   const handleDragStart = () => {
     transformCanvasImage({ ...canvasImage, isDragging: true });
   };
+
   const handleDragEnd = (e: KonvaEventObject<DragEvent>) => {
     transformCanvasImage({
       ...canvasImage,
@@ -62,16 +76,20 @@ const CanvasImage = ({
     const node = imageRef.current;
     const scaleX = node.scaleX();
     const scaleY = node.scaleY();
+    const width = Math.max(5, node.width() * scaleX);
+    const height = Math.max(node.height() * scaleY);
 
-    node.scaleX(1);
-    node.scaleY(1);
     transformCanvasImage({
       ...canvasImage,
       x: node.x(),
       y: node.y(),
-      width: Math.max(5, node.width() * scaleX),
-      height: Math.max(node.height() * scaleY),
+      width,
+      height,
     });
+
+    // Reset Transformer sizes to avoid scaling issues
+    trRef.current.nodes([imageRef.current]);
+    trRef.current.getLayer()?.batchDraw();
   };
 
   return (
@@ -94,12 +112,12 @@ const CanvasImage = ({
         <Transformer
           ref={trRef}
           flipEnabled={false}
-          boundBoxFunc={(oldBox, newBox) => {
-            if (Math.abs(newBox.width) < 5 || Math.abs(newBox.height) < 5) {
-              return oldBox;
-            }
-            return newBox;
-          }}
+          enabledAnchors={[
+            "top-left",
+            "top-right",
+            "bottom-left",
+            "bottom-right",
+          ]}
         />
       )}
     </>
@@ -109,7 +127,7 @@ const CanvasImage = ({
 const Canvas = () => {
   const { canvasList } = useStore();
   const stageRef = useRef() as MutableRefObject<Konva.Stage>;
-  const [selectedId, selectShape] = useState("");
+  const [selectedId, setSelectedId] = useState("");
   const sceneWidth = 1080;
   const sceneHeight = 1296;
 
@@ -134,18 +152,28 @@ const Canvas = () => {
     };
   }, []);
 
-  const checkDeselect = (
-    e: Konva.KonvaEventObject<TouchEvent> | Konva.KonvaEventObject<MouseEvent>,
-  ) => {
-    const clickedOnEmpty = e.target === e.target.getStage();
-    if (clickedOnEmpty) {
-      selectShape("");
+  const checkDeselect = () => {
+    setSelectedId("");
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "GLAMorous Europe",
+          text: "Check out my GLAMorous Europe artwork!",
+          url: window.location.href,
+        })
+        .then(() => console.log("Share successful"))
+        .catch((error) => console.error("Error sharing:", error));
+    } else {
+      console.log("Web Share API not supported");
     }
   };
 
   const handleDownload = () => {
     const uri = stageRef.current.toDataURL();
-    downloadURI(uri, "GLAMorousEurope.png");
+    saveAs(uri, "GLAMorousEurope.png");
   };
 
   return (
@@ -159,14 +187,14 @@ const Canvas = () => {
           onTouchStart={checkDeselect}
         >
           <Layer>
-            <FrameImage />
+            <FrameImage handleEvent={checkDeselect} />
             {canvasList.map((canvasImage) => (
               <CanvasImage
                 key={canvasImage.id}
                 canvasImage={canvasImage}
                 isSelected={canvasImage.id === selectedId}
                 onSelect={() => {
-                  selectShape(canvasImage.id);
+                  setSelectedId(canvasImage.id);
                 }}
               />
             ))}
@@ -178,7 +206,7 @@ const Canvas = () => {
         rounded
         inline
         outline
-        onClick={() => handleDownload()}
+        onClick={handleShare}
       >
         <Icon material={<MdShare className="w-6 h-6" />} />
       </Button>
@@ -187,7 +215,7 @@ const Canvas = () => {
         rounded
         inline
         outline
-        onClick={() => handleDownload()}
+        onClick={handleDownload}
       >
         <Icon material={<MdDownloadForOffline className="w-6 h-6" />} />
       </Button>
