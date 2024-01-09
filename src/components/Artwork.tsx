@@ -107,6 +107,8 @@ const CanvasImage = ({
         ref={imageRef}
         x={canvasImage.x}
         y={canvasImage.y}
+        opacity={canvasImage.opacity || 1}
+        brightness={canvasImage.brightness || 0}
       />
       {isSelected && (
         <Transformer
@@ -125,9 +127,11 @@ const CanvasImage = ({
 };
 
 const Canvas = () => {
-  const { canvasList } = useStore();
-  const stageRef = useRef() as MutableRefObject<Konva.Stage>;
+  const { canvasList, updateCanvasList, transformCanvasImage } = useStore();
+  const stageRef = useRef<Konva.Stage>(null);
   const [selectedId, setSelectedId] = useState("");
+  const [brightnessValue, setBrightnessValue] = useState(1);
+  const [opacityValue, setOpacityValue] = useState(1);
   const sceneWidth = 1080;
   const sceneHeight = 1296;
 
@@ -156,6 +160,40 @@ const Canvas = () => {
     setSelectedId("");
   };
 
+  const bringToFront = () => {
+    const selectedIndex = canvasList.findIndex(
+      (image) => image.id === selectedId,
+    );
+
+    if (selectedIndex !== -1) {
+      updateCanvasList(selectedIndex);
+    }
+  };
+
+  const adjustBrightness = (value: number) => {
+    setBrightnessValue(value);
+
+    const canvasImage = canvasList.find((image) => image.id === selectedId);
+    if (canvasImage) {
+      transformCanvasImage({
+        ...canvasImage,
+        brightness: value,
+      });
+    }
+  };
+
+  const adjustOpacity = (value: number) => {
+    setOpacityValue(value);
+
+    const canvasImage = canvasList.find((image) => image.id === selectedId);
+    if (canvasImage) {
+      transformCanvasImage({
+        ...canvasImage,
+        opacity: value,
+      });
+    }
+  };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator
@@ -172,8 +210,10 @@ const Canvas = () => {
   };
 
   const handleDownload = () => {
-    const uri = stageRef.current.toDataURL();
-    saveAs(uri, "GLAMorousEurope.png");
+    const uri = stageRef.current?.toDataURL();
+    if (uri) {
+      saveAs(uri, "GLAMorousEurope.png");
+    }
   };
 
   return (
@@ -201,6 +241,40 @@ const Canvas = () => {
           </Layer>
         </Stage>
       </div>
+      <Button
+        className="p-2 rounded-full"
+        rounded
+        inline
+        outline
+        onClick={bringToFront}
+      >
+        Bring to Front
+      </Button>
+      {selectedId && (
+        <div>
+          <label htmlFor="brightnessSlider">Brightness:</label>
+          <input
+            id="brightnessSlider"
+            type="range"
+            min="0"
+            max="2"
+            step="0.01"
+            value={brightnessValue}
+            onChange={(e) => adjustBrightness(parseFloat(e.target.value))}
+          />
+
+          <label htmlFor="opacitySlider">Opacity:</label>
+          <input
+            id="opacitySlider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={opacityValue}
+            onChange={(e) => adjustOpacity(parseFloat(e.target.value))}
+          />
+        </div>
+      )}
       <Button
         className="p-2 rounded-full"
         rounded

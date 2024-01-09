@@ -15,10 +15,12 @@ export interface ImageProps {
 }
 
 export interface CanvasImageProps {
+  brightness: number;
   height: number;
   id: string;
   image: string;
   isDragging: boolean;
+  opacity: number;
   width: number;
   x: number;
   y: number;
@@ -30,6 +32,7 @@ interface GlamState {
   imageLikeList: ImageProps[];
   likeImage: (image: ImageProps) => void;
   transformCanvasImage: (canvasImage: CanvasImageProps) => void;
+  updateCanvasList: (selectedIndex: number) => void;
 }
 
 const useStore = create<GlamState>()(
@@ -41,10 +44,12 @@ const useStore = create<GlamState>()(
             canvasList: [
               ...state.canvasList,
               {
+                brightness: 0,
                 height: 1080 * 0.8,
                 id: id,
                 image: imageURL,
                 isDragging: false,
+                opacity: 1,
                 width: 1080 * 0.8,
                 x: Math.random() * window.innerWidth,
                 y: Math.random() * window.innerHeight,
@@ -67,8 +72,18 @@ const useStore = create<GlamState>()(
                 width: canvasImage.width,
                 x: canvasImage.x,
                 y: canvasImage.y,
+                brightness: canvasImage.brightness,
+                opacity: canvasImage.opacity,
               };
             }),
+          })),
+        updateCanvasList: (selectedIndex) =>
+          set((state) => ({
+            canvasList: [
+              ...state.canvasList.slice(0, selectedIndex),
+              ...state.canvasList.slice(selectedIndex + 1),
+              state.canvasList[selectedIndex],
+            ],
           })),
       }),
       { name: "glamStore" },
