@@ -11,19 +11,20 @@
 }
 
 @font-face {
-  font-family: 'CrimsonRoman';
-  src: url('./fonts/CrimsonRoman.woff2') format('woff2');
+  font-family: 'Crimson';
+  src: url('./fonts/Crimson.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
-body {
-  font-family: 'CrimsonRoman', sans-serif;
+body, .k-material {
+  font-family: 'Crimson', sans-serif;
 }
 
-a > span > span {
+a > span > .text-xs {
   font-family: 'BeautySchoolDropout', sans-serif;
   text-transform: uppercase;
-  font-size: 4rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
 }

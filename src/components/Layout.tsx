@@ -10,7 +10,7 @@ import { NavLink, Outlet, useMatch, useResolvedPath } from "react-router-dom";
 
 function Layout() {
   return (
-    <App theme="material" touchRipple={false}>
+    <App theme="material">
       <Page>
         <Tabbar
           labels={true}
@@ -36,6 +36,7 @@ function Layout() {
               />
             }
             label={"Portal"}
+            touchRipple={false}
           />
 
           <TabbarLink
@@ -57,6 +58,7 @@ function Layout() {
               />
             }
             label={"Meine Auswahl"}
+            touchRipple={false}
           />
 
           <TabbarLink
@@ -78,6 +80,7 @@ function Layout() {
               />
             }
             label={"Meine Sammlung"}
+            touchRipple={false}
           />
 
           <TabbarLink
@@ -99,6 +102,7 @@ function Layout() {
               />
             }
             label={"Meine Leinwand"}
+            touchRipple={false}
           />
         </Tabbar>
         <main className="h-[calc(100%_-_80px)] overflow-auto">
