@@ -1,5 +1,6 @@
 // @ts-expect-error konsta typing
 import { App, Icon, Page, Tabbar, TabbarLink } from "konsta/react";
+import { useTranslation } from "react-i18next";
 import {
   MdFavoriteBorder,
   MdOutlineAssignmentInd,
@@ -9,6 +10,7 @@ import {
 import { NavLink, Outlet, useMatch, useResolvedPath } from "react-router-dom";
 
 function Layout() {
+  const { t } = useTranslation();
   return (
     <App theme="material">
       <Page>
@@ -35,7 +37,7 @@ function Layout() {
                 }`}
               />
             }
-            label={"Portal"}
+            label={t("portal")}
             touchRipple={false}
           />
 
@@ -57,7 +59,7 @@ function Layout() {
                 }`}
               />
             }
-            label={"Meine Auswahl"}
+            label={t("selection")}
             touchRipple={false}
           />
 
@@ -79,7 +81,7 @@ function Layout() {
                 }`}
               />
             }
-            label={"Meine Sammlung"}
+            label={t("collection")}
             touchRipple={false}
           />
 
@@ -101,7 +103,7 @@ function Layout() {
                 }`}
               />
             }
-            label={"Meine Leinwand"}
+            label={t("artwork")}
             touchRipple={false}
           />
         </Tabbar>
