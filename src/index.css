@@ -3,28 +3,32 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'BeautySchoolDropout';
-  src: url('./fonts/BeautySchoolDropout.woff2') format('woff2');
+  font-family: 'Neucha';
+  src: url('./fonts/Neucha.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Crimson';
-  src: url('./fonts/Crimson.woff2') format('woff2');
+  font-family: 'AverageSans-Regular';
+  src: url('./fonts/AverageSans-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 body, .k-material {
-  font-family: 'Crimson', sans-serif;
+  font-family: 'AverageSans-Regular', sans-serif;
 }
 
-a > span > .text-xs {
-  font-family: 'BeautySchoolDropout', sans-serif;
+a > span > .text-xs, button {
+  font-family: 'Neucha', sans-serif;
   text-transform: uppercase;
   font-size: 1.1rem;
   line-height: 1.5;
+}
+
+.tabbar-inner {
+  height: 6.5rem;
 }
