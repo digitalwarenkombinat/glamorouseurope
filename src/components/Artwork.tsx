@@ -1,4 +1,10 @@
-import { ArrowDownTrayIcon, ShareIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowDownTrayIcon,
+  ArrowUturnDownIcon,
+  ArrowUturnUpIcon,
+  ShareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 import { saveAs } from "file-saver";
 // @ts-expect-error konsta typing
 import { Block, Button, Icon } from "konsta/react";
@@ -79,7 +85,6 @@ const CanvasImage = ({
       height,
     });
 
-    // Reset Transformer sizes to avoid scaling issues
     trRef.current.nodes([imageRef.current]);
     trRef.current.getLayer()?.batchDraw();
   };
@@ -99,6 +104,8 @@ const CanvasImage = ({
         ref={imageRef}
         x={canvasImage.x}
         y={canvasImage.y}
+        width={canvasImage.width}
+        height={canvasImage.height}
         opacity={canvasImage.opacity || 1}
         brightness={canvasImage.brightness || 0}
       />
@@ -119,7 +126,14 @@ const CanvasImage = ({
 };
 
 const Canvas = () => {
-  const { canvasList, updateCanvasList, transformCanvasImage } = useStore();
+  const {
+    addToCanvas,
+    artworkList,
+    canvasList,
+    moveCanvasImage,
+    removeFromCanvas,
+    transformCanvasImage,
+  } = useStore();
   const stageRef = useRef<Konva.Stage>(null);
   const [selectedId, setSelectedId] = useState("");
   const [brightnessValue, setBrightnessValue] = useState(1);
@@ -157,13 +171,26 @@ const Canvas = () => {
     }
   };
 
-  const bringToFront = () => {
-    const selectedIndex = canvasList.findIndex(
-      (image) => image.id === selectedId,
-    );
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const canvasId = e.dataTransfer.getData("text/plain");
+    const canvasImage = artworkList.find((image) => image.id === canvasId);
 
-    if (selectedIndex !== -1) {
-      updateCanvasList(selectedIndex);
+    if (canvasImage) {
+      const stage = stageRef.current;
+
+      if (stage) {
+        const dropX =
+          e.clientX - stage.container().getBoundingClientRect().left;
+        const dropY = e.clientY - stage.container().getBoundingClientRect().top;
+        addToCanvas(canvasImage.image, dropX, dropY);
+      }
+    }
+  };
+
+  const handleMove = (moveForward: boolean) => {
+    if (selectedId) {
+      moveCanvasImage(selectedId, moveForward);
     }
   };
 
@@ -191,6 +218,11 @@ const Canvas = () => {
     }
   };
 
+  const handleRemove = () => {
+    removeFromCanvas(selectedId);
+    setSelectedId("");
+  };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator
@@ -215,7 +247,62 @@ const Canvas = () => {
 
   return (
     <>
-      <div className="mx-auto">
+      <div className="toolbar">
+        <Button
+          className="p-4 text-xl text-black"
+          rounded
+          inline
+          onClick={() => handleMove(true)}
+        >
+          <Icon material={<ArrowUturnUpIcon className="w-6 h-6" />} />
+        </Button>
+        <Button
+          className="p-4 text-xl text-black"
+          rounded
+          inline
+          onClick={() => handleMove(false)}
+        >
+          <Icon material={<ArrowUturnDownIcon className="w-6 h-6" />} />
+        </Button>
+        {selectedId && (
+          <div>
+            <label htmlFor="brightnessSlider">Brightness:</label>
+            <input
+              id="brightnessSlider"
+              type="range"
+              min="0"
+              max="2"
+              step="0.01"
+              value={brightnessValue}
+              onChange={(e) => adjustBrightness(parseFloat(e.target.value))}
+            />
+
+            <label htmlFor="opacitySlider">Opacity:</label>
+            <input
+              id="opacitySlider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={opacityValue}
+              onChange={(e) => adjustOpacity(parseFloat(e.target.value))}
+            />
+          </div>
+        )}
+        <Button
+          className="p-4 text-xl text-black"
+          rounded
+          inline
+          onClick={handleRemove}
+        >
+          <Icon material={<TrashIcon className="w-6 h-6" />} />
+        </Button>
+      </div>
+      <div
+        className="mx-auto"
+        onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
+      >
         <Stage
           width={sceneWidth}
           height={sceneHeight}
@@ -238,39 +325,6 @@ const Canvas = () => {
           </Layer>
         </Stage>
       </div>
-      <Button
-        className="p-4 text-xl text-black w-2/3 mx-auto"
-        rounded
-        inline
-        onClick={bringToFront}
-      >
-        Bring to Front
-      </Button>
-      {selectedId && (
-        <div>
-          <label htmlFor="brightnessSlider">Brightness:</label>
-          <input
-            id="brightnessSlider"
-            type="range"
-            min="0"
-            max="2"
-            step="0.01"
-            value={brightnessValue}
-            onChange={(e) => adjustBrightness(parseFloat(e.target.value))}
-          />
-
-          <label htmlFor="opacitySlider">Opacity:</label>
-          <input
-            id="opacitySlider"
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={opacityValue}
-            onChange={(e) => adjustOpacity(parseFloat(e.target.value))}
-          />
-        </div>
-      )}
 
       <div className="flex gap-2 mx-auto">
         <Button
@@ -296,80 +350,37 @@ const Canvas = () => {
 
 function Artwork() {
   const { t } = useTranslation();
-  const { canvasList } = useStore();
-
-  const [selectedId] = useState("");
-
-  /* useEffect(() => {
-    const container = stageRef.current?.container();
-    if (container) {
-      container.addEventListener("dragover", (e) => {
-        e.preventDefault();
-      });
-
-      container.addEventListener("drop", (e) => {
-        e.preventDefault();
-        const data = e.dataTransfer.getData("text");
-        const droppedImage = canvasList.find((img) => img.id === data);
-        if (droppedImage) {
-          const scale = stageRef.current?.scaleX() || 1;
-          const position = stageRef.current?.getPointerPosition();
-          const x = (position?.x || 0) / scale;
-          const y = (position?.y || 0) / scale;
-
-          updateCanvasList({ ...droppedImage, x, y });
-        }
-      });
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener("dragover", (e) => e.preventDefault());
-        container.removeEventListener("drop", (e) => e.preventDefault());
-      }
-    };
-  }, [canvasList, updateCanvasList]);
-
-  const checkDeselect = (
-    e: Konva.KonvaEventObject<TouchEvent> | Konva.KonvaEventObject<MouseEvent>,
-  ) => {
-    const clickedOnEmpty = e.target === e.target.getStage();
-    if (clickedOnEmpty) {
-      setSelectedId("");
-    }
-  }; */
+  const { artworkList } = useStore();
 
   return (
-    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center">
+    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
       <div className="p-2 m-4">
         <h1 className="text-2xl">{t("artworkTitle")}</h1>
       </div>
 
       <Block className="flex flex-wrap mx-auto">
-        {canvasList.map((canvasImage) => (
+        {artworkList.map((artworkImage) => (
           <img
-            key={canvasImage.id}
-            src={canvasImage.image}
-            alt={canvasImage.id}
-            draggable
-            onDragStart={(e) => {
-              e.dataTransfer.setData("text", canvasImage.id);
-            }}
+            key={artworkImage.id}
+            src={artworkImage.image}
+            alt={artworkImage.id}
             role="presentation"
             style={{
-              width: "100px",
-              height: "100px",
+              width: "200px",
+              height: "200px",
               cursor: "move",
-              border:
-                selectedId === canvasImage.id ? "2px solid #4CAF50" : "none",
               borderRadius: "5px",
               margin: "4px",
+            }}
+            draggable
+            onDragStart={(e) => {
+              e.dataTransfer.setData("text/plain", artworkImage.id);
             }}
           />
         ))}
       </Block>
 
-      {canvasList.length === 0 ? (
+      {artworkList.length === 0 ? (
         <Button
           className="p-4 text-xl text-black w-2/3 mx-auto h-20"
           rounded

@@ -149,7 +149,7 @@ function Selection() {
   const currentImage = data[currentIndex];
 
   return (
-    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center">
+    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
       <div className="p-2 m-4">
         <h1 className="text-2xl">{t("selectionTitle")}</h1>
       </div>

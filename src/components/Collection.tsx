@@ -46,7 +46,7 @@ function Collection() {
   const { t } = useTranslation();
 
   const { imageLikeList } = useStore();
-  const addToCanvas = useStore((state) => state.addToCanvas);
+  const addToArtwork = useStore((state) => state.addToArtwork);
 
   const [selectedImage, setSelectedImage] = useState<ImageProps | null>(
     imageLikeList[0] || null,
@@ -59,12 +59,12 @@ function Collection() {
   const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
   const [clippedImg, setClippedImg] = useState<string>();
 
-  const addFrameToCanvas = async (id: string, imageURL: string) => {
+  const addFrameToArtwork = async (id: string, imageURL: string) => {
     try {
       const croppedImagePath = await utils.getCroppedImagePath(imageURL);
       console.log("Cropped image path: ", croppedImagePath);
       if (croppedImagePath) {
-        addToCanvas(id, croppedImagePath);
+        addToArtwork(id, croppedImagePath);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -72,7 +72,7 @@ function Collection() {
   };
 
   return (
-    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center">
+    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
       <div className="p-2 m-4">
         <h1 className="text-2xl">{t("collectionTitle")}</h1>
       </div>
@@ -125,7 +125,7 @@ function Collection() {
             rounded
             inline
             onClick={() =>
-              addFrameToCanvas(selectedImage?.id, selectedImage?.identifier)
+              addFrameToArtwork(selectedImage?.id, selectedImage?.identifier)
             }
           >
             {t("collectionAddText")}

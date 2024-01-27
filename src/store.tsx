@@ -14,6 +14,10 @@ export interface ImageProps {
   year: string;
 }
 
+export interface ArtworkImageProps {
+  id: string;
+  image: string;
+}
 export interface CanvasImageProps {
   brightness: number;
   height: number;
@@ -27,41 +31,59 @@ export interface CanvasImageProps {
 }
 
 interface GlamState {
-  addToCanvas: (id: string, imageURL: string) => void;
+  addToCanvas: (imageURL: string, x: number, y: number) => void;
+  addToArtwork: (id: string, imageURL: string) => void;
+  artworkList: ArtworkImageProps[];
   canvasList: CanvasImageProps[];
   imageLikeList: ImageProps[];
   likeImage: (image: ImageProps) => void;
+  removeFromCanvas: (id: string) => void;
   resetState: () => void;
   transformCanvasImage: (canvasImage: CanvasImageProps) => void;
-  updateCanvasList: (selectedIndex: number) => void;
+  moveCanvasImage: (id: string, bringToFront: boolean) => void;
 }
 
 const useStore = create<GlamState>()(
   devtools(
     persist(
       (set) => ({
-        addToCanvas: (id, imageURL) =>
+        addToArtwork: (id, imageURL) =>
+          set((state) => ({
+            artworkList: [
+              ...state.artworkList,
+              {
+                id: id,
+                image: imageURL,
+              },
+            ],
+          })),
+        addToCanvas: (imageURL, x, y) =>
           set((state) => ({
             canvasList: [
               ...state.canvasList,
               {
                 brightness: 0,
                 height: 400,
-                id: id,
+                id: `${state.canvasList.length + 1}`,
                 image: imageURL,
                 isDragging: false,
                 opacity: 1,
                 width: 400,
-                x: 0,
-                y: 0,
+                x: x,
+                y: y,
               },
             ],
           })),
+        artworkList: [],
         canvasList: [],
         imageLikeList: [],
         likeImage: (image) =>
           set((state) => ({ imageLikeList: [...state.imageLikeList, image] })),
         resetState: () => set(() => ({ canvasList: [], imageLikeList: [] })),
+        removeFromCanvas: (id) =>
+          set((state) => ({
+            canvasList: state.canvasList.filter((image) => image.id !== id),
+          })),
         transformCanvasImage: (canvasImage) =>
           set((state) => ({
             canvasList: state.canvasList.map((canvas) => {
@@ -79,14 +101,28 @@ const useStore = create<GlamState>()(
               };
             }),
           })),
-        updateCanvasList: (selectedIndex) =>
-          set((state) => ({
-            canvasList: [
-              ...state.canvasList.slice(0, selectedIndex),
-              ...state.canvasList.slice(selectedIndex + 1),
-              state.canvasList[selectedIndex],
-            ],
-          })),
+        moveCanvasImage: (id: string, moveForward: boolean) =>
+          set((state) => {
+            const currentIndex = state.canvasList.findIndex(
+              (image) => image.id === id,
+            );
+
+            if (currentIndex !== -1) {
+              const targetIndex = moveForward
+                ? currentIndex - 1
+                : currentIndex + 1;
+
+              if (targetIndex >= 0 && targetIndex < state.canvasList.length) {
+                const updatedCanvasList = [...state.canvasList];
+                const [movedImage] = updatedCanvasList.splice(currentIndex, 1);
+                updatedCanvasList.splice(targetIndex, 0, movedImage);
+
+                return { canvasList: updatedCanvasList };
+              }
+            }
+
+            return {};
+          }),
       }),
       { name: "glamStore" },
     ),
