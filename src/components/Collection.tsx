@@ -1,8 +1,7 @@
 // @ts-expect-error konsta typing
-import { Block, Button, Card, Link, Navbar, Page, Popup } from "konsta/react";
+import { Block, Button } from "konsta/react";
 import { Suspense, lazy, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Masonry } from "react-plock";
 
 import useStore, { ImageProps } from "../store";
 import utils from "../utils";
@@ -35,12 +34,12 @@ function Collection() {
   const { imageLikeList } = useStore();
   const addToCanvas = useStore((state) => state.addToCanvas);
 
-  const [selectedImage, setSelectedImage] = useState<ImageProps | null>(null);
-  const [popupOpened, setPopupOpened] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<ImageProps | null>(
+    imageLikeList[0] || null,
+  );
 
   const handleImageClick = (image: ImageProps) => {
     setSelectedImage(image);
-    setPopupOpened(true);
   };
 
   const addFrameToCanvas = async (id: string, imageURL: string) => {
@@ -61,60 +60,49 @@ function Collection() {
         <h1 className="text-2xl">{t("collectionTitle")}</h1>
       </div>
 
-      <Card className="h-auto rounded-none">
-        <Masonry
-          items={imageLikeList}
-          config={{
-            columns: [1, 2, 3],
-            gap: [24, 12, 6],
-            media: [640, 768, 1024],
-          }}
-          render={(item, index) => (
+      <Block
+        className="flex flex-col justify-evenly items-start"
+        style={{
+          gap: "20px",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <div className="flex flex-wrap mx-auto">
+          {imageLikeList.map((item) => (
             <img
-              key={index}
-              src={item.image}
+              key={item.id}
+              src={item.thumbnail}
               alt={item.name}
               onClick={() => handleImageClick(item)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", margin: "4px" }}
               role="presentation"
             />
-          )}
-        />
-      </Card>
-      {selectedImage && (
-        <Popup
-          opened={popupOpened}
-          onBackdropClick={() => setPopupOpened(false)}
-          size="w-screen h-4/5"
-        >
-          <Page>
-            <Navbar
-              title={selectedImage.name}
-              right={
-                <Link navbar onClick={() => setPopupOpened(false)}>
-                  {t("collectionClose")}
-                </Link>
-              }
-            />
-            <Block className="space-y-4">
+          ))}
+        </div>
+
+        {selectedImage && (
+          <>
+            <div className="max-w-2xl mx-auto w-screen">
+              <Suspense fallback={<h2>🌀 {t("collectionLoading")}</h2>}>
+                <Viewer iiifContent={selectedImage?.url} options={options} />
+              </Suspense>
+            </div>
+
+            <div className="mx-auto">
               <Button
-                className="px-4 py-2 rounded-full mr-2 text-xl"
-                onClick={() =>
-                  addFrameToCanvas(selectedImage.id, selectedImage.identifier)
-                }
+                className="p-4 text-xl text-black"
                 rounded
                 inline
-                outline
+                onClick={() =>
+                  addFrameToCanvas(selectedImage?.id, selectedImage?.identifier)
+                }
               >
                 {t("collectionAddText")}
               </Button>
-              <Suspense fallback={<h2>🌀 {t("collectionLoading")}</h2>}>
-                <Viewer iiifContent={selectedImage.url} options={options} />
-              </Suspense>
-            </Block>
-          </Page>
-        </Popup>
-      )}
+            </div>
+          </>
+        )}
+      </Block>
     </div>
   );
 }

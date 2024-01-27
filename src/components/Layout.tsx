@@ -11,13 +11,15 @@ import { NavLink, Outlet, useMatch, useResolvedPath } from "react-router-dom";
 
 function Layout() {
   const { t } = useTranslation();
+
   return (
     <App theme="material">
       <Page>
         <Tabbar
           labels={true}
           icons={true}
-          className="left-0 bottom-0 fixed k-color-brand-secondary"
+          className="left-0 bottom-0 fixed k-color-brand-primary"
+          style={{ paddingTop: "1rem" }}
         >
           <TabbarLink
             active={useMatch({

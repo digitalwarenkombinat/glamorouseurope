@@ -40,13 +40,7 @@ const SwipeButton = ({
   onClick: () => void;
   materialIcon: React.ReactNode;
 }) => (
-  <Button
-    className="px-4 py-2 rounded-full"
-    onClick={onClick}
-    rounded
-    inline
-    outline
-  >
+  <Button className="p-4 text-xl text-black" onClick={onClick} rounded inline>
     <Icon material={materialIcon} />
   </Button>
 );
@@ -153,12 +147,12 @@ function Selection() {
 
   return (
     <div className="flex flex-col justify-evenly text-center">
-      <div className="p-2 m-4">
+      <div className="p-2 my-4 mx-auto">
         <h1 className="text-2xl">{t("selectionTitle")}</h1>
       </div>
 
       <div className="max-w-2xl mx-auto h-2/3">
-        <Card className="flex">
+        <Card className="flex shadow-lg">
           {currentImage && (
             <>
               <TinderCard
@@ -169,7 +163,11 @@ function Selection() {
                 onCardLeftScreen={() => outOfFrame(currentIndex)}
                 preventSwipe={["up", "down"]}
               >
-                <img alt={currentImage.name} src={currentImage.image}></img>
+                <img
+                  alt={currentImage.name}
+                  src={currentImage.image}
+                  style={{ boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}
+                ></img>
               </TinderCard>
               <div className="flex justify-between">
                 <SwipeButton
@@ -186,8 +184,8 @@ function Selection() {
         </Card>
       </div>
 
-      <div className="p-2 bg-white rounded m-4 h-1/3">
-        <h2 className="text-2xl font-bold mb-2 text-black">
+      <div className="p-2 bg-white rounded  h-1/3 mx-auto max-w-2xl">
+        <h2 className="text-3xl font-bold m-4 text-black opacity-90">
           {currentImage?.name}
         </h2>
         <p className="text-gray-600">
