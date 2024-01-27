@@ -1,12 +1,12 @@
+import {
+  HeartIcon,
+  HomeIcon,
+  PhotoIcon,
+  Square2StackIcon,
+} from "@heroicons/react/24/outline";
 // @ts-expect-error konsta typing
 import { App, Icon, Page, Tabbar, TabbarLink } from "konsta/react";
 import { useTranslation } from "react-i18next";
-import {
-  MdFavoriteBorder,
-  MdOutlineAssignmentInd,
-  MdOutlineCollections,
-  MdOutlineDoorFront,
-} from "react-icons/md";
 import { NavLink, Outlet, useMatch, useResolvedPath } from "react-router-dom";
 
 function Layout() {
@@ -18,8 +18,8 @@ function Layout() {
         <Tabbar
           labels={true}
           icons={true}
-          className="left-0 bottom-0 fixed k-color-brand-primary"
-          style={{ paddingTop: "1rem" }}
+          className="left-0 bottom-0 fixed k-color-brand-primary text-center"
+          innerClassName="tabbar-inner"
         >
           <TabbarLink
             active={useMatch({
@@ -30,7 +30,7 @@ function Layout() {
             component={NavLink}
             icon={
               <Icon
-                material={<MdOutlineDoorFront className="w-10 h-10" />}
+                material={<HomeIcon className="w-10 h-10" />}
                 className={`transition duration-300 ${
                   useMatch({
                     path: useResolvedPath("/").pathname,
@@ -39,7 +39,7 @@ function Layout() {
                 }`}
               />
             }
-            label={t("portal")}
+            label={t("start")}
             touchRipple={false}
           />
 
@@ -52,7 +52,7 @@ function Layout() {
             component={NavLink}
             icon={
               <Icon
-                material={<MdFavoriteBorder className="w-10 h-10" />}
+                material={<HeartIcon className="w-10 h-10" />}
                 className={`transition duration-300 ${
                   useMatch({
                     path: useResolvedPath("/selection").pathname,
@@ -74,7 +74,7 @@ function Layout() {
             component={NavLink}
             icon={
               <Icon
-                material={<MdOutlineCollections className="w-10 h-10" />}
+                material={<Square2StackIcon className="w-10 h-10" />}
                 className={`transition duration-300 ${
                   useMatch({
                     path: useResolvedPath("/collection").pathname,
@@ -96,7 +96,7 @@ function Layout() {
             component={NavLink}
             icon={
               <Icon
-                material={<MdOutlineAssignmentInd className="w-10 h-10" />}
+                material={<PhotoIcon className="w-10 h-10" />}
                 className={`transition duration-300 ${
                   useMatch({
                     path: useResolvedPath("/creation").pathname,
@@ -109,7 +109,7 @@ function Layout() {
             touchRipple={false}
           />
         </Tabbar>
-        <main className="h-[calc(100%_-_80px)] overflow-auto">
+        <main className="h-[calc(100%_-_128px)] overflow-auto">
           <Outlet />
         </main>
       </Page>

@@ -13,6 +13,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.1",
     "@iiif/parser": "^2.0.1",
     "@samvera/clover-iiif": "^2.3.2",
     "axios": "^1.6.7",
@@ -49,7 +50,6 @@
     "postcss": "^8.4.33",
     "prettier": "^3.2.4",
     "prettier-plugin-sort-json": "^3.1.0",
-    "react-icons": "^5.0.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.12",

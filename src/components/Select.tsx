@@ -1,9 +1,12 @@
+import {
+  HandThumbDownIcon,
+  HandThumbUpIcon,
+} from "@heroicons/react/24/outline";
 import axios from "axios";
 // @ts-expect-error konsta typing
 import { Button, Card, Icon } from "konsta/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MdOutlineThumbDown, MdOutlineThumbUp } from "react-icons/md";
 import TinderCard from "react-tinder-card";
 
 import api from "../api";
@@ -172,11 +175,11 @@ function Selection() {
               <div className="flex justify-between">
                 <SwipeButton
                   onClick={() => swipe("left")}
-                  materialIcon={<MdOutlineThumbDown className="w-6 h-6" />}
+                  materialIcon={<HandThumbDownIcon className="w-6 h-6" />}
                 />
                 <SwipeButton
                   onClick={() => swipe("right")}
-                  materialIcon={<MdOutlineThumbUp className="w-6 h-6" />}
+                  materialIcon={<HandThumbUpIcon className="w-6 h-6" />}
                 />
               </div>
             </>

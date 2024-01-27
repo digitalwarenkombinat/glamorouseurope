@@ -1,3 +1,4 @@
+import { ArrowDownTrayIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { saveAs } from "file-saver";
 // @ts-expect-error konsta typing
 import { Block, Button, Icon } from "konsta/react";
@@ -5,7 +6,6 @@ import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MdDownloadForOffline, MdShare } from "react-icons/md";
 import { Image, Layer, Stage, Transformer } from "react-konva";
 import { Link } from "react-router-dom";
 import useImage from "use-image";
@@ -129,7 +129,7 @@ const Canvas = () => {
 
   useEffect(() => {
     const fitStageIntoParentContainer = () => {
-      const containerWidth = window.innerWidth || 0;
+      const containerWidth = window.innerWidth * 0.9 || 0;
       const scale = containerWidth / sceneWidth;
 
       if (stageRef.current) {
@@ -272,24 +272,25 @@ const Canvas = () => {
           />
         </div>
       )}
-      <Button
-        className="p-2 rounded-full"
-        rounded
-        inline
-        outline
-        onClick={handleShare}
-      >
-        <Icon material={<MdShare className="w-6 h-6" />} />
-      </Button>
-      <Button
-        className="p-2 rounded-full"
-        rounded
-        inline
-        outline
-        onClick={handleDownload}
-      >
-        <Icon material={<MdDownloadForOffline className="w-6 h-6" />} />
-      </Button>
+
+      <div className="flex gap-2 mx-auto">
+        <Button
+          className="p-4 text-xl text-black"
+          rounded
+          inline
+          onClick={handleShare}
+        >
+          <Icon material={<ShareIcon className="w-6 h-6" />} />
+        </Button>
+        <Button
+          className="p-4 text-xl text-black"
+          rounded
+          inline
+          onClick={handleDownload}
+        >
+          <Icon material={<ArrowDownTrayIcon className="w-6 h-6" />} />
+        </Button>
+      </div>
     </>
   );
 };
@@ -298,10 +299,74 @@ function Artwork() {
   const { t } = useTranslation();
   const { canvasList } = useStore();
 
+  const [selectedId] = useState("");
+
+  /* useEffect(() => {
+    const container = stageRef.current?.container();
+    if (container) {
+      container.addEventListener("dragover", (e) => {
+        e.preventDefault();
+      });
+
+      container.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const data = e.dataTransfer.getData("text");
+        const droppedImage = canvasList.find((img) => img.id === data);
+        if (droppedImage) {
+          const scale = stageRef.current?.scaleX() || 1;
+          const position = stageRef.current?.getPointerPosition();
+          const x = (position?.x || 0) / scale;
+          const y = (position?.y || 0) / scale;
+
+          updateCanvasList({ ...droppedImage, x, y });
+        }
+      });
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener("dragover", (e) => e.preventDefault());
+        container.removeEventListener("drop", (e) => e.preventDefault());
+      }
+    };
+  }, [canvasList, updateCanvasList]);
+
+  const checkDeselect = (
+    e: Konva.KonvaEventObject<TouchEvent> | Konva.KonvaEventObject<MouseEvent>,
+  ) => {
+    const clickedOnEmpty = e.target === e.target.getStage();
+    if (clickedOnEmpty) {
+      setSelectedId("");
+    }
+  }; */
+
   return (
-    <Block className="flex flex-col flex-wrap gap-4 container mx-auto justify-center content-center text-center">
+    <Block className="flex flex-col flex-wrap gap-4 container mx-auto justify-center content-center text-center max-w-2xl">
       <div className="p-2 m-4">
         <h1 className="text-2xl">{t("artworkTitle")}</h1>
+      </div>
+      <div className="flex flex-wrap gap-4 p-2">
+        {canvasList.map((canvasImage) => (
+          <img
+            key={canvasImage.id}
+            src={canvasImage.image}
+            alt={canvasImage.id}
+            draggable
+            onDragStart={(e) => {
+              e.dataTransfer.setData("text", canvasImage.id);
+            }}
+            role="presentation"
+            style={{
+              width: "100px",
+              height: "100px",
+              cursor: "move",
+              border:
+                selectedId === canvasImage.id ? "2px solid #4CAF50" : "none",
+              borderRadius: "5px",
+              margin: "4px",
+            }}
+          />
+        ))}
       </div>
       {canvasList.length === 0 ? (
         <Button className="p-2 rounded-full text-xl" rounded inline outline>
