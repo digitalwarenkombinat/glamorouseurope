@@ -50,10 +50,7 @@ function Start() {
   };
 
   return (
-    <Block
-      size="h-4/5"
-      className="max-w-2xl mx-auto w-screen flex flex-col flex-wrap my-0 gap-4 container justify-center content-center text-center"
-    >
+    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center">
       <Logo />
       <h1 className="text-3xl">{t("startTitle")}</h1>
       <h2 className="text-xl">{t("startSubtitle")}</h2>
@@ -62,7 +59,7 @@ function Start() {
 
       <Button
         large
-        className="text-4xl mx-auto"
+        className="text-4xl w-1/2 mx-auto h-16"
         rounded
         inline
         onClick={handleStartButtonClick}

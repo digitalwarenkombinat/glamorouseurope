@@ -125,7 +125,7 @@ const Canvas = () => {
   const [brightnessValue, setBrightnessValue] = useState(1);
   const [opacityValue, setOpacityValue] = useState(1);
   const sceneWidth = 1080;
-  const sceneHeight = 1296;
+  const sceneHeight = 1080;
 
   useEffect(() => {
     const fitStageIntoParentContainer = () => {
@@ -215,7 +215,7 @@ const Canvas = () => {
 
   return (
     <>
-      <div>
+      <div className="mx-auto">
         <Stage
           width={sceneWidth}
           height={sceneHeight}
@@ -239,10 +239,9 @@ const Canvas = () => {
         </Stage>
       </div>
       <Button
-        className="p-2 rounded-full"
+        className="p-4 text-xl text-black w-2/3 mx-auto"
         rounded
         inline
-        outline
         onClick={bringToFront}
       >
         Bring to Front
@@ -341,11 +340,12 @@ function Artwork() {
   }; */
 
   return (
-    <Block className="flex flex-col flex-wrap gap-4 container mx-auto justify-center content-center text-center max-w-2xl">
+    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center">
       <div className="p-2 m-4">
         <h1 className="text-2xl">{t("artworkTitle")}</h1>
       </div>
-      <div className="flex flex-wrap gap-4 p-2">
+
+      <Block className="flex flex-wrap mx-auto">
         {canvasList.map((canvasImage) => (
           <img
             key={canvasImage.id}
@@ -367,9 +367,14 @@ function Artwork() {
             }}
           />
         ))}
-      </div>
+      </Block>
+
       {canvasList.length === 0 ? (
-        <Button className="p-2 rounded-full text-xl" rounded inline outline>
+        <Button
+          className="p-4 text-xl text-black w-2/3 mx-auto h-20"
+          rounded
+          inline
+        >
           <Link to={"/selection"}>{t("artworkEmpty")}</Link>
         </Button>
       ) : (

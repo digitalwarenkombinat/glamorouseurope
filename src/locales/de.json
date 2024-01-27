@@ -1,14 +1,14 @@
 {
   "translation": {
     "artwork": "Meine Leinwand",
-    "artworkEmpty": "Füge deine persönlichen Favoriten hinzu.",
+    "artworkEmpty": "Füge deine persönlichen Favoriten hinzu",
     "artworkTitle": "Gestalte mit einzelnen Bildelementen dein ganz eigenes europäisches Kunstwerk und teile es mit anderen.",
     "chooseLanguage": "Sprache wählen:",
     "collection": "Meine Sammlung",
-    "collectionAddText": "Meiner Leinwand hinzufügen",
+    "collectionAddText": "Ausschnitt meiner Leinwand hinzufügen",
     "collectionClose": "Schließen",
     "collectionLoading": "Lade...",
-    "collectionTitle": "Öffne die Tür zu neuen Gemälden, Skulpturen und Fotografien, die perfekt zu deinem Geschmack passen.",
+    "collectionTitle": "Hier ist deine Auswahl der Favoriten. Wähle einen Auschnitt aus den Bildern für deine Leinwand.",
     "discardModalCancel": "Abbrechen",
     "discardModalConfirm": "Ja",
     "discardModalMessage": "Möchtest du die bestehende Auswahl verwerfen?",

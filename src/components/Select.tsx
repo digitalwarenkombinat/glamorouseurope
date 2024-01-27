@@ -4,7 +4,7 @@ import {
 } from "@heroicons/react/24/outline";
 import axios from "axios";
 // @ts-expect-error konsta typing
-import { Button, Card, Icon } from "konsta/react";
+import { Block, Button, Card, Icon } from "konsta/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import TinderCard from "react-tinder-card";
@@ -149,8 +149,8 @@ function Selection() {
   const currentImage = data[currentIndex];
 
   return (
-    <div className="flex flex-col justify-evenly text-center max-w-2xl content-center mx-auto">
-      <div className="p-2 my-2">
+    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center">
+      <div className="p-2 m-4">
         <h1 className="text-2xl">{t("selectionTitle")}</h1>
       </div>
 
@@ -183,8 +183,8 @@ function Selection() {
         </Card>
       </div>
 
-      <div className="mb-8 bg-white rounded h-1/3 opacity-90 max-w-sm text-center mx-auto shadow-md text-center shadow-[#BC13FE]/90">
-        <h2 className="text-2xl font-bold m-4 text-black">
+      <div className="mb-8 p-4 bg-white rounded h-1/3 opacity-90 max-w-lg w-2/3 text-center mx-auto shadow-md shadow-[#BC13FE]/90">
+        <h2 className="text-2xl font-bold mb-4 text-black">
           {currentImage?.name}
         </h2>
         <p className="text-gray-600">
@@ -199,7 +199,7 @@ function Selection() {
           {currentImage?.location || t("selectionUnknown")}
         </p>
       </div>
-    </div>
+    </Block>
   );
 }
 
