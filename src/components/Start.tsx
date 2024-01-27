@@ -27,7 +27,7 @@ const Collage = () => {
 
 function Start() {
   const { t } = useTranslation();
-  const { imageLikeList } = useStore();
+  const { imageLikeList, resetState } = useStore();
   const [discardModalOpen, setDiscardModalOpen] = useState(false);
 
   const handleStartButtonClick = () => {
@@ -44,19 +44,25 @@ function Start() {
     setDiscardModalOpen(false);
   };
 
+  const handleConfirm = () => {
+    setDiscardModalOpen(false);
+    resetState();
+  };
+
   return (
     <Block
-      size="w-screen h-4/5"
-      className="flex flex-col flex-wrap my-0 gap-4 container mx-auto justify-center content-center text-center"
+      size="h-4/5"
+      className="max-w-2xl mx-auto w-screen flex flex-col flex-wrap my-0 gap-4 container justify-center content-center text-center"
     >
       <Logo />
-      <h1 className="text-2xl">{t("startTitle")}</h1>
+      <h1 className="text-3xl">{t("startTitle")}</h1>
       <h2 className="text-xl">{t("startSubtitle")}</h2>
       <Collage />
       <p className="text-xl">{t("startText")}</p>
 
       <Button
-        className="p-4 text-xl text-black"
+        large
+        className="text-4xl mx-auto"
         rounded
         inline
         onClick={handleStartButtonClick}
@@ -73,18 +79,23 @@ function Start() {
             <Navbar
               title={t("discardModalTitle")}
               right={
-                <Link to={"/selection"} onClick={handleDiscard}>
+                <Link to={"/"} onClick={handleDiscard}>
                   {t("discardModalCancel")}
                 </Link>
               }
             />
             <Block className="space-y-4">
               <p>{t("discardModalMessage")}</p>
+              <Button className="p-4 rounded-full text-xl bg-red-500 text-white">
+                <Link to={"/selection"} onClick={handleConfirm}>
+                  {t("discardModalConfirm")}
+                </Link>
+              </Button>
               <Button
                 className="p-4 rounded-full text-xl bg-red-500 text-white"
                 onClick={handleDiscard}
               >
-                {t("discardModalConfirm")}
+                {t("discardModalNotConfirm")}
               </Button>
             </Block>
           </Page>

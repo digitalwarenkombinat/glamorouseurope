@@ -31,6 +31,7 @@ interface GlamState {
   canvasList: CanvasImageProps[];
   imageLikeList: ImageProps[];
   likeImage: (image: ImageProps) => void;
+  resetState: () => void;
   transformCanvasImage: (canvasImage: CanvasImageProps) => void;
   updateCanvasList: (selectedIndex: number) => void;
 }
@@ -60,6 +61,7 @@ const useStore = create<GlamState>()(
         imageLikeList: [],
         likeImage: (image) =>
           set((state) => ({ imageLikeList: [...state.imageLikeList, image] })),
+        resetState: () => set(() => ({ canvasList: [], imageLikeList: [] })),
         transformCanvasImage: (canvasImage) =>
           set((state) => ({
             canvasList: state.canvasList.map((canvas) => {

@@ -149,13 +149,13 @@ function Selection() {
   const currentImage = data[currentIndex];
 
   return (
-    <div className="flex flex-col justify-evenly text-center">
-      <div className="p-2 my-4 mx-auto">
+    <div className="flex flex-col justify-evenly text-center max-w-2xl content-center mx-auto">
+      <div className="p-2 my-2">
         <h1 className="text-2xl">{t("selectionTitle")}</h1>
       </div>
 
-      <div className="max-w-2xl mx-auto h-2/3">
-        <Card className="flex shadow-lg">
+      <div className="mx-auto h-2/3">
+        <Card className="flex shadow-md shadow-[#BC13FE]/90">
           {currentImage && (
             <>
               <TinderCard
@@ -166,11 +166,7 @@ function Selection() {
                 onCardLeftScreen={() => outOfFrame(currentIndex)}
                 preventSwipe={["up", "down"]}
               >
-                <img
-                  alt={currentImage.name}
-                  src={currentImage.image}
-                  style={{ boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}
-                ></img>
+                <img alt={currentImage.name} src={currentImage.image}></img>
               </TinderCard>
               <div className="flex justify-between">
                 <SwipeButton
@@ -187,8 +183,8 @@ function Selection() {
         </Card>
       </div>
 
-      <div className="p-2 bg-white rounded  h-1/3 mx-auto max-w-2xl">
-        <h2 className="text-3xl font-bold m-4 text-black opacity-90">
+      <div className="mb-8 bg-white rounded h-1/3 opacity-90 max-w-sm text-center mx-auto shadow-md text-center shadow-[#BC13FE]/90">
+        <h2 className="text-2xl font-bold m-4 text-black">
           {currentImage?.name}
         </h2>
         <p className="text-gray-600">
