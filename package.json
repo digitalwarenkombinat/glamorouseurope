@@ -18,7 +18,7 @@
     "@samvera/clover-iiif": "^2.3.2",
     "axios": "^1.6.7",
     "file-saver": "^2.0.5",
-    "i18next": "^23.7.20",
+    "i18next": "^23.8.1",
     "konsta": "3.1.1",
     "konva": "^9.3.2",
     "react": "^18.2.0",
