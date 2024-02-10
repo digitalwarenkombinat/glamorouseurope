@@ -22,7 +22,7 @@ import useStore, { CanvasImageProps } from "../store";
 
 const FrameImage = ({ front }: { front: boolean }) => {
   const { frame } = useStore();
-  const [image] = useImage(front ? frame.front : frame.image);
+  const [image] = useImage(front ? frame.front : frame.image, "anonymous");
   return <Image image={image} draggable={false} />;
 };
 
