@@ -2,6 +2,8 @@ import {
   ArrowDownTrayIcon,
   ArrowUturnDownIcon,
   ArrowUturnUpIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   ShareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
@@ -18,9 +20,10 @@ import useImage from "use-image";
 
 import useStore, { CanvasImageProps } from "../store";
 
-const FrameImage = () => {
-  const [image] = useImage("/canvas.webp");
-  return <Image image={image} />;
+const FrameImage = ({ front }: { front: boolean }) => {
+  const { frame } = useStore();
+  const [image] = useImage(front ? frame.front : frame.image);
+  return <Image image={image} draggable={false} />;
 };
 
 const CanvasImage = ({
@@ -104,8 +107,8 @@ const CanvasImage = ({
         ref={imageRef}
         x={canvasImage.x}
         y={canvasImage.y}
-        width={canvasImage.width}
-        height={canvasImage.height}
+        scaleX={0.5}
+        scaleY={0.5}
         opacity={canvasImage.opacity || 1}
         brightness={canvasImage.brightness || 0}
       />
@@ -130,8 +133,10 @@ const Canvas = () => {
     addToCanvas,
     artworkList,
     canvasList,
+    frame,
     moveCanvasImage,
     removeFromCanvas,
+    setFrame,
     transformCanvasImage,
   } = useStore();
   const stageRef = useRef<Konva.Stage>(null);
@@ -299,10 +304,18 @@ const Canvas = () => {
         </Button>
       </div>
       <div
-        className="mx-auto"
+        className="mx-auto flex items-center gap-2"
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
       >
+        <Button
+          className="p-4 text-xl text-black"
+          rounded
+          inline
+          onClick={() => setFrame(Math.max(1, frame.id - 1))}
+        >
+          <Icon material={<ChevronLeftIcon className="w-6 h-6" />} />
+        </Button>
         <Stage
           width={sceneWidth}
           height={sceneHeight}
@@ -311,7 +324,7 @@ const Canvas = () => {
           onTouchStart={checkDeselect}
         >
           <Layer>
-            <FrameImage />
+            <FrameImage front={false} />
             {canvasList.map((canvasImage) => (
               <CanvasImage
                 key={canvasImage.id}
@@ -323,7 +336,18 @@ const Canvas = () => {
               />
             ))}
           </Layer>
+          <Layer listening={false}>
+            <FrameImage front={true} />
+          </Layer>
         </Stage>
+        <Button
+          className="p-4 text-xl text-black"
+          rounded
+          inline
+          onClick={() => setFrame(Math.min(5, frame.id + 1))}
+        >
+          <Icon material={<ChevronRightIcon className="w-6 h-6" />} />
+        </Button>
       </div>
 
       <div className="flex gap-2 mx-auto">
@@ -366,8 +390,10 @@ function Artwork() {
             alt={artworkImage.id}
             role="presentation"
             style={{
-              width: "200px",
-              height: "200px",
+              display: "block",
+              maxHeight: "150px",
+              width: "auto",
+              height: "auto",
               cursor: "move",
               borderRadius: "5px",
               margin: "4px",

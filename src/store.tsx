@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
+import frameList from "./frameList";
+import initialArtworkList from "./initialArtworkList";
 import initialImageList from "./initialImageList";
 
 export interface ImageProps {
@@ -32,6 +34,12 @@ export interface CanvasImageProps {
   y: number;
 }
 
+export interface FrameImageProps {
+  id: number;
+  image: string;
+  front: string;
+}
+
 interface GlamState {
   addToCanvas: (imageURL: string, x: number, y: number) => void;
   addToArtwork: (id: string, imageURL: string) => void;
@@ -39,10 +47,12 @@ interface GlamState {
   artworkList: ArtworkImageProps[];
   canvasList: CanvasImageProps[];
   imageList: ImageProps[];
+  frame: FrameImageProps;
   imageLikeList: ImageProps[];
   likeImage: (image: ImageProps) => void;
   removeFromCanvas: (id: string) => void;
   resetState: () => void;
+  setFrame: (id: number) => void;
   transformCanvasImage: (canvasImage: CanvasImageProps) => void;
   moveCanvasImage: (id: string, bringToFront: boolean) => void;
 }
@@ -80,16 +90,26 @@ const useStore = create<GlamState>()(
           })),
         addToImageList: (images) =>
           set((state) => ({ imageList: [...state.imageList, ...images] })),
-        artworkList: [],
+        artworkList: initialArtworkList,
         canvasList: [],
+        frame: frameList[1],
         imageList: initialImageList.sort(() => Math.random() - 0.5),
         imageLikeList: [],
         likeImage: (image) =>
           set((state) => ({ imageLikeList: [...state.imageLikeList, image] })),
-        resetState: () => set(() => ({ canvasList: [], imageLikeList: [] })),
+        resetState: () =>
+          set(() => ({
+            imageList: initialImageList.sort(() => Math.random() - 0.5),
+            canvasList: [],
+            imageLikeList: [],
+          })),
         removeFromCanvas: (id) =>
           set((state) => ({
             canvasList: state.canvasList.filter((image) => image.id !== id),
+          })),
+        setFrame: (id) =>
+          set(() => ({
+            frame: frameList.find((frame) => frame.id === id),
           })),
         transformCanvasImage: (canvasImage) =>
           set((state) => ({
