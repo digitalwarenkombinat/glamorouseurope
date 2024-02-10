@@ -2,18 +2,17 @@ import {
   HandThumbDownIcon,
   HandThumbUpIcon,
 } from "@heroicons/react/24/outline";
-import axios from "axios";
 // @ts-expect-error konsta typing
 import { Block, Button, Card, Icon } from "konsta/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import TinderCard from "react-tinder-card";
 
-import api from "../api";
 import useStore, { ImageProps } from "../store";
+import { useFetch } from "../useFetch";
 import utils from "../utils";
 
-export interface Element {
+export interface ImageElement {
   artworkLabel: { value: string };
   collectionLabel: { value: string };
   copyrightLabel: { value: string };
@@ -52,7 +51,9 @@ function Selection() {
   const { t } = useTranslation();
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [data, setData] = useState<ImageProps[]>([]);
+  const { addToImageList, imageList } = useStore();
+
+  const { data } = useFetch();
 
   const likeImage = useStore((state) => state.likeImage);
 
@@ -60,7 +61,7 @@ function Selection() {
 
   const childRef = useRef<API | null>(null);
 
-  const validateData = useCallback(async (elements: Element[]) => {
+  const validateData = useCallback(async (elements: ImageElement[]) => {
     if (!elements) return;
 
     const getValidIIIFIdentifier = async (iiifManifest: string) => {
@@ -82,11 +83,11 @@ function Selection() {
           if (identifier !== null) {
             return {
               id: element.item.value,
-              name: element.itemLabel.value,
-              year: element.year?.value,
+              name: element.itemLabel.value || "",
+              year: element.year?.value || "",
               country: element.countryLabel?.value,
-              location: element?.locationLabel?.value,
-              creator: element.creatorLabel?.value,
+              location: element?.locationLabel?.value || "",
+              creator: element.creatorLabel?.value || "",
               url: element.iiifManifest?.value,
               identifier: identifier,
               image: `${identifier}/full/400,/0/default.jpg`,
@@ -105,21 +106,14 @@ function Selection() {
       (result): result is ImageProps => result !== null,
     );
 
-    setData(fulfilledImages);
+    addToImageList(fulfilledImages);
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get(api.sparqlQuery());
-        validateData(data.results.bindings);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, [validateData]);
+    if (data.length > 0) {
+      validateData(data);
+    }
+  }, [data, validateData]);
 
   const updateCurrentIndex = (val: number) => {
     setCurrentIndex(val);
@@ -146,7 +140,7 @@ function Selection() {
     }
   };
 
-  const currentImage = data[currentIndex];
+  const currentImage = imageList[currentIndex];
 
   return (
     <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
@@ -188,15 +182,22 @@ function Selection() {
           {currentImage?.name}
         </h2>
         <p className="text-gray-600">
-          {t("selectionYear")} {currentImage?.year || t("selectionUnknown")}
+          {t("selectionYear")}{" "}
+          {currentImage?.year !== ""
+            ? currentImage?.year
+            : t("selectionUnknown")}
         </p>
         <p className="text-gray-600">
           {t("selectionCreator")}{" "}
-          {currentImage?.creator || t("selectionUnknown")}
+          {currentImage?.creator !== ""
+            ? currentImage?.creator
+            : t("selectionUnknown")}
         </p>
         <p className="text-gray-600">
           {t("selectionLocation")}{" "}
-          {currentImage?.location || t("selectionUnknown")}
+          {currentImage?.location !== ""
+            ? currentImage?.location
+            : t("selectionUnknown")}
         </p>
       </div>
     </Block>
