@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import api from "./api";
-import { ImageElement } from "./components/Select";
+import { ImageElement } from "../components/Select";
+import api from "../middleware/api";
 
 export const useFetch = () => {
   const [data, setData] = useState([] as ImageElement[]);

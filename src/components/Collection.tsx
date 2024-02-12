@@ -2,10 +2,9 @@
 import { Block, Button } from "konsta/react";
 import { Suspense, lazy, useState } from "react";
 import { useTranslation } from "react-i18next";
-import ReactLassoSelect, { getCanvas } from "react-lasso-select";
 
 import useStore, { ImageProps } from "../store";
-import utils from "../utils";
+import utils from "../utils/utils";
 
 const Viewer = lazy(() => import("@samvera/clover-iiif/viewer"));
 
@@ -56,9 +55,6 @@ function Collection() {
     setSelectedImage(image);
   };
 
-  const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
-  const [clippedImg, setClippedImg] = useState<string>();
-
   const addFrameToArtwork = async (id: string, imageURL: string) => {
     try {
       const croppedImagePath = await utils.getCroppedImagePath(imageURL);
@@ -92,26 +88,6 @@ function Collection() {
 
       {selectedImage && (
         <Block className="space-y-4">
-          <ReactLassoSelect
-            value={points}
-            src={selectedImage.image}
-            onChange={(path) => {
-              setPoints(path);
-            }}
-            onComplete={(path) => {
-              if (!path.length) return;
-              getCanvas(selectedImage.image, path, (err, canvas) => {
-                if (!err) {
-                  setClippedImg(canvas.toDataURL());
-                }
-              });
-            }}
-          />
-          <div>Points: {points.map(({ x, y }) => `${x},${y}`).join(" ")}</div>
-          <div>
-            <img src={clippedImg} alt="" />
-          </div>
-
           <Suspense fallback={<h2>🌀 {t("collectionLoading")}</h2>}>
             <Viewer
               iiifContent={selectedImage.url}

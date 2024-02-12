@@ -9,8 +9,8 @@ import { useTranslation } from "react-i18next";
 import TinderCard from "react-tinder-card";
 
 import useStore, { ImageProps } from "../store";
-import { useFetch } from "../useFetch";
-import utils from "../utils";
+import { useFetch } from "../utils/useFetch";
+import utils from "../utils/utils";
 
 export interface ImageElement {
   artworkLabel: { value: string };

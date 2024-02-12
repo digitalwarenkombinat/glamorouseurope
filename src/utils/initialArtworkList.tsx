@@ -1,4 +1,4 @@
-import { ArtworkImageProps } from "./store";
+import { ArtworkImageProps } from "../store";
 
 const initialArtworkList: ArtworkImageProps[] = [
   {
