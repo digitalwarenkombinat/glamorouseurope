@@ -68,12 +68,12 @@ function Collection() {
   };
 
   return (
-    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
+    <Block className="flex flex-col flex-wrap gap-2 container justify-center content-center text-center mx-auto">
       <div className="p-2 m-4">
         <h1 className="text-2xl">{t("collectionTitle")}</h1>
       </div>
 
-      <Block className="flex flex-wrap mx-auto">
+      <Block className="flex flex-wrap mx-auto my-0">
         {imageLikeList.map((item) => (
           <img
             key={item.id}
@@ -87,7 +87,7 @@ function Collection() {
       </Block>
 
       {selectedImage && (
-        <Block className="space-y-4">
+        <Block className="space-y-4 my-0">
           <Suspense fallback={<h2>🌀 {t("collectionLoading")}</h2>}>
             <Viewer
               iiifContent={selectedImage.url}

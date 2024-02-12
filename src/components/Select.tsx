@@ -51,7 +51,7 @@ function Selection() {
   const { t } = useTranslation();
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { addToImageList, imageList } = useStore();
+  const { addToImageList, imageList, removeFromImageList } = useStore();
 
   const { data } = useFetch();
 
@@ -61,53 +61,56 @@ function Selection() {
 
   const childRef = useRef<API | null>(null);
 
-  const validateData = useCallback(async (elements: ImageElement[]) => {
-    if (!elements) return;
+  const validateData = useCallback(
+    async (elements: ImageElement[]) => {
+      if (!elements) return;
 
-    const getValidIIIFIdentifier = async (iiifManifest: string) => {
-      try {
-        const imageURL = await utils.fetchIIIFIdentifier(iiifManifest);
-        return imageURL;
-      } catch (error) {
-        console.error("Error:", error);
-        return null;
-      }
-    };
-
-    const imagePromises = await Promise.all(
-      elements.map(async (element) => {
+      const getValidIIIFIdentifier = async (iiifManifest: string) => {
         try {
-          const identifier = await getValidIIIFIdentifier(
-            element.iiifManifest.value,
-          );
-          if (identifier !== null) {
-            return {
-              id: element.item.value,
-              name: element.itemLabel.value || "",
-              year: element.year?.value || "",
-              country: element.countryLabel?.value,
-              location: element?.locationLabel?.value || "",
-              creator: element.creatorLabel?.value || "",
-              url: element.iiifManifest?.value,
-              identifier: identifier,
-              image: `${identifier}/full/400,/0/default.jpg`,
-              thumbnail: `${identifier}/full/100,100/0/default.jpg`,
-            };
-          }
-          return null;
+          const imageURL = await utils.fetchIIIFIdentifier(iiifManifest);
+          return imageURL;
         } catch (error) {
-          console.error("Error processing image:", error);
+          console.error("Error:", error);
           return null;
         }
-      }),
-    );
+      };
 
-    const fulfilledImages = imagePromises.filter(
-      (result): result is ImageProps => result !== null,
-    );
+      const imagePromises = await Promise.all(
+        elements.map(async (element) => {
+          try {
+            const identifier = await getValidIIIFIdentifier(
+              element.iiifManifest.value,
+            );
+            if (identifier !== null) {
+              return {
+                id: element.item.value,
+                name: element.itemLabel.value || "",
+                year: element.year?.value || "",
+                country: element.countryLabel?.value,
+                location: element?.locationLabel?.value || "",
+                creator: element.creatorLabel?.value || "",
+                url: element.iiifManifest?.value,
+                identifier: identifier,
+                image: `${identifier}/full/400,/0/default.jpg`,
+                thumbnail: `${identifier}/full/100,100/0/default.jpg`,
+              };
+            }
+            return null;
+          } catch (error) {
+            console.error("Error processing image:", error);
+            return null;
+          }
+        }),
+      );
 
-    addToImageList(fulfilledImages);
-  }, []);
+      const fulfilledImages = imagePromises.filter(
+        (result): result is ImageProps => result !== null,
+      );
+
+      addToImageList(fulfilledImages);
+    },
+    [addToImageList],
+  );
 
   useEffect(() => {
     if (data.length > 0) {
@@ -127,6 +130,7 @@ function Selection() {
       // console.log(currentImage);
       likeImage(currentImage);
     }
+    removeFromImageList(currentImage.id);
     updateCurrentIndex(index + 1);
   };
 
@@ -135,7 +139,7 @@ function Selection() {
   };
 
   const swipe = async (dir: Direction) => {
-    if (canSwipe && currentIndex < data.length) {
+    if (canSwipe && currentIndex < imageList.length) {
       await childRef.current?.swipe(dir);
     }
   };

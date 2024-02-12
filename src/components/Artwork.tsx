@@ -381,11 +381,11 @@ function Artwork() {
       <div className="p-2 m-4">
         <h1 className="text-2xl">{t("artworkTitle")}</h1>
       </div>
-
+      {/* Use slider logic from spook tours inventory */}
       <Block className="flex flex-wrap mx-auto">
-        {artworkList.map((artworkImage) => (
+        {artworkList.map((artworkImage, index) => (
           <img
-            key={artworkImage.id}
+            key={artworkImage.id + index}
             src={artworkImage.image}
             alt={artworkImage.id}
             role="presentation"

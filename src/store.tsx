@@ -51,6 +51,7 @@ interface GlamState {
   imageLikeList: ImageProps[];
   likeImage: (image: ImageProps) => void;
   removeFromCanvas: (id: string) => void;
+  removeFromImageList: (id: string) => void;
   resetState: () => void;
   setFrame: (id: number) => void;
   transformCanvasImage: (canvasImage: CanvasImageProps) => void;
@@ -64,11 +65,11 @@ const useStore = create<GlamState>()(
         addToArtwork: (id, imageURL) =>
           set((state) => ({
             artworkList: [
-              ...state.artworkList,
               {
                 id: id,
                 image: imageURL,
               },
+              ...state.artworkList,
             ],
           })),
         addToCanvas: (imageURL, x, y) =>
@@ -90,6 +91,10 @@ const useStore = create<GlamState>()(
           })),
         addToImageList: (images) =>
           set((state) => ({ imageList: [...state.imageList, ...images] })),
+        removeFromImageList: (id) =>
+          set((state) => ({
+            imageList: state.imageList.filter((image) => image.id !== id),
+          })),
         artworkList: initialArtworkList,
         canvasList: [],
         frame: frameList[1],
