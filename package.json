@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
-    "@iiif/parser": "^2.0.1",
+    "@iiif/parser": "^2.0.2",
     "@samvera/clover-iiif": "^2.3.2",
     "@tensorflow-models/deeplab": "^0.2.2",
     "file-saver": "^2.0.5",
@@ -43,7 +43,7 @@
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "@vite-pwa/assets-generator": "^0.2.3",
+    "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
@@ -58,6 +58,6 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "vite": "^5.1.1",
-    "vite-plugin-pwa": "^0.18.0"
+    "vite-plugin-pwa": "^0.18.1"
   }
 }
