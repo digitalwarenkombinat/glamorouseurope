@@ -1,5 +1,7 @@
 import i18next from "i18next";
 import React from "react";
+import { DndProvider } from "react-dnd";
+import { TouchBackend } from "react-dnd-touch-backend";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
 import { BrowserRouter } from "react-router-dom";
@@ -22,9 +24,11 @@ i18next.init({
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <I18nextProvider i18n={i18next}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <DndProvider backend={TouchBackend}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </DndProvider>
     </I18nextProvider>
   </React.StrictMode>,
 );

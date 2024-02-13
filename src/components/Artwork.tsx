@@ -13,12 +13,13 @@ import { Block, Button, Icon } from "konsta/react";
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { DragPreviewImage, useDrag, useDrop } from "react-dnd";
 import { useTranslation } from "react-i18next";
 import { Image, Layer, Stage, Transformer } from "react-konva";
 import { Link } from "react-router-dom";
 import useImage from "use-image";
 
-import useStore, { CanvasImageProps } from "../store";
+import useStore, { ArtworkImageProps, CanvasImageProps } from "../store";
 
 const FrameImage = ({ front }: { front: boolean }) => {
   const { frame } = useStore();
@@ -148,7 +149,7 @@ const Canvas = () => {
 
   useEffect(() => {
     const fitStageIntoParentContainer = () => {
-      const containerWidth = window.innerWidth * 0.9 || 0;
+      const containerWidth = window.innerWidth * 0.8 || 0;
       const scale = containerWidth / sceneWidth;
 
       if (stageRef.current) {
@@ -173,23 +174,6 @@ const Canvas = () => {
     const clickedOnEmpty = e.target === e.target.getStage();
     if (clickedOnEmpty) {
       setSelectedId("");
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const canvasId = e.dataTransfer.getData("text/plain");
-    const canvasImage = artworkList.find((image) => image.id === canvasId);
-
-    if (canvasImage) {
-      const stage = stageRef.current;
-
-      if (stage) {
-        const dropX =
-          e.clientX - stage.container().getBoundingClientRect().left;
-        const dropY = e.clientY - stage.container().getBoundingClientRect().top;
-        addToCanvas(canvasImage.image, dropX, dropY);
-      }
     }
   };
 
@@ -250,6 +234,39 @@ const Canvas = () => {
     }
   };
 
+  const [{ canDrop, isOver }, drop] = useDrop(() => ({
+    accept: "artwork",
+    drop: (item: ArtworkImageProps, monitor) => {
+      const offset = monitor.getClientOffset();
+      if (item && offset) {
+        const canvasImage = artworkList.find((image) => image.id === item.id);
+
+        if (canvasImage) {
+          const stage = stageRef.current;
+
+          if (stage) {
+            const dropX =
+              offset.x - stage.container().getBoundingClientRect().left;
+            const dropY =
+              offset.y - stage.container().getBoundingClientRect().top;
+            addToCanvas(canvasImage.image, dropX, dropY);
+          }
+        }
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  }));
+  const isActive = canDrop && isOver;
+  let borderColor = "transparent";
+  if (isActive) {
+    borderColor = "#ebb2ff";
+  } else if (canDrop) {
+    borderColor = "#2B2829";
+  }
+
   return (
     <>
       <div className="toolbar">
@@ -303,11 +320,7 @@ const Canvas = () => {
           <Icon material={<TrashIcon className="w-6 h-6" />} />
         </Button>
       </div>
-      <div
-        className="mx-auto flex items-center gap-2"
-        onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-      >
+      <div className="mx-auto flex items-center gap-2" ref={drop}>
         <Button
           className="p-4 text-xl text-black"
           rounded
@@ -317,6 +330,10 @@ const Canvas = () => {
           <Icon material={<ChevronLeftIcon className="w-6 h-6" />} />
         </Button>
         <Stage
+          style={{
+            border: "4px solid",
+            borderColor: borderColor,
+          }}
           width={sceneWidth}
           height={sceneHeight}
           ref={stageRef}
@@ -372,6 +389,37 @@ const Canvas = () => {
   );
 };
 
+function ArtworkImage({ id, image }: { id: string; image: string }) {
+  const [{ opacity }, drag, preview] = useDrag(() => ({
+    type: "artwork",
+    item: { id },
+    collect: (monitor) => ({
+      opacity: monitor.isDragging() ? 0.4 : 1,
+    }),
+  }));
+  return (
+    <>
+      <DragPreviewImage connect={preview} src={image} />
+      <img
+        src={image}
+        alt={id}
+        role="presentation"
+        style={{
+          display: "block",
+          maxHeight: "150px",
+          width: "auto",
+          height: "auto",
+          cursor: "move",
+          borderRadius: "5px",
+          margin: "4px",
+          opacity: opacity,
+        }}
+        ref={drag}
+      />
+    </>
+  );
+}
+
 function Artwork() {
   const { t } = useTranslation();
   const { artworkList } = useStore();
@@ -384,25 +432,7 @@ function Artwork() {
       {/* Use slider logic from spook tours inventory */}
       <Block className="flex flex-wrap mx-auto">
         {artworkList.map((artworkImage, index) => (
-          <img
-            key={artworkImage.id + index}
-            src={artworkImage.image}
-            alt={artworkImage.id}
-            role="presentation"
-            style={{
-              display: "block",
-              maxHeight: "150px",
-              width: "auto",
-              height: "auto",
-              cursor: "move",
-              borderRadius: "5px",
-              margin: "4px",
-            }}
-            draggable
-            onDragStart={(e) => {
-              e.dataTransfer.setData("text/plain", artworkImage.id);
-            }}
-          />
+          <ArtworkImage key={artworkImage.id + index} {...artworkImage} />
         ))}
       </Block>
 
