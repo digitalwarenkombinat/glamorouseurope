@@ -1,9 +1,11 @@
 // @ts-expect-error konsta typing
 import { Block, Button } from "konsta/react";
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import ReactLassoSelect, { getCanvas } from "react-lasso-select";
 
 import useStore, { ImageProps } from "../store";
+import useRemoveImageBackground from "../utils/useRemoveImageBackground";
 import utils from "../utils/utils";
 
 const Viewer = lazy(() => import("@samvera/clover-iiif/viewer"));
@@ -51,8 +53,34 @@ function Collection() {
     imageLikeList[0] || null,
   );
 
+  const [activeCanvasId, setActiveCanvasId] = useState("");
+
+  const [canvasImg, setCanvasImg] = useState("");
+
+  useEffect(() => {
+    if (activeCanvasId) {
+      setTimeout(() => {
+        setCanvasImg(document.querySelectorAll("canvas")[0].toDataURL());
+      }, 1000);
+    }
+  }, [activeCanvasId]);
+
   const handleImageClick = (image: ImageProps) => {
     setSelectedImage(image);
+  };
+
+  const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
+  const [clippedImg, setClippedImg] = useState<string>();
+
+  const { autoRemoveBackground } = useRemoveImageBackground();
+
+  const removeBackground = (clippedImg: string) => {
+    const imageElement = new Image();
+    imageElement.src = clippedImg;
+    autoRemoveBackground(imageElement).then((base64: string) => {
+      console.log(base64);
+      setClippedImg(base64);
+    });
   };
 
   const addFrameToArtwork = async (id: string, imageURL: string) => {
@@ -67,13 +95,17 @@ function Collection() {
     }
   };
 
+  const handleCanvasIdCallback = (activeCanvasId: string) => {
+    if (activeCanvasId) console.log(setActiveCanvasId(activeCanvasId));
+  };
+
   return (
-    <Block className="flex flex-col flex-wrap gap-2 container justify-center content-center text-center mx-auto">
+    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
       <div className="p-2 m-4">
         <h1 className="text-2xl">{t("collectionTitle")}</h1>
       </div>
 
-      <Block className="flex flex-wrap mx-auto my-0">
+      <Block className="flex flex-wrap mx-auto">
         {imageLikeList.map((item) => (
           <img
             key={item.id}
@@ -87,12 +119,40 @@ function Collection() {
       </Block>
 
       {selectedImage && (
-        <Block className="space-y-4 my-0">
+        <Block className="space-y-4">
+          <ReactLassoSelect
+            value={points}
+            src={canvasImg}
+            onChange={(path) => {
+              setPoints(path);
+            }}
+            onComplete={(path) => {
+              if (!path.length) return;
+              getCanvas(canvasImg, path, (err, canvas) => {
+                if (!err) {
+                  setClippedImg(canvas.toDataURL());
+                  addToArtwork("1", canvas.toDataURL());
+                }
+              });
+            }}
+          />
+          {/* <div>Points: {points.map(({ x, y }) => `${x},${y}`).join(" ")}</div> */}
+          <div>
+            <img src={clippedImg} alt="" />
+          </div>
+
+          {clippedImg && (
+            <Button onClick={() => removeBackground(clippedImg)}>
+              Remove Background
+            </Button>
+          )}
+
           <Suspense fallback={<h2>🌀 {t("collectionLoading")}</h2>}>
             <Viewer
               iiifContent={selectedImage.url}
               options={options}
               customTheme={customTheme}
+              canvasIdCallback={handleCanvasIdCallback}
             />
           </Suspense>
 
