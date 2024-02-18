@@ -405,14 +405,12 @@ function ArtworkImage({ id, image }: { id: string; image: string }) {
         alt={id}
         role="presentation"
         style={{
-          display: "block",
-          maxHeight: "150px",
-          width: "auto",
-          height: "auto",
           cursor: "move",
-          borderRadius: "5px",
-          margin: "4px",
+          marginRight: "10px",
+          maxHeight: "100px",
           opacity: opacity,
+          scrollSnapAlign: "start",
+          width: "auto",
         }}
         ref={drag}
       />
@@ -429,8 +427,16 @@ function Artwork() {
       <div className="p-2 m-4">
         <h1 className="text-2xl">{t("artworkTitle")}</h1>
       </div>
-      {/* Use slider logic from spook tours inventory */}
-      <Block className="flex flex-wrap mx-auto">
+
+      <Block
+        className="flex mx-auto overflow-x-auto"
+        style={{
+          maxHeight: "100px",
+          scrollSnapType: "x mandatory",
+          scrollBehavior: "smooth",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
         {artworkList.map((artworkImage, index) => (
           <ArtworkImage key={artworkImage.id + index} {...artworkImage} />
         ))}

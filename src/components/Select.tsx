@@ -116,7 +116,7 @@ function Selection() {
     if (data.length > 0) {
       validateData(data);
     }
-  }, [data, validateData]);
+  }, [data]);
 
   const updateCurrentIndex = (val: number) => {
     setCurrentIndex(val);

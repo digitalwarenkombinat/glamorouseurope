@@ -7,6 +7,7 @@ import ReactLassoSelect, { getCanvas } from "react-lasso-select";
 import useStore, { ImageProps } from "../store";
 import useRemoveImageBackground from "../utils/useRemoveImageBackground";
 import utils from "../utils/utils";
+import ThumbnailSlider from "./ThumbnailSlider";
 
 const Viewer = lazy(() => import("@samvera/clover-iiif/viewer"));
 
@@ -105,18 +106,10 @@ function Collection() {
         <h1 className="text-2xl">{t("collectionTitle")}</h1>
       </div>
 
-      <Block className="flex flex-wrap mx-auto">
-        {imageLikeList.map((item) => (
-          <img
-            key={item.id}
-            src={item.thumbnail}
-            alt={item.name}
-            onClick={() => handleImageClick(item)}
-            style={{ cursor: "pointer", margin: "4px" }}
-            role="presentation"
-          />
-        ))}
-      </Block>
+      <ThumbnailSlider
+        imageList={imageLikeList}
+        handleImageClick={handleImageClick}
+      />
 
       {selectedImage && (
         <Block className="space-y-4">
@@ -131,12 +124,11 @@ function Collection() {
               getCanvas(canvasImg, path, (err, canvas) => {
                 if (!err) {
                   setClippedImg(canvas.toDataURL());
-                  addToArtwork("1", canvas.toDataURL());
+                  // addToArtwork("1", canvas.toDataURL());
                 }
               });
             }}
           />
-          {/* <div>Points: {points.map(({ x, y }) => `${x},${y}`).join(" ")}</div> */}
           <div>
             <img src={clippedImg} alt="" />
           </div>
