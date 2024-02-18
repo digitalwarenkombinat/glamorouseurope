@@ -141,8 +141,8 @@ const useStore = create<GlamState>()(
 
             if (currentIndex !== -1) {
               const targetIndex = moveForward
-                ? currentIndex - 1
-                : currentIndex + 1;
+                ? currentIndex + 1
+                : currentIndex - 1;
 
               if (targetIndex >= 0 && targetIndex < state.canvasList.length) {
                 const updatedCanvasList = [...state.canvasList];
