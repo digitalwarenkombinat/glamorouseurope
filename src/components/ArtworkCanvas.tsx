@@ -5,13 +5,14 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ShareIcon,
+  SunIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { saveAs } from "file-saver";
 // @ts-expect-error konsta typing
-import { BlockTitle, Button, Icon, List, ListItem, Range } from "konsta/react";
+import { Block, Button, Icon, List, ListItem, Range } from "konsta/react";
 import Konva from "konva";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import { Layer, Stage } from "react-konva";
 
@@ -19,7 +20,7 @@ import useStore, { ArtworkImageProps, CanvasImageProps } from "../store";
 import ArtworkFrame from "./ArtworkFrame";
 import ArtworkImage from "./ArtworkImage";
 
-const ArtworkCanvas = () => {
+const ArtworkCanvas: React.FC = () => {
   const {
     addToCanvas,
     artworkList,
@@ -30,11 +31,18 @@ const ArtworkCanvas = () => {
     setFrame,
     transformCanvasImage,
   } = useStore();
+
   const stageRef = useRef<Konva.Stage>(null);
-  const [selectedImage, setSelectedImage] = useState({} as CanvasImageProps);
+  const [selectedImage, setSelectedImage] = useState<CanvasImageProps | null>(
+    null,
+  );
   const [brightness, setBrightness] = useState(0);
   const [contrast, setContrast] = useState(0);
   const [opacity, setOpacity] = useState(1);
+  const [brightnessExpanded, setBrightnessExpanded] = useState(false);
+  const [contrastExpanded, setContrastExpanded] = useState(false);
+  const [opacityExpanded, setOpacityExpanded] = useState(false);
+
   const sceneWidth = 1080;
   const sceneHeight = 1080;
 
@@ -64,7 +72,7 @@ const ArtworkCanvas = () => {
   ) => {
     const clickedOnEmpty = e.target === e.target.getStage();
     if (clickedOnEmpty) {
-      setSelectedImage({} as CanvasImageProps);
+      setSelectedImage(null);
     }
   };
 
@@ -81,51 +89,31 @@ const ArtworkCanvas = () => {
     }
   };
 
-  const adjustBrightness = (value: number) => {
-    setBrightness(value);
+  const adjustTransform = (value: number, property: keyof CanvasImageProps) => {
+    if (!selectedImage) return;
 
-    const canvasImage = canvasList.find(
-      (image) => image.id === selectedImage.id,
-    );
-    if (canvasImage) {
-      transformCanvasImage({
-        ...canvasImage,
-        brightness: value,
-      });
-    }
-  };
-
-  const adjustContrast = (value: number) => {
-    setContrast(value);
-
-    const canvasImage = canvasList.find(
-      (image) => image.id === selectedImage.id,
-    );
-    if (canvasImage) {
-      transformCanvasImage({
-        ...canvasImage,
-        contrast: value,
-      });
-    }
-  };
-
-  const adjustOpacity = (value: number) => {
-    setOpacity(value);
-
-    const canvasImage = canvasList.find(
-      (image) => image.id === selectedImage.id,
-    );
-    if (canvasImage) {
-      transformCanvasImage({
-        ...canvasImage,
-        opacity: value,
-      });
+    const updatedImage = { ...selectedImage, [property]: value };
+    transformCanvasImage(updatedImage);
+    switch (property) {
+      case "brightness":
+        setBrightness(value);
+        break;
+      case "contrast":
+        setContrast(value);
+        break;
+      case "opacity":
+        setOpacity(value);
+        break;
+      default:
+        break;
     }
   };
 
   const handleRemove = () => {
-    removeFromCanvas(selectedImage.id);
-    setSelectedImage({} as CanvasImageProps);
+    if (selectedImage) {
+      removeFromCanvas(selectedImage.id);
+      setSelectedImage(null);
+    }
   };
 
   const handleShare = () => {
@@ -148,6 +136,24 @@ const ArtworkCanvas = () => {
     if (uri) {
       saveAs(uri, "GLAMorousEurope.png");
     }
+  };
+
+  const handleToggleBrightness = () => {
+    setBrightnessExpanded(!brightnessExpanded);
+    setOpacityExpanded(false);
+    setContrastExpanded(false);
+  };
+
+  const handleToggleContrast = () => {
+    setContrastExpanded(!contrastExpanded);
+    setOpacityExpanded(false);
+    setBrightnessExpanded(false);
+  };
+
+  const handleToggleOpacity = () => {
+    setOpacityExpanded(!opacityExpanded);
+    setContrastExpanded(false);
+    setBrightnessExpanded(false);
   };
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
@@ -175,6 +181,7 @@ const ArtworkCanvas = () => {
       canDrop: monitor.canDrop(),
     }),
   }));
+
   const isActive = canDrop && isOver;
   let borderColor = "transparent";
   if (isActive) {
@@ -183,99 +190,128 @@ const ArtworkCanvas = () => {
 
   return (
     <>
-      <div className="toolbar">
-        <Button
-          className="p-4 text-xl text-black"
-          rounded
-          inline
-          onClick={() => handleMove(true)}
-        >
-          <Icon material={<ArrowUturnUpIcon className="w-6 h-6" />} />
+      <Block className="flex flex-wrap gap-1 container justify-center content-center text-center mx-auto">
+        <Button className="p-2 text-black" rounded inline onClick={handleShare}>
+          <Icon material={<ShareIcon className="w-6 h-6" />} />
         </Button>
         <Button
-          className="p-4 text-xl text-black"
+          className="p-2 text-black"
           rounded
           inline
-          onClick={() => handleMove(false)}
+          onClick={handleDownload}
         >
-          <Icon material={<ArrowUturnDownIcon className="w-6 h-6" />} />
+          <Icon material={<ArrowDownTrayIcon className="w-6 h-6" />} />
         </Button>
-        {selectedImage.id && (
-          <div>
-            <BlockTitle>Opacity: {opacity}</BlockTitle>
-            <List strong insetMaterial outlineIos>
-              <ListItem
-                innerClassName="flex space-x-4 rtl:space-x-reverse"
-                innerChildren={
-                  <>
-                    <span>0</span>
+        {selectedImage && (
+          <>
+            <Button
+              className="p-2 text-black"
+              rounded
+              inline
+              onClick={() => handleMove(true)}
+            >
+              <Icon material={<ArrowUturnUpIcon className="w-6 h-6" />} />
+            </Button>
+            <Button
+              className="p-2 text-black"
+              rounded
+              inline
+              onClick={() => handleMove(false)}
+            >
+              <Icon material={<ArrowUturnDownIcon className="w-6 h-6" />} />
+            </Button>
+            <Button
+              className="p-2 text-black"
+              rounded
+              inline
+              onClick={handleRemove}
+            >
+              <Icon material={<TrashIcon className="w-6 h-6" />} />
+            </Button>
+            <Button
+              className="p-2 text-black"
+              rounded
+              inline
+              onClick={handleToggleOpacity}
+            >
+              <Icon material={<SunIcon className="w-6 h-6" />} />
+            </Button>
+            {opacityExpanded && (
+              <List strong insetMaterial outlineIos className="w-1/3 my-0">
+                <ListItem
+                  innerClassName="flex space-x-4 w-6"
+                  innerChildren={
                     <Range
                       value={opacity}
                       min={0}
                       max={1}
                       step={0.01}
-                      onChange={(e: { target: { value: string } }) =>
-                        adjustOpacity(parseFloat(e.target.value))
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        adjustTransform(parseFloat(e.target.value), "opacity")
                       }
                     />
-                    <span>1</span>
-                  </>
-                }
-              />
-            </List>
-            <BlockTitle>Brightness: {brightness}</BlockTitle>
-            <List strong insetMaterial outlineIos>
-              <ListItem
-                innerClassName="flex space-x-4 rtl:space-x-reverse"
-                innerChildren={
-                  <>
-                    <span>0</span>
+                  }
+                />
+              </List>
+            )}
+            <Button
+              className="p-2 text-black"
+              rounded
+              inline
+              onClick={handleToggleBrightness}
+            >
+              <Icon material={<SunIcon className="w-6 h-6" />} />
+            </Button>
+            {brightnessExpanded && (
+              <List strong insetMaterial outlineIos className="w-1/3 my-0">
+                <ListItem
+                  innerClassName="flex space-x-4 w-6"
+                  innerChildren={
                     <Range
                       value={brightness}
                       min={-1}
                       max={1}
                       step={0.01}
-                      onChange={(e: { target: { value: string } }) =>
-                        adjustBrightness(parseFloat(e.target.value))
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        adjustTransform(
+                          parseFloat(e.target.value),
+                          "brightness",
+                        )
                       }
                     />
-                    <span>1</span>
-                  </>
-                }
-              />
-            </List>
-            <BlockTitle>Contrast: {contrast}</BlockTitle>
-            <List strong insetMaterial outlineIos>
-              <ListItem
-                innerClassName="flex space-x-4 rtl:space-x-reverse"
-                innerChildren={
-                  <>
-                    <span>0</span>
+                  }
+                />
+              </List>
+            )}
+            <Button
+              className="p-2 text-black"
+              rounded
+              inline
+              onClick={handleToggleContrast}
+            >
+              <Icon material={<SunIcon className="w-6 h-6" />} />
+            </Button>
+            {contrastExpanded && (
+              <List strong insetMaterial outlineIos className="w-1/3 my-0">
+                <ListItem
+                  innerClassName="flex space-x-4 w-6"
+                  innerChildren={
                     <Range
                       value={contrast}
                       min={-100}
                       max={100}
                       step={1}
-                      onChange={(e: { target: { value: string } }) =>
-                        adjustContrast(parseFloat(e.target.value))
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        adjustTransform(parseFloat(e.target.value), "contrast")
                       }
                     />
-                    <span>1</span>
-                  </>
-                }
-              />
-            </List>
-          </div>
+                  }
+                />
+              </List>
+            )}
+          </>
         )}
-        <Button
-          className="p-4 text-xl text-black"
-          rounded
-          inline
-          onClick={handleRemove}
-        >
-          <Icon material={<TrashIcon className="w-6 h-6" />} />
-        </Button>
-      </div>
+      </Block>
       <div className="mx-auto flex items-center gap-2" ref={drop}>
         <Button
           className="p-4 text-xl text-black"
@@ -304,10 +340,8 @@ const ArtworkCanvas = () => {
               <ArtworkImage
                 key={canvasImage.id}
                 canvasImage={canvasImage}
-                isSelected={canvasImage.id === selectedImage.id}
-                onSelect={() => {
-                  handleSelect(canvasImage);
-                }}
+                isSelected={selectedImage?.id === canvasImage.id}
+                onSelect={() => handleSelect(canvasImage)}
               />
             ))}
           </Layer>
@@ -322,25 +356,6 @@ const ArtworkCanvas = () => {
           onClick={() => setFrame(Math.min(5, frame.id + 1))}
         >
           <Icon material={<ChevronRightIcon className="w-6 h-6" />} />
-        </Button>
-      </div>
-
-      <div className="flex gap-2 mx-auto">
-        <Button
-          className="p-4 text-xl text-black"
-          rounded
-          inline
-          onClick={handleShare}
-        >
-          <Icon material={<ShareIcon className="w-6 h-6" />} />
-        </Button>
-        <Button
-          className="p-4 text-xl text-black"
-          rounded
-          inline
-          onClick={handleDownload}
-        >
-          <Icon material={<ArrowDownTrayIcon className="w-6 h-6" />} />
         </Button>
       </div>
     </>

@@ -98,6 +98,7 @@ const ArtworkImage = ({
             "bottom-left",
             "bottom-right",
           ]}
+          borderStroke={"#BC13FE"}
         />
       )}
     </>
