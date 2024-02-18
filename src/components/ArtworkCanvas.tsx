@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import { Layer, Stage } from "react-konva";
 
-import useStore, { ArtworkImageProps } from "../store";
+import useStore, { ArtworkImageProps, CanvasImageProps } from "../store";
 import ArtworkFrame from "./ArtworkFrame";
 import ArtworkImage from "./ArtworkImage";
 
@@ -31,7 +31,7 @@ const ArtworkCanvas = () => {
     transformCanvasImage,
   } = useStore();
   const stageRef = useRef<Konva.Stage>(null);
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedImage, setSelectedImage] = useState({} as CanvasImageProps);
   const [brightness, setBrightness] = useState(0);
   const [contrast, setContrast] = useState(0);
   const [opacity, setOpacity] = useState(1);
@@ -64,20 +64,29 @@ const ArtworkCanvas = () => {
   ) => {
     const clickedOnEmpty = e.target === e.target.getStage();
     if (clickedOnEmpty) {
-      setSelectedId("");
+      setSelectedImage({} as CanvasImageProps);
     }
   };
 
+  const handleSelect = (canvasImage: CanvasImageProps) => {
+    setSelectedImage(canvasImage);
+    setBrightness(canvasImage.brightness);
+    setContrast(canvasImage.contrast);
+    setOpacity(canvasImage.opacity);
+  };
+
   const handleMove = (moveForward: boolean) => {
-    if (selectedId) {
-      moveCanvasImage(selectedId, moveForward);
+    if (selectedImage) {
+      moveCanvasImage(selectedImage.id, moveForward);
     }
   };
 
   const adjustBrightness = (value: number) => {
     setBrightness(value);
 
-    const canvasImage = canvasList.find((image) => image.id === selectedId);
+    const canvasImage = canvasList.find(
+      (image) => image.id === selectedImage.id,
+    );
     if (canvasImage) {
       transformCanvasImage({
         ...canvasImage,
@@ -89,7 +98,9 @@ const ArtworkCanvas = () => {
   const adjustContrast = (value: number) => {
     setContrast(value);
 
-    const canvasImage = canvasList.find((image) => image.id === selectedId);
+    const canvasImage = canvasList.find(
+      (image) => image.id === selectedImage.id,
+    );
     if (canvasImage) {
       transformCanvasImage({
         ...canvasImage,
@@ -101,7 +112,9 @@ const ArtworkCanvas = () => {
   const adjustOpacity = (value: number) => {
     setOpacity(value);
 
-    const canvasImage = canvasList.find((image) => image.id === selectedId);
+    const canvasImage = canvasList.find(
+      (image) => image.id === selectedImage.id,
+    );
     if (canvasImage) {
       transformCanvasImage({
         ...canvasImage,
@@ -111,8 +124,8 @@ const ArtworkCanvas = () => {
   };
 
   const handleRemove = () => {
-    removeFromCanvas(selectedId);
-    setSelectedId("");
+    removeFromCanvas(selectedImage.id);
+    setSelectedImage({} as CanvasImageProps);
   };
 
   const handleShare = () => {
@@ -187,7 +200,7 @@ const ArtworkCanvas = () => {
         >
           <Icon material={<ArrowUturnDownIcon className="w-6 h-6" />} />
         </Button>
-        {selectedId && (
+        {selectedImage.id && (
           <div>
             <BlockTitle>Opacity: {opacity}</BlockTitle>
             <List strong insetMaterial outlineIos>
@@ -200,7 +213,7 @@ const ArtworkCanvas = () => {
                       value={opacity}
                       min={0}
                       max={1}
-                      step={0.1}
+                      step={0.01}
                       onChange={(e: { target: { value: string } }) =>
                         adjustOpacity(parseFloat(e.target.value))
                       }
@@ -221,7 +234,7 @@ const ArtworkCanvas = () => {
                       value={brightness}
                       min={-1}
                       max={1}
-                      step={0.1}
+                      step={0.01}
                       onChange={(e: { target: { value: string } }) =>
                         adjustBrightness(parseFloat(e.target.value))
                       }
@@ -291,9 +304,9 @@ const ArtworkCanvas = () => {
               <ArtworkImage
                 key={canvasImage.id}
                 canvasImage={canvasImage}
-                isSelected={canvasImage.id === selectedId}
+                isSelected={canvasImage.id === selectedImage.id}
                 onSelect={() => {
-                  setSelectedId(canvasImage.id);
+                  handleSelect(canvasImage);
                 }}
               />
             ))}
