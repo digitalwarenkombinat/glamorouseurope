@@ -53,7 +53,6 @@ function Start() {
     <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
       <Logo />
       <h1 className="text-3xl">{t("startTitle")}</h1>
-      <h2 className="text-xl">{t("startSubtitle")}</h2>
       <Collage />
       <p className="text-xl">{t("startText")}</p>
 
