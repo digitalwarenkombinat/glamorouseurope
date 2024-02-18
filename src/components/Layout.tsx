@@ -1,20 +1,35 @@
 import {
+  Bars3Icon,
   HeartIcon,
   HomeIcon,
   PhotoIcon,
   Square2StackIcon,
 } from "@heroicons/react/24/outline";
 // @ts-expect-error konsta typing
-import { App, Icon, Page, Tabbar, TabbarLink } from "konsta/react";
+import { App, Icon, Navbar, Page, Tabbar, TabbarLink } from "konsta/react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, Outlet, useMatch, useResolvedPath } from "react-router-dom";
 
+import Sidebar from "./Sidebar";
+
 function Layout() {
   const { t } = useTranslation();
+  const [panelOpened, setPanelOpened] = useState(false);
 
   return (
     <App theme="material">
       <Page>
+        <Navbar
+          className="top-0 sticky"
+          transparent
+          right={
+            <Bars3Icon
+              onClick={() => setPanelOpened(true)}
+              className="mr-4 w-10 h-10"
+            />
+          }
+        />
         <Tabbar
           labels={true}
           icons={true}
@@ -112,6 +127,7 @@ function Layout() {
         <main className="h-[calc(100%_-_128px)] overflow-auto">
           <Outlet />
         </main>
+        {Sidebar(panelOpened, setPanelOpened)}
       </Page>
     </App>
   );
