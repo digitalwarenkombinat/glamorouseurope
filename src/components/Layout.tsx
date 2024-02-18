@@ -124,7 +124,7 @@ function Layout() {
             touchRipple={false}
           />
         </Tabbar>
-        <main className="h-[calc(100%_-_128px)] overflow-auto">
+        <main className="h-[calc(100%_-_192px)] overflow-auto">
           <Outlet />
         </main>
         {Sidebar(panelOpened, setPanelOpened)}
