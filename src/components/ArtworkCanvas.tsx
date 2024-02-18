@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { saveAs } from "file-saver";
 // @ts-expect-error konsta typing
-import { Button, Icon } from "konsta/react";
+import { BlockTitle, Button, Icon, List, ListItem, Range } from "konsta/react";
 import Konva from "konva";
 import { useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
@@ -32,8 +32,9 @@ const ArtworkCanvas = () => {
   } = useStore();
   const stageRef = useRef<Konva.Stage>(null);
   const [selectedId, setSelectedId] = useState("");
-  const [brightnessValue, setBrightnessValue] = useState(1);
-  const [opacityValue, setOpacityValue] = useState(1);
+  const [brightness, setBrightness] = useState(0);
+  const [contrast, setContrast] = useState(0);
+  const [opacity, setOpacity] = useState(1);
   const sceneWidth = 1080;
   const sceneHeight = 1080;
 
@@ -74,7 +75,7 @@ const ArtworkCanvas = () => {
   };
 
   const adjustBrightness = (value: number) => {
-    setBrightnessValue(value);
+    setBrightness(value);
 
     const canvasImage = canvasList.find((image) => image.id === selectedId);
     if (canvasImage) {
@@ -85,8 +86,20 @@ const ArtworkCanvas = () => {
     }
   };
 
+  const adjustContrast = (value: number) => {
+    setContrast(value);
+
+    const canvasImage = canvasList.find((image) => image.id === selectedId);
+    if (canvasImage) {
+      transformCanvasImage({
+        ...canvasImage,
+        contrast: value,
+      });
+    }
+  };
+
   const adjustOpacity = (value: number) => {
-    setOpacityValue(value);
+    setOpacity(value);
 
     const canvasImage = canvasList.find((image) => image.id === selectedId);
     if (canvasImage) {
@@ -153,8 +166,6 @@ const ArtworkCanvas = () => {
   let borderColor = "transparent";
   if (isActive) {
     borderColor = "#ebb2ff";
-  } else if (canDrop) {
-    borderColor = "#2B2829";
   }
 
   return (
@@ -178,27 +189,69 @@ const ArtworkCanvas = () => {
         </Button>
         {selectedId && (
           <div>
-            <label htmlFor="brightnessSlider">Brightness:</label>
-            <input
-              id="brightnessSlider"
-              type="range"
-              min="0"
-              max="2"
-              step="0.01"
-              value={brightnessValue}
-              onChange={(e) => adjustBrightness(parseFloat(e.target.value))}
-            />
-
-            <label htmlFor="opacitySlider">Opacity:</label>
-            <input
-              id="opacitySlider"
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={opacityValue}
-              onChange={(e) => adjustOpacity(parseFloat(e.target.value))}
-            />
+            <BlockTitle>Opacity: {opacity}</BlockTitle>
+            <List strong insetMaterial outlineIos>
+              <ListItem
+                innerClassName="flex space-x-4 rtl:space-x-reverse"
+                innerChildren={
+                  <>
+                    <span>0</span>
+                    <Range
+                      value={opacity}
+                      min={0}
+                      max={1}
+                      step={0.1}
+                      onChange={(e: { target: { value: string } }) =>
+                        adjustOpacity(parseFloat(e.target.value))
+                      }
+                    />
+                    <span>1</span>
+                  </>
+                }
+              />
+            </List>
+            <BlockTitle>Brightness: {brightness}</BlockTitle>
+            <List strong insetMaterial outlineIos>
+              <ListItem
+                innerClassName="flex space-x-4 rtl:space-x-reverse"
+                innerChildren={
+                  <>
+                    <span>0</span>
+                    <Range
+                      value={brightness}
+                      min={-1}
+                      max={1}
+                      step={0.1}
+                      onChange={(e: { target: { value: string } }) =>
+                        adjustBrightness(parseFloat(e.target.value))
+                      }
+                    />
+                    <span>1</span>
+                  </>
+                }
+              />
+            </List>
+            <BlockTitle>Contrast: {contrast}</BlockTitle>
+            <List strong insetMaterial outlineIos>
+              <ListItem
+                innerClassName="flex space-x-4 rtl:space-x-reverse"
+                innerChildren={
+                  <>
+                    <span>0</span>
+                    <Range
+                      value={contrast}
+                      min={-100}
+                      max={100}
+                      step={1}
+                      onChange={(e: { target: { value: string } }) =>
+                        adjustContrast(parseFloat(e.target.value))
+                      }
+                    />
+                    <span>1</span>
+                  </>
+                }
+              />
+            </List>
           </div>
         )}
         <Button
@@ -230,8 +283,10 @@ const ArtworkCanvas = () => {
           onMouseDown={checkDeselect}
           onTouchStart={checkDeselect}
         >
-          <Layer>
+          <Layer listening={false}>
             <ArtworkFrame front={false} />
+          </Layer>
+          <Layer>
             {canvasList.map((canvasImage) => (
               <ArtworkImage
                 key={canvasImage.id}

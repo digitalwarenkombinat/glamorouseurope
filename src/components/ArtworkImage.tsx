@@ -17,7 +17,8 @@ const ArtworkImage = ({
 }) => {
   const imageRef = useRef() as MutableRefObject<Konva.Image>;
   const trRef = useRef() as MutableRefObject<Konva.Transformer>;
-  const [image] = useImage(canvasImage.image);
+  const [image] = useImage(canvasImage.image, "anonymous");
+
   const transformCanvasImage = useStore((state) => state.transformCanvasImage);
 
   useEffect(() => {
@@ -28,17 +29,10 @@ const ArtworkImage = ({
   }, [isSelected]);
 
   useEffect(() => {
-    const imageObj = new window.Image();
-    imageObj.crossOrigin = "Anonymous";
-    imageObj.src = canvasImage.image;
-
-    imageObj.onload = () => {
-      if (imageRef.current) {
-        imageRef.current.image(imageObj);
-        imageRef.current.getLayer()?.batchDraw();
-      }
-    };
-  }, [canvasImage.image]);
+    if (image) {
+      imageRef.current.cache();
+    }
+  }, [image]);
 
   const handleDragStart = () => {
     transformCanvasImage({ ...canvasImage, isDragging: true });
@@ -75,7 +69,10 @@ const ArtworkImage = ({
   return (
     <>
       <Image
+        brightness={canvasImage.brightness}
+        contrast={canvasImage.contrast}
         draggable
+        filters={[Konva.Filters.Brighten, Konva.Filters.Contrast]}
         id={canvasImage.id}
         image={image}
         key={canvasImage.id}
@@ -84,13 +81,12 @@ const ArtworkImage = ({
         onDragStart={handleDragStart}
         onTap={onSelect}
         onTransformEnd={handleTransformEnd}
+        opacity={canvasImage.opacity || 1}
         ref={imageRef}
-        x={canvasImage.x}
-        y={canvasImage.y}
         scaleX={0.5}
         scaleY={0.5}
-        opacity={canvasImage.opacity || 1}
-        brightness={canvasImage.brightness || 0}
+        x={canvasImage.x}
+        y={canvasImage.y}
       />
       {isSelected && (
         <Transformer

@@ -24,6 +24,7 @@ export interface ArtworkImageProps {
 }
 export interface CanvasImageProps {
   brightness: number;
+  contrast: number;
   height: number;
   id: string;
   image: string;
@@ -78,6 +79,7 @@ const useStore = create<GlamState>()(
               ...state.canvasList,
               {
                 brightness: 0,
+                contrast: 0,
                 height: 400,
                 id: `${state.canvasList.length + 1}`,
                 image: imageURL,
@@ -129,6 +131,7 @@ const useStore = create<GlamState>()(
                 x: canvasImage.x,
                 y: canvasImage.y,
                 brightness: canvasImage.brightness,
+                contrast: canvasImage.contrast,
                 opacity: canvasImage.opacity,
               };
             }),
