@@ -11,26 +11,28 @@ function Layout() {
   const [panelOpened, setPanelOpened] = useState(false);
 
   return (
-    <App theme="material">
-      <Page>
-        <Navbar
-          className="top-0 sticky"
-          transparent
-          right={
-            <Bars3Icon
-              onClick={() => setPanelOpened(true)}
-              className="mr-4 w-10 h-10"
-            />
-          }
-        />
-        <main className="h-[calc(100%_-_192px)] overflow-auto">
-          <Outlet />
-          <ScrollRestoration />
-        </main>
-        <Footer />
-        {Sidebar(panelOpened, setPanelOpened)}
-      </Page>
-    </App>
+    <>
+      <App theme="material">
+        <Page>
+          <Navbar
+            className="top-0 sticky"
+            transparent
+            right={
+              <Bars3Icon
+                onClick={() => setPanelOpened(true)}
+                className="mr-4 w-10 h-10"
+              />
+            }
+          />
+          <main className="h-[calc(100%_-_192px)] overflow-auto">
+            <Outlet />
+          </main>
+          <Footer />
+          {Sidebar(panelOpened, setPanelOpened)}
+        </Page>
+      </App>
+      <ScrollRestoration />
+    </>
   );
 }
 
