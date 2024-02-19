@@ -21,10 +21,15 @@ i18next.init({
   },
 });
 
+const options = {
+  scrollAngleRanges: [{ start: 300 }, { end: 60 }, { start: 120, end: 240 }],
+  ignoreContextMenu: true,
+};
+
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <I18nextProvider i18n={i18next}>
-      <DndProvider backend={TouchBackend}>
+      <DndProvider backend={TouchBackend} options={options}>
         <BrowserRouter>
           <App />
         </BrowserRouter>
