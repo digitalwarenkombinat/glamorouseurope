@@ -1,7 +1,6 @@
 // @ts-expect-error konsta typing
-import { Block, Button } from "konsta/react";
+import { Block } from "konsta/react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 
 import useStore from "../store";
 import ArtworkCanvas from "./ArtworkCanvas";
@@ -34,17 +33,7 @@ function Artwork() {
         ))}
       </Block>
 
-      {artworkList.length === 0 ? (
-        <Button
-          className="p-4 text-xl text-black w-2/3 mx-auto h-20"
-          rounded
-          inline
-        >
-          <Link to={"/selection"}>{t("artworkEmpty")}</Link>
-        </Button>
-      ) : (
-        <ArtworkCanvas />
-      )}
+      <ArtworkCanvas />
     </Block>
   );
 }

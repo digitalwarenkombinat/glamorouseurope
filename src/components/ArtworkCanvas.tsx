@@ -116,16 +116,31 @@ const ArtworkCanvas: React.FC = () => {
     }
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     if (navigator.share) {
-      navigator
-        .share({
+      try {
+        const canvas = stageRef.current;
+        if (!canvas) {
+          console.error("Canvas element not found");
+          return;
+        }
+
+        const blob = await fetch(canvas.toDataURL()).then((res) => res.blob());
+        if (!blob) {
+          console.error("Failed to create blob from canvas");
+          return;
+        }
+
+        await navigator.share({
+          files: [new File([blob], "canvas.png", { type: "image/png" })],
           title: "GLAMorous Europe",
           text: "Check out my GLAMorous Europe artwork!",
-          url: window.location.href,
-        })
-        .then(() => console.log("Share successful"))
-        .catch((error) => console.error("Error sharing:", error));
+        });
+
+        console.log("Share successful");
+      } catch (error) {
+        console.error("Error sharing:", error);
+      }
     } else {
       console.log("Web Share API not supported");
     }
