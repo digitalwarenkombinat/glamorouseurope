@@ -7,7 +7,7 @@ export default {
       sparqlEndpoint: "https://query.wikidata.org/sparql",
     });
     const sparql = `
-      SELECT ?item ?itemLabel ?artworkLabel ?countryLabel ?genreLabel ?year ?locationLabel ?creatorLabel ?materialLabel ?depictsLabel ?collectionLabel ?iiifManifest
+      SELECT ?item ?itemLabel ?artworkLabel ?countryLabel ?genreLabel ?year ?locationLabel ?creatorLabel ?materialLabel ?depictsLabel ?collectionLabel ?iiifManifest (MD5(CONCAT(str(?item),str(RAND()))) as ?random)
       WITH {    
         SELECT ?item (SAMPLE(?artwork) as ?artwork) (SAMPLE(?country) as ?country) (SAMPLE(?genre) as ?genre) (SAMPLE(YEAR(?inception)) as ?year) (SAMPLE(?location) as ?location) (SAMPLE(?creator) as ?creator) (SAMPLE(?material) as ?material) (SAMPLE(?depicts) as ?depicts) (SAMPLE(?collection) as ?collection) (SAMPLE(?iiifManifest) as ?iiifManifest)
         WHERE {
@@ -35,12 +35,12 @@ export default {
                 OPTIONAL { ?item wdt:P180 ?depicts. }
         }
         GROUP BY ?item
-        LIMIT 10
+        LIMIT 100
       } AS %result
       WHERE {
         INCLUDE %result.
         SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-      } ORDER BY ?itemLabel
+      } ORDER BY ?random
     `;
 
     const queryURL = wbk.sparqlQuery(sparql);
