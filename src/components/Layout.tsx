@@ -2,7 +2,7 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 // @ts-expect-error konsta typing
 import { App, Navbar, Page } from "konsta/react";
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 
 import Footer from "./Footer";
 import Sidebar from "./Sidebar";
@@ -25,6 +25,7 @@ function Layout() {
         />
         <main className="h-[calc(100%_-_192px)] overflow-auto">
           <Outlet />
+          <ScrollRestoration />
         </main>
         <Footer />
         {Sidebar(panelOpened, setPanelOpened)}

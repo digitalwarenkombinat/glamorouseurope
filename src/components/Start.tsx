@@ -79,7 +79,11 @@ function Start() {
             <Navbar
               title={t("discardModalTitle")}
               right={
-                <Link to={"/"} onClick={handleDiscard}>
+                <Link
+                  preventScrollReset={true}
+                  to={"/"}
+                  onClick={handleDiscard}
+                >
                   {t("discardModalCancel")}
                 </Link>
               }
@@ -87,7 +91,11 @@ function Start() {
             <Block className="space-y-4">
               <p>{t("discardModalMessage")}</p>
               <Button className="p-4 rounded-full text-xl bg-red-500 text-white">
-                <Link to={"/selection"} onClick={handleConfirm}>
+                <Link
+                  preventScrollReset={true}
+                  to={"/selection"}
+                  onClick={handleConfirm}
+                >
                   {t("discardModalConfirm")}
                 </Link>
               </Button>

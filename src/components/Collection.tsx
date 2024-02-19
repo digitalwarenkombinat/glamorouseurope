@@ -97,7 +97,7 @@ function Collection() {
   };
 
   const handleCanvasIdCallback = (activeCanvasId: string) => {
-    if (activeCanvasId) console.log(setActiveCanvasId(activeCanvasId));
+    if (activeCanvasId) setActiveCanvasId(activeCanvasId);
   };
 
   return (
