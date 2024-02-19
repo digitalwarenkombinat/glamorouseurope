@@ -48,7 +48,7 @@ const ArtworkCanvas: React.FC = () => {
 
   useEffect(() => {
     const fitStageIntoParentContainer = () => {
-      const containerWidth = window.innerWidth * 0.8 || 0;
+      const containerWidth = window.innerWidth * 0.9 || 0;
       const scale = containerWidth / sceneWidth;
 
       if (stageRef.current) {
@@ -202,6 +202,22 @@ const ArtworkCanvas: React.FC = () => {
         >
           <Icon material={<ArrowDownTrayIcon className="w-6 h-6" />} />
         </Button>
+        <Button
+          className="p-4 text-xl text-black"
+          rounded
+          inline
+          onClick={() => setFrame(Math.max(1, frame.id - 1))}
+        >
+          <Icon material={<ChevronLeftIcon className="w-6 h-6" />} />
+        </Button>
+        <Button
+          className="p-4 text-xl text-black"
+          rounded
+          inline
+          onClick={() => setFrame(Math.min(5, frame.id + 1))}
+        >
+          <Icon material={<ChevronRightIcon className="w-6 h-6" />} />
+        </Button>
         {selectedImage && (
           <>
             <Button
@@ -312,15 +328,7 @@ const ArtworkCanvas: React.FC = () => {
           </>
         )}
       </Block>
-      <div className="mx-auto flex items-center gap-2" ref={drop}>
-        <Button
-          className="p-4 text-xl text-black"
-          rounded
-          inline
-          onClick={() => setFrame(Math.max(1, frame.id - 1))}
-        >
-          <Icon material={<ChevronLeftIcon className="w-6 h-6" />} />
-        </Button>
+      <div className="mx-auto flex items-center" ref={drop}>
         <Stage
           style={{
             border: "4px solid",
@@ -349,14 +357,6 @@ const ArtworkCanvas: React.FC = () => {
             <ArtworkFrame front={true} />
           </Layer>
         </Stage>
-        <Button
-          className="p-4 text-xl text-black"
-          rounded
-          inline
-          onClick={() => setFrame(Math.min(5, frame.id + 1))}
-        >
-          <Icon material={<ChevronRightIcon className="w-6 h-6" />} />
-        </Button>
       </div>
     </>
   );

@@ -24,8 +24,7 @@ body, .k-material {
 
 a > span > .text-xs, button {
   font-family: 'Neucha', sans-serif;
-  text-transform: uppercase;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   line-height: 1.5;
 }
 

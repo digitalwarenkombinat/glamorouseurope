@@ -25,7 +25,8 @@
     "sidebarLegal": "Legal",
     "start": "Start",
     "startButtonText": "Let's go!",
-    "startText": "Explore works of art from museums, galleries, libraries and archives. Collect your favorite objects, select details from them and create your very own work of art.",
+    "startSubtitle": "Explore works of art from museums, galleries, libraries and archives.",
+    "startText": "Collect your favorite objects, select details from them and create your very own work of art.",
     "startTitle": "Dating European cultural heritage with GLAMorous Europe!"
   }
 }

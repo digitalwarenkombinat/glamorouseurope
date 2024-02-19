@@ -147,7 +147,10 @@ function Selection() {
   const currentImage = imageList[currentIndex];
 
   return (
-    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
+    <Block
+      margin={"my-4"}
+      className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto"
+    >
       <div className="p-2 m-4">
         <h1 className="text-2xl">{t("selectionTitle")}</h1>
       </div>
@@ -181,7 +184,7 @@ function Selection() {
         </Card>
       </div>
 
-      <div className="mb-8 p-4 bg-white rounded h-1/3 opacity-90 max-w-lg w-2/3 text-center mx-auto shadow-md shadow-[#BC13FE]/90">
+      <div className="mb-8 p-4 bg-white rounded h-1/3 opacity-90 max-w-lg w-3/4 text-center mx-auto shadow-md shadow-[#BC13FE]/90">
         <h2 className="text-2xl font-bold mb-4 text-black">
           {currentImage?.name}
         </h2>

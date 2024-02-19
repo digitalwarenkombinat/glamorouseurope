@@ -50,15 +50,19 @@ function Start() {
   };
 
   return (
-    <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
+    <Block
+      margin={"my-4"}
+      className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto"
+    >
       <Logo />
-      <h1 className="text-3xl">{t("startTitle")}</h1>
+      <h1 className="text-xl">{t("startTitle")}</h1>
       <Collage />
+      <p className="text-xl">{t("startSubtitle")}</p>
       <p className="text-xl">{t("startText")}</p>
 
       <Button
         large
-        className="text-4xl w-1/2 mx-auto h-16"
+        className="text-xl w-1/2 mx-auto h-16"
         rounded
         inline
         onClick={handleStartButtonClick}

@@ -15,7 +15,7 @@ const LogoPrototypeFund = () => {
       <img
         src={LogoPrototypeFundIcon}
         alt="Logo Protype Fund"
-        className="w-96 m-auto"
+        className="w-64 m-auto"
       />
     </Link>
   );
@@ -28,7 +28,7 @@ const LogoBMBF = () => {
       <img
         src={i18n.resolvedLanguage === "en" ? LogoBMBFIconEN : LogoBMBFIconDE}
         alt="Logo Bundesministerium für Bildung und Forschung"
-        className="w-96 m-auto"
+        className="w-64 m-auto"
       />
     </Link>
   );
@@ -40,7 +40,7 @@ const LogoDigitalwarenkombinat = () => {
       <img
         src={LogoDigitalwarenkombinatIcon}
         alt="Logo Digitalwarenkombinat"
-        className="w-96 m-auto"
+        className="w-64 m-auto"
       />
     </Link>
   );
