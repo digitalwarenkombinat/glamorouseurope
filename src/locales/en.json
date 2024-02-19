@@ -1,6 +1,9 @@
 {
   "translation": {
     "artwork": "My Canvas",
+    "artworkCanvasBrightness": "Helligkeit",
+    "artworkCanvasContrast": "Kontrast",
+    "artworkCanvasOpacity": "Deckkraft",
     "artworkEmpty": "Add your image details.",
     "artworkTitle": "Drag the image details or prepared stickers onto the canvas. You can change them and replace the canvas. Create your own work of art and share it with your friends!",
     "chooseLanguage": "Choose Language:",

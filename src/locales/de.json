@@ -1,6 +1,9 @@
 {
   "translation": {
     "artwork": "Meine Leinwand",
+    "artworkCanvasBrightness": "Helligkeit",
+    "artworkCanvasContrast": "Kontrast",
+    "artworkCanvasOpacity": "Deckkraft",
     "artworkEmpty": "Füge deine eigenen Bildausschnitte hinzu",
     "artworkTitle": "Ziehe die Ausschnitte oder vorbereiteten Sticker in die Leinwand. Du kannst sie verändern und die Leinwand austauschen. Gestalte dein eigenes Kunstwerk und teile es mit deinen Freund:innen!",
     "chooseLanguage": "Sprache wählen:",

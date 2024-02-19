@@ -51,7 +51,7 @@ function Start() {
 
   return (
     <Block
-      margin={"my-4"}
+      margin={"mb-4"}
       className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto"
     >
       <Logo />

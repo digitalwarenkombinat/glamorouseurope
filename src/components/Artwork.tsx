@@ -15,11 +15,12 @@ function Artwork() {
       margin={"my-4"}
       className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto"
     >
-      <div className="p-2 m-4">
-        <h1 className="text-2xl">{t("artworkTitle")}</h1>
+      <div className="p-2">
+        <h1 className="text-xl">{t("artworkTitle")}</h1>
       </div>
 
       <Block
+        margin={"my-4"}
         className="flex mx-auto overflow-x-auto"
         style={{
           maxHeight: "100px",

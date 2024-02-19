@@ -8,12 +8,14 @@ import {
   SunIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { BlendingModeIcon, ComponentBooleanIcon } from "@radix-ui/react-icons";
 import { saveAs } from "file-saver";
 // @ts-expect-error konsta typing
 import { Block, Button, Icon, List, ListItem, Range } from "konsta/react";
 import Konva from "konva";
 import React, { useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
+import { useTranslation } from "react-i18next";
 import { Layer, Stage } from "react-konva";
 
 import useStore, { ArtworkImageProps, CanvasImageProps } from "../store";
@@ -32,6 +34,7 @@ const ArtworkCanvas: React.FC = () => {
     transformCanvasImage,
   } = useStore();
 
+  const { t } = useTranslation();
   const stageRef = useRef<Konva.Stage>(null);
   const [selectedImage, setSelectedImage] = useState<CanvasImageProps | null>(
     null,
@@ -205,7 +208,10 @@ const ArtworkCanvas: React.FC = () => {
 
   return (
     <>
-      <Block className="flex flex-wrap gap-1 container justify-center content-center text-center mx-auto">
+      <Block
+        margin={"my-0"}
+        className="flex flex-wrap gap-1 container justify-center content-center text-center mx-auto"
+      >
         <Button className="p-2 text-black" rounded inline onClick={handleShare}>
           <Icon material={<ShareIcon className="w-6 h-6" />} />
         </Button>
@@ -261,81 +267,120 @@ const ArtworkCanvas: React.FC = () => {
             </Button>
             <Button
               className="p-2 text-black"
+              style={{
+                backgroundColor: opacityExpanded && "#BC13FE",
+              }}
               rounded
               inline
               onClick={handleToggleOpacity}
             >
-              <Icon material={<SunIcon className="w-6 h-6" />} />
+              <Icon material={<BlendingModeIcon className="w-6 h-6" />} />
             </Button>
-            {opacityExpanded && (
-              <List strong insetMaterial outlineIos className="w-1/3 my-0">
-                <ListItem
-                  innerClassName="flex space-x-4 w-6"
-                  innerChildren={
-                    <Range
-                      value={opacity}
-                      min={0}
-                      max={1}
-                      step={0.01}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        adjustTransform(parseFloat(e.target.value), "opacity")
-                      }
-                    />
-                  }
-                />
-              </List>
-            )}
             <Button
               className="p-2 text-black"
+              style={{
+                backgroundColor: brightnessExpanded && "#BC13FE",
+              }}
               rounded
               inline
               onClick={handleToggleBrightness}
             >
               <Icon material={<SunIcon className="w-6 h-6" />} />
             </Button>
-            {brightnessExpanded && (
-              <List strong insetMaterial outlineIos className="w-1/3 my-0">
-                <ListItem
-                  innerClassName="flex space-x-4 w-6"
-                  innerChildren={
-                    <Range
-                      value={brightness}
-                      min={-1}
-                      max={1}
-                      step={0.01}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        adjustTransform(
-                          parseFloat(e.target.value),
-                          "brightness",
-                        )
-                      }
-                    />
-                  }
-                />
-              </List>
-            )}
             <Button
               className="p-2 text-black"
+              style={{
+                backgroundColor: contrastExpanded && "#BC13FE",
+              }}
               rounded
               inline
               onClick={handleToggleContrast}
             >
-              <Icon material={<SunIcon className="w-6 h-6" />} />
+              <Icon material={<ComponentBooleanIcon className="w-6 h-6" />} />
             </Button>
-            {contrastExpanded && (
-              <List strong insetMaterial outlineIos className="w-1/3 my-0">
+            {opacityExpanded && (
+              <List
+                strong
+                insetMaterial
+                outlineIos
+                margin={"my-4"}
+                className="w-2/3"
+              >
                 <ListItem
                   innerClassName="flex space-x-4 w-6"
                   innerChildren={
-                    <Range
-                      value={contrast}
-                      min={-100}
-                      max={100}
-                      step={1}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        adjustTransform(parseFloat(e.target.value), "contrast")
-                      }
-                    />
+                    <>
+                      <p>{t("artworkCanvasOpacity")}</p>
+                      <Range
+                        value={opacity}
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          adjustTransform(parseFloat(e.target.value), "opacity")
+                        }
+                      />
+                    </>
+                  }
+                />
+              </List>
+            )}
+            {brightnessExpanded && (
+              <List
+                strong
+                insetMaterial
+                outlineIos
+                margin={"my-4"}
+                className="w-2/3"
+              >
+                <ListItem
+                  innerClassName="flex space-x-4 w-6"
+                  innerChildren={
+                    <>
+                      <p>{t("artworkCanvasBrightness")}</p>
+                      <Range
+                        value={brightness}
+                        min={-1}
+                        max={1}
+                        step={0.01}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          adjustTransform(
+                            parseFloat(e.target.value),
+                            "brightness",
+                          )
+                        }
+                      />
+                    </>
+                  }
+                />
+              </List>
+            )}
+            {contrastExpanded && (
+              <List
+                strong
+                insetMaterial
+                outlineIos
+                margin={"my-4"}
+                className="w-2/3"
+              >
+                <ListItem
+                  innerClassName="flex space-x-4 w-6"
+                  innerChildren={
+                    <>
+                      <p>{t("artworkCanvasContrast")}</p>
+                      <Range
+                        value={contrast}
+                        min={-100}
+                        max={100}
+                        step={1}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          adjustTransform(
+                            parseFloat(e.target.value),
+                            "contrast",
+                          )
+                        }
+                      />
+                    </>
                   }
                 />
               </List>

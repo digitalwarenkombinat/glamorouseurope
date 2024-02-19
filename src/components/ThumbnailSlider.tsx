@@ -12,6 +12,7 @@ function ThumbnailSlider({
 }) {
   return (
     <Block
+      margin={"my-4"}
       className="flex overflow-x-auto"
       style={{
         maxHeight: "200px",

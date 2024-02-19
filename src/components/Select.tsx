@@ -3,7 +3,7 @@ import {
   HandThumbUpIcon,
 } from "@heroicons/react/24/outline";
 // @ts-expect-error konsta typing
-import { Block, Button, Card, Icon } from "konsta/react";
+import { Block, Card } from "konsta/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import TinderCard from "react-tinder-card";
@@ -11,6 +11,7 @@ import TinderCard from "react-tinder-card";
 import useStore, { ImageProps } from "../store";
 import { useFetch } from "../utils/useFetch";
 import utils from "../utils/utils";
+import { SwipeButton } from "./SwipeButton";
 
 export interface ImageElement {
   artworkLabel: { value: string };
@@ -30,22 +31,10 @@ export interface ImageElement {
 
 type Direction = "left" | "right" | "up" | "down";
 
-export interface API {
+export interface SwipeAPI {
   restoreCard(): Promise<void>;
   swipe(dir?: Direction): Promise<void>;
 }
-
-const SwipeButton = ({
-  onClick,
-  materialIcon,
-}: {
-  onClick: () => void;
-  materialIcon: React.ReactNode;
-}) => (
-  <Button className="p-4 text-xl text-black" onClick={onClick} rounded inline>
-    <Icon material={materialIcon} />
-  </Button>
-);
 
 function Selection() {
   const { t } = useTranslation();
@@ -59,7 +48,7 @@ function Selection() {
 
   const currentIndexRef = useRef(currentIndex);
 
-  const childRef = useRef<API | null>(null);
+  const childRef = useRef<SwipeAPI | null>(null);
 
   const validateData = useCallback(
     async (elements: ImageElement[]) => {
@@ -127,7 +116,6 @@ function Selection() {
 
   const swiped = (direction: Direction, index: number) => {
     if (direction === "right") {
-      // console.log(currentImage);
       likeImage(currentImage);
     }
     removeFromImageList(currentImage.id);
@@ -151,8 +139,8 @@ function Selection() {
       margin={"my-4"}
       className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto"
     >
-      <div className="p-2 m-4">
-        <h1 className="text-2xl">{t("selectionTitle")}</h1>
+      <div className="p-2">
+        <h1 className="text-xl">{t("selectionTitle")}</h1>
       </div>
 
       <div className="mx-auto h-2/3">
@@ -185,7 +173,7 @@ function Selection() {
       </div>
 
       <div className="mb-8 p-4 bg-white rounded h-1/3 opacity-90 max-w-lg w-3/4 text-center mx-auto shadow-md shadow-[#BC13FE]/90">
-        <h2 className="text-2xl font-bold mb-4 text-black">
+        <h2 className="text-xl font-bold mb-4 text-black">
           {currentImage?.name}
         </h2>
         <p className="text-gray-600">
