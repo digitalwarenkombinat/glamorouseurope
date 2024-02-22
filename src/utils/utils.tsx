@@ -162,29 +162,13 @@ function getImageSelectionData(
   );
 
   const selectionRegion = `${calculatedSelectionX},${calculatedSelectionY},${calculatedSelectionWidth},${calculatedSelectionHeight}`;
-  console.log(
-    `Calculated selection region (x, y, width, height): ${selectionRegion}`,
-  );
+  // console.log(`Selection region (x, y, width, height): ${selectionRegion}`);
 
   const selectionURL = `${identifier}/${selectionRegion}/${defaultSelectionWidth},/${selectionRotation}/${selectionQuality}${selectionFormat}`;
   return selectionURL;
 }
 
 export default {
-  /*   bgRemoval: async (path: string) => {
-    const startTime = Date.now();
-    try {
-      const blob: Blob = await removeBackground(path, config);
-      const objectURL = URL.createObjectURL(blob);
-      const timeDiffInSeconds = (Date.now() - startTime) / 1000;
-      console.log("Duration for background removal: ", timeDiffInSeconds);
-      console.log("Object URL: ", objectURL);
-      return objectURL;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }, */
   fetchIIIFIdentifier: async (iiifManifest: string) => {
     try {
       return await fetchIIIFIdentifier(iiifManifest);

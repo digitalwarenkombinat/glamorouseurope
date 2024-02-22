@@ -26,6 +26,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-touch-backend": "^16.0.1",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
     "react-i18next": "^14.0.5",
     "react-konva": "^18.2.10",
     "react-lasso-select": "^1.2.2",

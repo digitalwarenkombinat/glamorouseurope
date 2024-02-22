@@ -4,7 +4,7 @@ import "@tensorflow/tfjs-backend-cpu";
 import "@tensorflow/tfjs-backend-webgl";
 import "@tensorflow/tfjs-converter";
 import "@tensorflow/tfjs-core";
-import { MutableRefObject, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 async function loadModel() {
   return await deeplab.load({ base: "pascal", quantizationBytes: 2 });
@@ -73,16 +73,22 @@ function renderPrediction(image: HTMLImageElement, prediction: DeepLabOutput) {
 }
 
 const useRemoveImageBackground = () => {
-  const model = useRef() as MutableRefObject<deeplab.SemanticSegmentation>;
+  const model = useRef<deeplab.SemanticSegmentation | null>(null);
 
-  const autoRemoveBackground = async (image: HTMLImageElement) =>
-    await predict(model.current, image);
+  const autoRemoveBackground = async (image: HTMLImageElement) => {
+    if (!model.current) {
+      model.current = await loadModel();
+    }
+    return await predict(model.current!, image);
+  };
 
   useEffect(() => {
-    loadModel().then((_model) => {
-      model.current = _model;
-    });
-  });
+    return () => {
+      if (model.current) {
+        model.current.dispose();
+      }
+    };
+  }, []);
 
   return {
     autoRemoveBackground,
