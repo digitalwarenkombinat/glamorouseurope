@@ -110,6 +110,10 @@ function Selection() {
 
   const currentImage = imageList[currentIndex];
 
+  const transformCreator = (creator: string) => {
+    return !creator.includes("http") && creator;
+  };
+
   return (
     <Block
       margin={"my-4"}
@@ -157,7 +161,7 @@ function Selection() {
         </p>
         <p className="text-gray-600">
           {t("selectionCreator")}{" "}
-          {currentImage?.creator || t("selectionUnknown")}
+          {transformCreator(currentImage?.creator) || t("selectionUnknown")}
         </p>
         <p className="text-gray-600">
           {t("selectionLocation")}{" "}
