@@ -3,6 +3,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Block, Button, Link, Navbar, Page, Panel } from "konsta/react";
 import { SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
+import { NavLink } from "react-router-dom";
 
 import LogoBMBFIconDE from "/logos/bmbf_logo_de.jpg";
 import LogoBMBFIconEN from "/logos/bmbf_logo_en.jpg";
@@ -66,26 +67,42 @@ export default function Sidebar(
             />
           }
         />
-        <Block className="space-y-4">
+        <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
           <p className="text-xl">{t("sidebarChooseLanguage")}</p>
-          <Button
-            onClick={() => i18n.changeLanguage("de")}
-            className="p-4 text-xl text-black w-10 mr-2 h-10"
-            rounded
-            inline
+          <div>
+            <Button
+              onClick={() => i18n.changeLanguage("de")}
+              className="p-4 text-xl text-black w-10 mr-2 h-10"
+              rounded
+              inline
+            >
+              DE
+            </Button>
+            <Button
+              onClick={() => i18n.changeLanguage("en")}
+              className="p-4 text-xl text-black w-10 h-10"
+              rounded
+              inline
+            >
+              EN
+            </Button>
+          </div>
+          <Link
+            className="text-xl"
+            to="/about"
+            component={NavLink}
+            onClick={() => setPanelOpened(false)}
           >
-            DE
-          </Button>
-          <Button
-            onClick={() => i18n.changeLanguage("en")}
-            className="p-4 text-xl text-black w-10 h-10"
-            rounded
-            inline
+            {t("sidebarAbout")}
+          </Link>
+          <Link
+            className="text-xl"
+            to="/legal"
+            component={NavLink}
+            onClick={() => setPanelOpened(false)}
           >
-            EN
-          </Button>
-          <p>{t("sidebarAbout")}</p>
-          <p>{t("sidebarLegal")}</p>
+            {t("sidebarLegal")}
+          </Link>
           <LogoPrototypeFund />
           <LogoBMBF />
           <LogoDigitalwarenkombinat />
