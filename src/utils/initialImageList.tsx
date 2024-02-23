@@ -59,20 +59,20 @@ const initialImageList = [
     thumbnail:
       "https://iiif.library.vanderbilt.edu/iiif/2/gallery%2F1976%2F1976.032.med.jpg/full/100,100/0/default.jpg",
   },
-  {
-    id: "http://www.wikidata.org/entity/Q3698180",
-    name: "Calvary",
-    year: "1475",
-    country: "Belgium",
-    location: "Royal Museum of Fine Arts Antwerp",
-    creator: "Antonello da Messina",
-    url: "https://iiif.kmska.be/iiif/2/5/manifest.json",
-    identifier: "https://iiif.kmska.be/c/iiif/2/public@5.tif",
-    image:
-      "https://iiif.kmska.be/c/iiif/2/public@5.tif/full/400,/0/default.jpg",
-    thumbnail:
-      "https://iiif.kmska.be/c/iiif/2/public@5.tif/full/100,100/0/default.jpg",
-  },
+  // {
+  //   id: "http://www.wikidata.org/entity/Q3698180",
+  //   name: "Calvary",
+  //   year: "1475",
+  //   country: "Belgium",
+  //   location: "Royal Museum of Fine Arts Antwerp",
+  //   creator: "Antonello da Messina",
+  //   url: "https://iiif.kmska.be/iiif/2/5/manifest.json",
+  //   identifier: "https://iiif.kmska.be/c/iiif/2/public@5.tif",
+  //   image:
+  //     "https://iiif.kmska.be/c/iiif/2/public@5.tif/full/400,/0/default.jpg",
+  //   thumbnail:
+  //     "https://iiif.kmska.be/c/iiif/2/public@5.tif/full/100,100/0/default.jpg",
+  // },
   {
     id: "http://www.wikidata.org/entity/Q103300860",
     name: "Half-Figure Prophet",
