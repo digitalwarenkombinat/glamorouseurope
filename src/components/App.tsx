@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import { registerSW } from "virtual:pwa-register";
 
 import Artwork from "./Artwork";
 import Collection from "./Collection";
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
 );
 
 function App() {
+  registerSW({ immediate: true });
   return <RouterProvider router={router} />;
 }
 

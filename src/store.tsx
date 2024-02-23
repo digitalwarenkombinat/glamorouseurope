@@ -41,15 +41,18 @@ export interface FrameImageProps {
   front: string;
 }
 
-interface GlamState {
-  addToCanvas: (imageURL: string, x: number, y: number) => void;
-  addToArtwork: (id: string, imageURL: string) => void;
-  addToImageList: (image: ImageProps[]) => void;
+type State = {
   artworkList: ArtworkImageProps[];
   canvasList: CanvasImageProps[];
   imageList: ImageProps[];
   frame: FrameImageProps;
   imageLikeList: ImageProps[];
+};
+
+type Actions = {
+  addToCanvas: (imageURL: string, x: number, y: number) => void;
+  addToArtwork: (id: string, imageURL: string) => void;
+  addToImageList: (image: ImageProps[]) => void;
   likeImage: (image: ImageProps) => void;
   removeFromCanvas: (id: string) => void;
   removeFromImageList: (id: string) => void;
@@ -57,12 +60,21 @@ interface GlamState {
   setFrame: (id: number) => void;
   transformCanvasImage: (canvasImage: CanvasImageProps) => void;
   moveCanvasImage: (id: string, bringToFront: boolean) => void;
-}
+};
 
-const useStore = create<GlamState>()(
+const initialState: State = {
+  artworkList: initialArtworkList,
+  frame: frameList[1],
+  imageList: initialImageList.sort(() => Math.random() - 0.5),
+  canvasList: [],
+  imageLikeList: [],
+};
+
+const useStore = create<State & Actions>()(
   devtools(
     persist(
       (set) => ({
+        ...initialState,
         addToArtwork: (id, imageURL) =>
           set((state) => ({
             artworkList: [
@@ -97,19 +109,9 @@ const useStore = create<GlamState>()(
           set((state) => ({
             imageList: state.imageList.filter((image) => image.id !== id),
           })),
-        artworkList: initialArtworkList,
-        canvasList: [],
-        frame: frameList[1],
-        imageList: initialImageList.sort(() => Math.random() - 0.5),
-        imageLikeList: [],
         likeImage: (image) =>
           set((state) => ({ imageLikeList: [...state.imageLikeList, image] })),
-        resetState: () =>
-          set(() => ({
-            imageList: initialImageList.sort(() => Math.random() - 0.5),
-            canvasList: [],
-            imageLikeList: [],
-          })),
+        resetState: () => set(initialState),
         removeFromCanvas: (id) =>
           set((state) => ({
             canvasList: state.canvasList.filter((image) => image.id !== id),
@@ -159,7 +161,7 @@ const useStore = create<GlamState>()(
             return {};
           }),
       }),
-      { name: "glamStore" },
+      { name: "glamStore", version: 1 },
     ),
   ),
 );
