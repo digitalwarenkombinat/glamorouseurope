@@ -111,7 +111,10 @@ function Selection() {
   const currentImage = imageList[currentIndex];
 
   const transformCreator = (creator: string) => {
-    return !creator.includes("http") && creator;
+    if (creator && !creator.includes("http")) {
+      return creator;
+    }
+    return t("selectionUnknown");
   };
 
   return (
@@ -133,6 +136,8 @@ function Selection() {
                 key={currentImage.id}
                 onSwipe={(dir) => swiped(dir)}
                 onCardLeftScreen={() => outOfFrame(currentIndex)}
+                swipeRequirementType="position"
+                swipeThreshold={100}
                 preventSwipe={["up", "down"]}
               >
                 <img alt={currentImage.name} src={currentImage.image} />
@@ -160,8 +165,7 @@ function Selection() {
           {t("selectionYear")} {currentImage?.year || t("selectionUnknown")}
         </p>
         <p className="text-gray-600">
-          {t("selectionCreator")}{" "}
-          {transformCreator(currentImage?.creator) || t("selectionUnknown")}
+          {t("selectionCreator")} {transformCreator(currentImage?.creator)}
         </p>
         <p className="text-gray-600">
           {t("selectionLocation")}{" "}
