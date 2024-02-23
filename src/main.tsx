@@ -30,6 +30,7 @@ const HTML5toTouch = {
     {
       id: "html5",
       backend: HTML5Backend,
+      preview: true,
       transition: MouseTransition,
     },
     {

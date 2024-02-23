@@ -1,9 +1,9 @@
 import { CSSProperties } from "react";
-import { DragPreviewImage, useDrag } from "react-dnd";
+import { useDrag } from "react-dnd";
 import { Preview } from "react-dnd-multi-backend";
 
 function ArtworkThumbnail({ id, image }: { id: string; image: string }) {
-  const [{ opacity }, drag, preview] = useDrag(() => ({
+  const [{ opacity }, drag] = useDrag(() => ({
     type: "artwork",
     item: { id, image },
     collect: (monitor) => ({
@@ -35,7 +35,6 @@ function ArtworkThumbnail({ id, image }: { id: string; image: string }) {
 
   return (
     <>
-      <DragPreviewImage connect={preview} src={image} />
       <Preview>{generatePreview}</Preview>
       <img
         src={image}
@@ -43,7 +42,7 @@ function ArtworkThumbnail({ id, image }: { id: string; image: string }) {
         role="presentation"
         style={{
           cursor: "move",
-          marginRight: "10px",
+          paddingRight: "10px",
           maxHeight: "100px",
           opacity: opacity,
           scrollSnapAlign: "start",

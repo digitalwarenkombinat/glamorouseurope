@@ -394,6 +394,7 @@ const ArtworkCanvas: React.FC = () => {
             border: "4px solid",
             borderColor: borderColor,
           }}
+          pixelRatio={1}
           width={sceneWidth}
           height={sceneHeight}
           ref={stageRef}

@@ -82,6 +82,7 @@ const ArtworkImage = ({
         onTap={onSelect}
         onTransformEnd={handleTransformEnd}
         opacity={canvasImage.opacity || 1}
+        perfectDrawEnabled={false}
         ref={imageRef}
         scaleX={0.5}
         scaleY={0.5}
