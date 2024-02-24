@@ -1,56 +1,26 @@
-import { CSSProperties } from "react";
-import { useDrag } from "react-dnd";
-import { Preview } from "react-dnd-multi-backend";
+import { useDraggable } from "@dnd-kit/core";
 
 function ArtworkThumbnail({ id, image }: { id: string; image: string }) {
-  const [{ opacity }, drag] = useDrag(() => ({
-    type: "artwork",
-    item: { id, image },
-    collect: (monitor) => ({
-      opacity: monitor.isDragging() ? 0.4 : 1,
-    }),
-  }));
-
-  const generatePreview = ({
-    item,
-    style,
-  }: {
-    item: { id: string; image: string };
-    style: CSSProperties;
-  }) => {
-    return (
-      <img
-        src={item.image}
-        alt={item.id}
-        style={{
-          ...style,
-          cursor: "move",
-          maxHeight: "100px",
-          width: "auto",
-          zIndex: 99,
-        }}
-      />
-    );
-  };
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id,
+    data: { id, image, type: "artwork" },
+  });
 
   return (
-    <>
-      <Preview>{generatePreview}</Preview>
-      <img
-        src={image}
-        alt={id}
-        role="presentation"
-        style={{
-          cursor: "move",
-          paddingRight: "10px",
-          maxHeight: "100px",
-          opacity: opacity,
-          scrollSnapAlign: "start",
-          width: "auto",
-        }}
-        ref={drag}
-      />
-    </>
+    <img
+      src={image}
+      alt={id}
+      style={{
+        cursor: "move",
+        paddingRight: "10px",
+        maxHeight: "100px",
+        scrollSnapAlign: "start",
+        width: "auto",
+      }}
+      {...listeners}
+      {...attributes}
+      ref={setNodeRef}
+    />
   );
 }
 

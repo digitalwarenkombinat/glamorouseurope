@@ -1,3 +1,13 @@
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 // @ts-expect-error konsta typing
 import { App, Navbar, Page } from "konsta/react";
@@ -9,9 +19,41 @@ import Sidebar from "./Sidebar";
 
 function Layout() {
   const [panelOpened, setPanelOpened] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [activeItem, setActiveItem] = useState<any | undefined>(null);
+
+  function handleDragStart(event: DragStartEvent) {
+    console.log(event.active);
+    setActiveItem(event.active.data.current);
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    if (event.over) {
+      setActiveItem(null);
+    }
+  }
+
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 8,
+    },
+  });
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 100,
+      tolerance: 5,
+    },
+  });
+
+  const sensors = useSensors(mouseSensor, touchSensor);
 
   return (
-    <>
+    <DndContext
+      // autoScroll={{ threshold: { x: 0.2, y: 0 } }}
+      onDragEnd={handleDragEnd}
+      onDragStart={handleDragStart}
+      sensors={sensors}
+    >
       <App theme="material">
         <Page>
           <Navbar
@@ -32,7 +74,20 @@ function Layout() {
         </Page>
       </App>
       <ScrollRestoration />
-    </>
+      <DragOverlay>
+        {activeItem ? (
+          <img
+            src={activeItem.image}
+            alt={activeItem.id}
+            style={{
+              cursor: "move",
+              maxHeight: "100px",
+              width: "auto",
+            }}
+          />
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 }
 

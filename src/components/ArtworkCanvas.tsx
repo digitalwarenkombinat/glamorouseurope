@@ -1,3 +1,4 @@
+import { useDndMonitor, useDroppable } from "@dnd-kit/core";
 import {
   ArrowDownTrayIcon,
   ArrowUturnDownIcon,
@@ -14,11 +15,10 @@ import { saveAs } from "file-saver";
 import { Block, Button, Icon, List, ListItem, Range } from "konsta/react";
 import Konva from "konva";
 import React, { useEffect, useRef, useState } from "react";
-import { useDrop } from "react-dnd";
 import { useTranslation } from "react-i18next";
 import { Layer, Stage } from "react-konva";
 
-import useStore, { ArtworkImageProps, CanvasImageProps } from "../store";
+import useStore, { CanvasImageProps } from "../store";
 import ArtworkFrame from "./ArtworkFrame";
 import ArtworkImage from "./ArtworkImage";
 
@@ -51,7 +51,7 @@ const ArtworkCanvas: React.FC = () => {
 
   useEffect(() => {
     const fitStageIntoParentContainer = () => {
-      const containerWidth = window.innerWidth * 0.9 || 0;
+      const containerWidth = window.innerWidth * 0.95 || 0;
       const scale = containerWidth / sceneWidth;
 
       if (stageRef.current) {
@@ -174,33 +174,43 @@ const ArtworkCanvas: React.FC = () => {
     setBrightnessExpanded(false);
   };
 
-  const [{ canDrop, isOver }, drop] = useDrop(() => ({
-    accept: "artwork",
-    drop: (item: ArtworkImageProps, monitor) => {
-      const offset = monitor.getClientOffset();
-      if (item && offset) {
-        const canvasImage = artworkList.find((image) => image.id === item.id);
+  useDndMonitor({
+    onDragEnd(event) {
+      const { active, over } = event;
+      if (
+        over &&
+        over.data.current?.accepts.includes(active.data.current?.type)
+      ) {
+        const activeId = event.active.id;
+        if (activeId) {
+          const canvasImage = artworkList.find(
+            (image) => image.id === activeId,
+          );
 
-        if (canvasImage) {
-          const stage = stageRef.current;
+          if (canvasImage) {
+            const stage = stageRef.current;
 
-          if (stage) {
-            const dropX =
-              offset.x - stage.container().getBoundingClientRect().left;
-            const dropY =
-              offset.y - stage.container().getBoundingClientRect().top;
-            addToCanvas(canvasImage.image, dropX, dropY);
+            if (stage) {
+              stage.setPointersPositions(event.activatorEvent);
+              const position = stage.getPointerPosition();
+              if (position) {
+                addToCanvas(canvasImage.image, position.x, position.y);
+              }
+            }
           }
         }
       }
     },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
-  }));
+  });
 
-  const isActive = canDrop && isOver;
+  const { isOver, setNodeRef } = useDroppable({
+    id: "droppable",
+    data: {
+      accepts: ["artwork"],
+    },
+  });
+
+  const isActive = isOver;
   let borderColor = "transparent";
   if (isActive) {
     borderColor = "#ebb2ff";
@@ -387,7 +397,7 @@ const ArtworkCanvas: React.FC = () => {
           </>
         )}
       </Block>
-      <div className="mx-auto flex items-center" ref={drop}>
+      <div className="mx-auto flex items-center" ref={setNodeRef}>
         <Stage
           style={{
             border: "4px solid",
