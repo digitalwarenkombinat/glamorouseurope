@@ -212,61 +212,54 @@ const ArtworkCanvas: React.FC = () => {
         margin={"my-0"}
         className="flex flex-wrap gap-1 container justify-center content-center text-center mx-auto"
       >
-        <Button className="p-2 text-black" rounded inline onClick={handleShare}>
-          <Icon material={<ShareIcon className="w-6 h-6" />} />
+        <Button rounded inline onClick={handleShare}>
+          <Icon material={<ShareIcon className="w-6 h-6 lg:w-8 lg:h-8" />} />
+        </Button>
+        <Button rounded inline onClick={handleDownload}>
+          <Icon
+            material={<ArrowDownTrayIcon className="w-6 h-6 lg:w-8 lg:h-8" />}
+          />
         </Button>
         <Button
-          className="p-2 text-black"
-          rounded
-          inline
-          onClick={handleDownload}
-        >
-          <Icon material={<ArrowDownTrayIcon className="w-6 h-6" />} />
-        </Button>
-        <Button
-          className="p-4 text-xl text-black"
           rounded
           inline
           onClick={() => setFrame(Math.max(1, frame.id - 1))}
         >
-          <Icon material={<ChevronLeftIcon className="w-6 h-6" />} />
+          <Icon
+            material={<ChevronLeftIcon className="w-6 h-6 lg:w-8 lg:h-8" />}
+          />
         </Button>
         <Button
-          className="p-4 text-xl text-black"
           rounded
           inline
           onClick={() => setFrame(Math.min(5, frame.id + 1))}
         >
-          <Icon material={<ChevronRightIcon className="w-6 h-6" />} />
+          <Icon
+            material={<ChevronRightIcon className="w-6 h-6 lg:w-8 lg:h-8" />}
+          />
         </Button>
         {selectedImage && (
           <>
-            <Button
-              className="p-2 text-black"
-              rounded
-              inline
-              onClick={() => handleMove(true)}
-            >
-              <Icon material={<ArrowUturnUpIcon className="w-6 h-6" />} />
+            <Button rounded inline onClick={() => handleMove(true)}>
+              <Icon
+                material={
+                  <ArrowUturnUpIcon className="w-6 h-6 lg:w-8 lg:h-8" />
+                }
+              />
+            </Button>
+            <Button rounded inline onClick={() => handleMove(false)}>
+              <Icon
+                material={
+                  <ArrowUturnDownIcon className="w-6 h-6 lg:w-8 lg:h-8" />
+                }
+              />
+            </Button>
+            <Button rounded inline onClick={handleRemove}>
+              <Icon
+                material={<TrashIcon className="w-6 h-6 lg:w-8 lg:h-8" />}
+              />
             </Button>
             <Button
-              className="p-2 text-black"
-              rounded
-              inline
-              onClick={() => handleMove(false)}
-            >
-              <Icon material={<ArrowUturnDownIcon className="w-6 h-6" />} />
-            </Button>
-            <Button
-              className="p-2 text-black"
-              rounded
-              inline
-              onClick={handleRemove}
-            >
-              <Icon material={<TrashIcon className="w-6 h-6" />} />
-            </Button>
-            <Button
-              className="p-2 text-black"
               style={{
                 backgroundColor: opacityExpanded && "#BC13FE",
               }}
@@ -274,10 +267,13 @@ const ArtworkCanvas: React.FC = () => {
               inline
               onClick={handleToggleOpacity}
             >
-              <Icon material={<BlendingModeIcon className="w-6 h-6" />} />
+              <Icon
+                material={
+                  <BlendingModeIcon className="w-6 h-6 lg:w-8 lg:h-8" />
+                }
+              />
             </Button>
             <Button
-              className="p-2 text-black"
               style={{
                 backgroundColor: brightnessExpanded && "#BC13FE",
               }}
@@ -285,10 +281,9 @@ const ArtworkCanvas: React.FC = () => {
               inline
               onClick={handleToggleBrightness}
             >
-              <Icon material={<SunIcon className="w-6 h-6" />} />
+              <Icon material={<SunIcon className="w-6 h-6 lg:w-8 lg:h-8" />} />
             </Button>
             <Button
-              className="p-2 text-black"
               style={{
                 backgroundColor: contrastExpanded && "#BC13FE",
               }}
@@ -296,7 +291,11 @@ const ArtworkCanvas: React.FC = () => {
               inline
               onClick={handleToggleContrast}
             >
-              <Icon material={<ComponentBooleanIcon className="w-6 h-6" />} />
+              <Icon
+                material={
+                  <ComponentBooleanIcon className="w-6 h-6 lg:w-8 lg:h-8" />
+                }
+              />
             </Button>
             {opacityExpanded && (
               <List

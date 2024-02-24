@@ -106,36 +106,40 @@ function Collection() {
   };
 
   const renderLoader = () => (
-    <h2 className="mt-4 text-xl">🌀 {t("collectionLoading")}</h2>
+    <h2 className="mt-4 text-lg md:text-xl">🌀 {t("collectionLoading")}</h2>
   );
 
   return (
     <Block
       margin={"my-4"}
-      className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto"
+      className="flex flex-col flex-wrap gap-2 lg:gap-8 justify-center content-center text-center mx-auto"
     >
-      <div className="p-2">
-        <h1 className="text-xl">{t("collectionTitle")}</h1>
-      </div>
+      <h1 className="text-lg leading-6 px-8 md:px-24 md:text-xl lg:px-48">
+        {t("collectionTitle")}
+      </h1>
       <Toaster />
       <ThumbnailSlider
         imageList={imageLikeList}
         handleImageClick={handleImageClick}
       />
       {selectedImage && (
-        <Block margin={"my-0"} className="space-y-4">
+        <Block margin={"my-0"}>
           <Block
-            margin={"mb-4"}
-            className="flex flex-wrap gap-4 container justify-center text-center mx-auto"
+            margin={"m-0"}
+            className="flex flex-wrap gap-4 justify-center text-center mx-auto no-safe-areas"
           >
-            <p className="text-xl self-center">{t("collectionSwitchLasso")}</p>
+            <p className="text-lg self-center md:text-xl">
+              {t("collectionSwitchLasso")}
+            </p>
             <Toggle
               checked={showZoomSelect}
               onChange={() => setShowZoomSelect(!showZoomSelect)}
             />
-            <p className="text-xl self-center">{t("collectionSwitchViewer")}</p>
+            <p className="text-lg self-center md:text-xl">
+              {t("collectionSwitchViewer")}
+            </p>
             <Button
-              className="p-4 text-xl text-black w-2/3 mx-auto h-16"
+              className="text-xl w-2/3 mx-auto h-12"
               rounded
               inline
               onClick={() =>
@@ -161,7 +165,7 @@ function Collection() {
               />
             </Suspense>
           ) : (
-            <>
+            <div className="mt-4">
               <ReactLassoSelect
                 value={points}
                 src={canvasImg}
@@ -180,7 +184,7 @@ function Collection() {
               <div>
                 {clippedImg && (
                   <Button
-                    className="p-4 text-xl text-black w-2/3 mx-auto h-16"
+                    className="mt-4 text-xl w-2/3 mx-auto h-12"
                     rounded
                     inline
                     onClick={() => removeBackground(clippedImg)}
@@ -190,7 +194,7 @@ function Collection() {
                 )}
                 <img className="my-4 mx-auto" src={clippedImg} alt="" />
               </div>
-            </>
+            </div>
           )}
         </Block>
       )}

@@ -24,12 +24,12 @@ body, .k-material {
 
 a > span > .text-xs, button {
   font-family: 'Neucha', sans-serif;
-  font-size: 1.3rem;
-  line-height: 1.5;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
 
 .tabbar-inner {
-  height: 8rem;
+  height: 6rem;
 }
 
 .clover-viewer-media-wrapper {

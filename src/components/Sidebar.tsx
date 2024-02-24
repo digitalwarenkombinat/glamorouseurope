@@ -16,7 +16,7 @@ const LogoPrototypeFund = () => {
       <img
         src={LogoPrototypeFundIcon}
         alt="Logo Protype Fund"
-        className="w-64 m-auto"
+        className="w-48 md:w-64 m-auto"
       />
     </Link>
   );
@@ -29,7 +29,7 @@ const LogoBMBF = () => {
       <img
         src={i18n.resolvedLanguage === "en" ? LogoBMBFIconEN : LogoBMBFIconDE}
         alt="Logo Bundesministerium für Bildung und Forschung"
-        className="w-64 m-auto"
+        className="w-48 md:w-64 m-auto"
       />
     </Link>
   );
@@ -41,7 +41,7 @@ const LogoDigitalwarenkombinat = () => {
       <img
         src={LogoDigitalwarenkombinatIcon}
         alt="Logo Digitalwarenkombinat"
-        className="w-64 m-auto"
+        className="w-48 md:w-64 m-auto"
       />
     </Link>
   );
@@ -67,7 +67,10 @@ export default function Sidebar(
             />
           }
         />
-        <Block className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto">
+        <Block
+          margin={"my-2 md:my-8"}
+          className="flex flex-col flex-wrap gap-4 justify-center content-center text-center mx-auto"
+        >
           <p className="text-xl">{t("sidebarChooseLanguage")}</p>
           <div>
             <Button

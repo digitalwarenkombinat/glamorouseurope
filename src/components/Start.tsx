@@ -10,7 +10,11 @@ import LogoIcon from "/logo_animated.svg";
 
 const Logo = () => {
   return (
-    <img src={LogoIcon} alt="Logo GLAMorous Europe" className="w-96 m-auto" />
+    <img
+      src={LogoIcon}
+      alt="Logo GLAMorous Europe"
+      className="w-48 md:w-64 lg:w-96 m-auto"
+    />
   );
 };
 
@@ -19,7 +23,7 @@ const Collage = () => {
     <img
       src={CollageIcon}
       alt="Collage GLAMorous Europe"
-      className="w-96 m-auto"
+      className="w-64 md:w-80 lg:w-1/2 xl:w-1/3 m-auto"
       decoding="async"
     />
   );
@@ -51,18 +55,18 @@ function Start() {
 
   return (
     <Block
-      margin={"mb-4"}
-      className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto"
+      margin={"mb-16 lg:mb-4"}
+      className="flex flex-col gap-4 lg:gap-8 text-center mx-auto"
     >
       <Logo />
-      <h1 className="text-xl">{t("startTitle")}</h1>
+      <h1 className="text-lg px-8 md:text-xl">{t("startTitle")}</h1>
       <Collage />
-      <p className="text-xl">{t("startSubtitle")}</p>
-      <p className="text-xl">{t("startText")}</p>
+      <p className="text-lg px-8 md:px-24 md:text-xl">{t("startSubtitle")}</p>
+      <p className="text-lg px-8 md:px-24 md:text-xl">{t("startText")}</p>
 
       <Button
         large
-        className="text-xl w-1/2 mx-auto h-16"
+        className="text-lg w-1/2 mx-auto h-16 md:text-xl"
         rounded
         inline
         onClick={handleStartButtonClick}
@@ -76,34 +80,18 @@ function Start() {
           onBackdropClick={() => setDiscardModalOpen(false)}
         >
           <Page>
-            <Navbar
-              title={t("discardModalTitle")}
-              right={
-                <Link
-                  preventScrollReset={true}
-                  to={"/"}
-                  onClick={handleDiscard}
-                >
-                  {t("discardModalCancel")}
-                </Link>
-              }
-            />
+            <Navbar title={t("discardModalTitle")} />
             <Block className="space-y-4">
               <p>{t("discardModalMessage")}</p>
-              <Button className="p-4 rounded-full text-xl bg-red-500 text-white">
-                <Link
-                  preventScrollReset={true}
-                  to={"/selection"}
-                  onClick={handleConfirm}
-                >
+              <Button className="p-4 rounded-full text-lg">
+                <Link to={"/selection"} onClick={handleConfirm}>
                   {t("discardModalConfirm")}
                 </Link>
               </Button>
-              <Button
-                className="p-4 rounded-full text-xl bg-red-500 text-white"
-                onClick={handleDiscard}
-              >
-                {t("discardModalNotConfirm")}
+              <Button className="p-4 rounded-full text-lg">
+                <Link to={"/selection"} onClick={handleDiscard}>
+                  {t("discardModalNotConfirm")}
+                </Link>
               </Button>
             </Block>
           </Page>

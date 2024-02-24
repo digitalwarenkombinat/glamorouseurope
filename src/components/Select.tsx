@@ -120,11 +120,11 @@ function Selection() {
   return (
     <Block
       margin={"my-4"}
-      className="flex flex-col flex-wrap gap-4 container justify-center content-center text-center mx-auto"
+      className="flex flex-col flex-wrap gap-2 lg:gap-8 justify-center content-center text-center mx-auto"
     >
-      <div className="p-2">
-        <h1 className="text-xl">{t("selectionTitle")}</h1>
-      </div>
+      <h1 className="text-lg leading-6 px-8 md:px-24 md:text-xl lg:px-48">
+        {t("selectionTitle")}
+      </h1>
 
       <div className="mx-auto h-2/3">
         <Card className="flex shadow-md shadow-[#BC13FE]/90">
@@ -158,7 +158,7 @@ function Selection() {
       </div>
 
       <div className="mb-8 p-4 bg-white rounded h-1/3 opacity-90 max-w-lg w-3/4 text-center mx-auto shadow-md shadow-[#BC13FE]/90">
-        <h2 className="text-xl font-bold mb-4 text-black">
+        <h2 className="text-lg font-bold mb-4 text-black md:text-xl">
           {currentImage?.name}
         </h2>
         <p className="text-gray-600">
