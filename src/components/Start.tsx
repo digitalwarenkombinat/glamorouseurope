@@ -83,16 +83,16 @@ function Start() {
             <Navbar title={t("discardModalTitle")} />
             <Block className="space-y-4">
               <p>{t("discardModalMessage")}</p>
-              <Button className="p-4 rounded-full text-lg">
-                <Link to={"/selection"} onClick={handleConfirm}>
+              <Link className="p-4" to={"/selection"} onClick={handleConfirm}>
+                <Button className="p-4 rounded-full text-lg">
                   {t("discardModalConfirm")}
-                </Link>
-              </Button>
-              <Button className="p-4 rounded-full text-lg">
-                <Link to={"/selection"} onClick={handleDiscard}>
+                </Button>
+              </Link>
+              <Link className="p-4" to={"/selection"} onClick={handleDiscard}>
+                <Button className="rounded-full text-lg">
                   {t("discardModalNotConfirm")}
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </Block>
           </Page>
         </Popup>
