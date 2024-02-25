@@ -233,7 +233,7 @@ const ArtworkCanvas: React.FC = () => {
         <Button
           rounded
           inline
-          onClick={() => setFrame(Math.max(1, frame.id - 1))}
+          onClick={() => setFrame(frame.id <= 1 ? 5 : frame.id - 1)}
         >
           <Icon
             material={<ChevronLeftIcon className="w-6 h-6 lg:w-8 lg:h-8" />}
@@ -242,7 +242,7 @@ const ArtworkCanvas: React.FC = () => {
         <Button
           rounded
           inline
-          onClick={() => setFrame(Math.min(5, frame.id + 1))}
+          onClick={() => setFrame(frame.id >= 5 ? 1 : frame.id + 1)}
         >
           <Icon
             material={<ChevronRightIcon className="w-6 h-6 lg:w-8 lg:h-8" />}
