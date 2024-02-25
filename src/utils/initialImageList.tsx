@@ -46,7 +46,7 @@ const initialImageList = [
   },
   {
     id: "http://www.wikidata.org/entity/Q103297971",
-    name: "Business-Man, ffrom Genius, Zeitschrift für werdende und alte Kunst (Magazine for Emerging and Ancient Art), Year 2, no. 1",
+    name: "Business-Man, from Genius, Zeitschrift für werdende und alte Kunst (Magazine for Emerging and Ancient Art), Year 2, no. 1",
     year: "1920",
     country: "Belgium",
     location: "Vanderbilt University Fine Arts Gallery",
