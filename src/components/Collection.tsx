@@ -4,6 +4,7 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import ReactLassoSelect, { getCanvas } from "react-lasso-select";
+import { v4 as uuidv4 } from "uuid";
 
 import useStore, { ImageProps } from "../store";
 import useRemoveImageBackground from "../utils/useRemoveImageBackground";
@@ -63,13 +64,16 @@ function Collection() {
   useEffect(() => {
     if (activeCanvasId) {
       setTimeout(() => {
-        setCanvasImg(document.querySelectorAll("canvas")[0].toDataURL());
+        if (document.querySelectorAll("canvas")[0]) {
+          setCanvasImg(document.querySelectorAll("canvas")[0].toDataURL());
+        }
       }, 1000);
     }
   }, [activeCanvasId]);
 
   useEffect(() => {
     selectedImage && setCanvasImg(selectedImage?.image);
+    setClippedImg("");
   }, [selectedImage]);
 
   const handleImageClick = (image: ImageProps) => {
@@ -148,7 +152,7 @@ function Collection() {
                       selectedImage?.id,
                       selectedImage?.identifier,
                     )
-                  : addFrameToArtwork("1", clippedImg)
+                  : addFrameToArtwork(uuidv4(), clippedImg)
               }
             >
               {t("collectionAddText")}

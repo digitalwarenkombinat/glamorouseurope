@@ -3,10 +3,6 @@ import {
   DragEndEvent,
   DragOverlay,
   DragStartEvent,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
 } from "@dnd-kit/core";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 // @ts-expect-error konsta typing
@@ -33,26 +29,11 @@ function Layout() {
     }
   }
 
-  const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint: {
-      distance: 8,
-    },
-  });
-  const touchSensor = useSensor(TouchSensor, {
-    activationConstraint: {
-      delay: 100,
-      tolerance: 5,
-    },
-  });
-
-  const sensors = useSensors(mouseSensor, touchSensor);
-
   return (
     <DndContext
       // autoScroll={{ threshold: { x: 0.2, y: 0 } }}
       onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
-      sensors={sensors}
     >
       <App theme="material">
         <Page>
@@ -83,6 +64,7 @@ function Layout() {
               cursor: "move",
               maxHeight: "100px",
               width: "auto",
+              opacity: 0.4,
             }}
           />
         ) : null}

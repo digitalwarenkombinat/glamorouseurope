@@ -1,5 +1,7 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 // @ts-expect-error konsta typing
-import { Block } from "konsta/react";
+import { Block, Button, Icon } from "konsta/react";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import useStore from "../store";
@@ -9,6 +11,13 @@ import ArtworkThumbnail from "./ArtworkThumbnail";
 function Artwork() {
   const { t } = useTranslation();
   const { artworkList } = useStore();
+  const artWorkListRef = useRef<HTMLDivElement>(null);
+
+  const handleList = (scrollOffset: number) => {
+    if (artWorkListRef.current) {
+      artWorkListRef.current.scrollLeft += scrollOffset;
+    }
+  };
 
   return (
     <Block
@@ -20,17 +29,27 @@ function Artwork() {
       </h1>
       <Block
         margin={"my-4"}
-        className="flex mx-auto overflow-x-auto"
-        style={{
-          maxHeight: "100px",
-          scrollSnapType: "x mandatory",
-          scrollBehavior: "smooth",
-          WebkitOverflowScrolling: "touch",
-        }}
+        className="flex flex-row mx-0 gap-1 justify-center"
       >
-        {artworkList.map((artworkImage, index) => (
-          <ArtworkThumbnail key={artworkImage.id + index} {...artworkImage} />
-        ))}
+        <div className="self-center">
+          <Button rounded inline onClick={() => handleList(-100)}>
+            <Icon
+              material={<ChevronLeftIcon className="w-4 h-4 lg:w-6 lg:h-6" />}
+            />
+          </Button>
+        </div>
+        <div className="overflow-auto whitespace-nowrap" ref={artWorkListRef}>
+          {artworkList.map((artworkImage, index) => (
+            <ArtworkThumbnail key={artworkImage.id + index} {...artworkImage} />
+          ))}
+        </div>
+        <div className="self-center">
+          <Button rounded inline onClick={() => handleList(100)}>
+            <Icon
+              material={<ChevronRightIcon className="w-4 h-4 lg:w-6 lg:h-6" />}
+            />
+          </Button>
+        </div>
       </Block>
 
       <ArtworkCanvas />
