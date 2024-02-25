@@ -2,6 +2,7 @@ import i18next from "i18next";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
+import { registerSW } from "virtual:pwa-register";
 
 import App from "./components/App.tsx";
 import "./index.css";
@@ -25,3 +26,5 @@ createRoot(document.getElementById("root")!).render(
     </I18nextProvider>
   </React.StrictMode>,
 );
+
+registerSW({ immediate: true });
