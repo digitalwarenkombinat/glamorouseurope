@@ -35,3 +35,7 @@ a > span > .text-xs, button {
 .clover-viewer-media-wrapper {
   display: none;
 }
+
+.clover-viewer-content > div > button {
+  display: none;
+}
