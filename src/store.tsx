@@ -161,7 +161,7 @@ const useStore = create<State & Actions>()(
             return {};
           }),
       }),
-      { name: "glamStore", version: 1 },
+      { name: "glamStore", version: 2 },
     ),
   ),
 );

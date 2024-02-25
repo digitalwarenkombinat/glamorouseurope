@@ -3,13 +3,15 @@ import {
   ArrowDownTrayIcon,
   ArrowUturnDownIcon,
   ArrowUturnUpIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
   ShareIcon,
   SunIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-import { BlendingModeIcon, ComponentBooleanIcon } from "@radix-ui/react-icons";
+import {
+  BlendingModeIcon,
+  ComponentBooleanIcon,
+  PaddingIcon,
+} from "@radix-ui/react-icons";
 import { saveAs } from "file-saver";
 // @ts-expect-error konsta typing
 import { Block, Button, Icon, List, ListItem, Range } from "konsta/react";
@@ -233,20 +235,9 @@ const ArtworkCanvas: React.FC = () => {
         <Button
           rounded
           inline
-          onClick={() => setFrame(frame.id <= 1 ? 5 : frame.id - 1)}
-        >
-          <Icon
-            material={<ChevronLeftIcon className="w-6 h-6 lg:w-8 lg:h-8" />}
-          />
-        </Button>
-        <Button
-          rounded
-          inline
           onClick={() => setFrame(frame.id >= 5 ? 1 : frame.id + 1)}
         >
-          <Icon
-            material={<ChevronRightIcon className="w-6 h-6 lg:w-8 lg:h-8" />}
-          />
+          <Icon material={<PaddingIcon className="w-6 h-6 lg:w-8 lg:h-8" />} />
         </Button>
         {selectedImage && (
           <>

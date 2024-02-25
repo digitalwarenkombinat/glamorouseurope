@@ -15,7 +15,7 @@ export default defineConfig({
         display: "fullscreen",
         name: "GLAMorous Europe",
         short_name: "GLAM",
-        description: "Wir machen Kulturerbe digital erfahrbar.",
+        description: "Entdecke Europas digitale Kultursammlungen",
         theme_color: "#BC13FE",
         icons: [
           {
