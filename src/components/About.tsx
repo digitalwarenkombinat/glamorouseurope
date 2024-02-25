@@ -72,7 +72,7 @@ function About() {
               Instagram
             </Link>
             <Link
-              href={"https://www.instagram.com/digitalwarenkombinat/"}
+              href={"https://www.linkedin.com/company/digitalwarenkombinat"}
               target="_blank"
             >
               LinkedIn
