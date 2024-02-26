@@ -2,7 +2,7 @@
 import { Block, Button, Navbar, Page, Popup } from "konsta/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import useStore from "../store";
 import CollageIcon from "/collage.webp";
@@ -31,6 +31,7 @@ const Collage = () => {
 
 function Start() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { imageLikeList, resetState } = useStore();
   const [discardModalOpen, setDiscardModalOpen] = useState(false);
 
@@ -40,7 +41,7 @@ function Start() {
     if (isDataAvailable) {
       setDiscardModalOpen(true);
     } else {
-      window.location.href = "/selection";
+      navigate("/selection");
     }
   };
 
