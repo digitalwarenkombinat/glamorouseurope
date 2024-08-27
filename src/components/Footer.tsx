@@ -9,6 +9,37 @@ import { Icon, Tabbar, TabbarLink } from "konsta/react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useMatch, useResolvedPath } from "react-router-dom";
 
+function useActiveLink(path: string) {
+  return useMatch({
+    path: useResolvedPath(path).pathname,
+    end: true,
+  });
+}
+
+const FooterLink: React.FC<{
+  to: string;
+  icon: JSX.Element;
+  label: string;
+}> = ({ to, icon, label }) => {
+  const isActive = useActiveLink(to);
+
+  return (
+    <TabbarLink
+      active={isActive}
+      to={to}
+      component={NavLink}
+      icon={
+        <Icon
+          material={icon}
+          className={`transition duration-300 ${isActive && "animate-pulse"}`}
+        />
+      }
+      label={label}
+      touchRipple={false}
+    />
+  );
+};
+
 function Footer() {
   const { t } = useTranslation();
 
@@ -19,92 +50,25 @@ function Footer() {
       className="left-0 bottom-0 fixed k-color-brand-primary text-center"
       innerClassName="tabbar-inner"
     >
-      <TabbarLink
-        active={useMatch({
-          path: useResolvedPath("/").pathname,
-          end: true,
-        })}
+      <FooterLink
         to="/"
-        component={NavLink}
-        icon={
-          <Icon
-            material={<HomeIcon className="w-10 h-10" />}
-            className={`transition duration-300 ${
-              useMatch({
-                path: useResolvedPath("/").pathname,
-                end: true,
-              }) && "animate-pulse"
-            }`}
-          />
-        }
+        icon={<HomeIcon className="w-10 h-10" />}
         label={t("start")}
-        touchRipple={false}
       />
-
-      <TabbarLink
-        active={useMatch({
-          path: useResolvedPath("/selection").pathname,
-          end: true,
-        })}
+      <FooterLink
         to="/selection"
-        component={NavLink}
-        icon={
-          <Icon
-            material={<HeartIcon className="w-10 h-10" />}
-            className={`transition duration-300 ${
-              useMatch({
-                path: useResolvedPath("/selection").pathname,
-                end: true,
-              }) && "animate-pulse"
-            }`}
-          />
-        }
+        icon={<HeartIcon className="w-10 h-10" />}
         label={t("selection")}
-        touchRipple={false}
       />
-
-      <TabbarLink
-        active={useMatch({
-          path: useResolvedPath("/collection").pathname,
-          end: true,
-        })}
+      <FooterLink
         to="/collection"
-        component={NavLink}
-        icon={
-          <Icon
-            material={<Square2StackIcon className="w-10 h-10" />}
-            className={`transition duration-300 ${
-              useMatch({
-                path: useResolvedPath("/collection").pathname,
-                end: true,
-              }) && "animate-pulse"
-            }`}
-          />
-        }
+        icon={<Square2StackIcon className="w-10 h-10" />}
         label={t("collection")}
-        touchRipple={false}
       />
-
-      <TabbarLink
-        active={useMatch({
-          path: useResolvedPath("/creation").pathname,
-          end: true,
-        })}
+      <FooterLink
         to="/creation"
-        component={NavLink}
-        icon={
-          <Icon
-            material={<PhotoIcon className="w-10 h-10" />}
-            className={`transition duration-300 ${
-              useMatch({
-                path: useResolvedPath("/creation").pathname,
-                end: true,
-              }) && "animate-pulse"
-            }`}
-          />
-        }
+        icon={<PhotoIcon className="w-10 h-10" />}
         label={t("artwork")}
-        touchRipple={false}
       />
     </Tabbar>
   );
