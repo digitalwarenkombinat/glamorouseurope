@@ -1,4 +1,4 @@
-import { FrameImageProps } from "../store";
+import { FrameImageProps } from "../../store";
 
 const frameList: FrameImageProps[] = [
   {
