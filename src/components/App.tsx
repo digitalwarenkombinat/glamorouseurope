@@ -5,13 +5,13 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-import About from "./About";
 import Artwork from "./Artwork";
 import Collection from "./Collection";
 import Layout from "./Layout";
-import Legal from "./Legal";
 import Select from "./Select";
 import Start from "./Start";
+import About from "./about/About";
+import Legal from "./about/Legal";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
