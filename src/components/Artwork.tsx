@@ -2,14 +2,13 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 // @ts-expect-error konsta typing
 import { Block, Button, Icon } from "konsta/react";
 import { useRef } from "react";
-import { useTranslation } from "react-i18next";
 
+import ArtworkCanvas from "../creation/ArtworkCanvas";
+import ArtworkThumbnail from "../creation/ArtworkThumbnail";
 import useStore from "../store";
-import ArtworkCanvas from "./ArtworkCanvas";
-import ArtworkThumbnail from "./ArtworkThumbnail";
+import { Title } from "./Title";
 
 function Artwork() {
-  const { t } = useTranslation();
   const { artworkList } = useStore();
   const artWorkListRef = useRef<HTMLDivElement>(null);
 
@@ -24,9 +23,7 @@ function Artwork() {
       margin={"my-4"}
       className="flex flex-col flex-wrap gap-2 lg:gap-8 justify-center content-center text-center mx-auto"
     >
-      <h1 className="text-lg leading-6 px-8 md:px-24 md:text-xl lg:px-48">
-        {t("artworkTitle")}
-      </h1>
+      <Title text={"artworkTitle"} />
       <Block
         margin={"my-4"}
         className="flex flex-row mx-0 gap-1 justify-center"
