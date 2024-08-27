@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
+import data from "./data.json";
 import frameList from "./utils/frameList";
 import initialArtworkList from "./utils/initialArtworkList";
-import initialImageList from "./utils/initialImageList";
 
 export interface ImageProps {
   country: string;
@@ -52,7 +52,6 @@ type State = {
 type Actions = {
   addToCanvas: (imageURL: string, x: number, y: number) => void;
   addToArtwork: (id: string, imageURL: string) => void;
-  addToImageList: (image: ImageProps[]) => void;
   likeImage: (image: ImageProps) => void;
   removeFromCanvas: (id: string) => void;
   removeFromImageList: (id: string) => void;
@@ -65,7 +64,7 @@ type Actions = {
 const initialState: State = {
   artworkList: initialArtworkList,
   frame: frameList[1],
-  imageList: initialImageList.sort(() => Math.random() - 0.5),
+  imageList: data.sort(() => Math.random() - 0.5),
   canvasList: [],
   imageLikeList: [],
 };
@@ -103,8 +102,6 @@ const useStore = create<State & Actions>()(
               },
             ],
           })),
-        addToImageList: (images) =>
-          set((state) => ({ imageList: [...state.imageList, ...images] })),
         removeFromImageList: (id) =>
           set((state) => ({
             imageList: state.imageList.filter((image) => image.id !== id),
