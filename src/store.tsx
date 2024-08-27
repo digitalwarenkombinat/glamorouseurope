@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
+import frameList from "./creation/frameList";
+import initialArtworkList from "./creation/initialArtworks";
 import data from "./data.json";
-import frameList from "./utils/frameList";
-import initialArtworkList from "./utils/initialArtworkList";
 
 export interface ImageProps {
   country: string;

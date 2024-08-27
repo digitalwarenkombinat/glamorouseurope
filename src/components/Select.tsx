@@ -2,10 +2,10 @@
 import { Block } from "konsta/react";
 import { useState } from "react";
 
-import { ImageDetails } from "../select/ImageDetails";
-import { SwipeContainer } from "../select/SwipeContainer";
-import { Title } from "../select/Title";
+import { ImageDetails } from "../selection/ImageDetails";
+import { SwipeContainer } from "../selection/SwipeContainer";
 import useStore from "../store";
+import { Title } from "./Title";
 
 function Selection() {
   const { imageList } = useStore();
@@ -15,7 +15,7 @@ function Selection() {
   const currentImage = imageList[currentIndex];
   return (
     <Block className="flex flex-col flex-wrap gap-2 lg:gap-8 text-center mx-auto">
-      <Title />
+      <Title text={"selectionTitle"} />
 
       <SwipeContainer
         currentImage={currentImage}
