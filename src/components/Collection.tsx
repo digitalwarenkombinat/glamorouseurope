@@ -6,10 +6,9 @@ import { useTranslation } from "react-i18next";
 import ReactLassoSelect, { getCanvas } from "react-lasso-select";
 import { v4 as uuidv4 } from "uuid";
 
+import ThumbnailSlider from "../collection/ThumbnailSlider";
+import useRemoveImageBackground from "../collection/useRemoveImageBackground";
 import useStore, { ImageProps } from "../store";
-import useRemoveImageBackground from "../utils/useRemoveImageBackground";
-import utils from "../utils/utils";
-import ThumbnailSlider from "./ThumbnailSlider";
 
 const Viewer = lazy(() => import("@samvera/clover-iiif/viewer"));
 
@@ -72,6 +71,7 @@ function Collection() {
   }, [activeCanvasId]);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     selectedImage && setCanvasImg(selectedImage?.image);
     setClippedImg("");
   }, [selectedImage]);
