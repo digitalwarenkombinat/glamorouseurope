@@ -20,7 +20,7 @@ export function ImageDetails({ currentImage }: { currentImage: ImageProps }) {
         {t("selectionYear")} {currentImage?.year || t("selectionUnknown")}
       </p>
       <p className="text-gray-600">
-        {t("selectionCreator")}
+        {t("selectionCreator")}{" "}
         {transformCreator(currentImage?.creator || "", t("selectionUnknown"))}
       </p>
       <p className="text-gray-600">
