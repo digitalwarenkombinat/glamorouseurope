@@ -2,9 +2,9 @@ name: Update Wikidata JSON
 
 on:
   schedule:
-    # Wöchentlicher Cronjob: jeden Sonntag um Mitternacht
+    # Weekly cronjob: every Sunday at midnight
     - cron: "0 0 * * 0"
-  workflow_dispatch: # Ermöglicht das manuelle Ausführen des Workflows über GitHub
+  workflow_dispatch: # Enables manual execution of the workflow via GitHub
 
 jobs:
   update-data:
@@ -17,12 +17,12 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18" # oder eine andere Version
+          node-version: "18" # or another version
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run script to fetch data
+      - name: Run script to retrieve data
         run: npm run update-data
 
       - name: Commit and push changes
