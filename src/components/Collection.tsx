@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import ReactLassoSelect, { getCanvas } from "react-lasso-select";
 import { v4 as uuidv4 } from "uuid";
 
+import ImagePathCropper from "../collection/ImagePathCropper";
 import ThumbnailSlider from "../collection/ThumbnailSlider";
 import useRemoveImageBackground from "../collection/useRemoveImageBackground";
 import useStore, { ImageProps } from "../store";
@@ -93,7 +94,8 @@ function Collection() {
     try {
       notify();
       if (showZoomSelect) {
-        const croppedImagePath = await utils.getCroppedImagePath(imageURL);
+        const croppedImagePath =
+          await ImagePathCropper.getCroppedImagePath(imageURL);
         if (croppedImagePath) {
           addToArtwork(id, croppedImagePath);
         }
@@ -162,7 +164,7 @@ function Collection() {
           {showZoomSelect ? (
             <Suspense fallback={renderLoader()}>
               <Viewer
-                iiifContent={selectedImage.url}
+                iiifContent={selectedImage?.url}
                 options={options}
                 customTheme={customTheme}
                 canvasIdCallback={handleCanvasIdCallback}
