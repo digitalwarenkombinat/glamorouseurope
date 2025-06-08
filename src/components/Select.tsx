@@ -4,13 +4,11 @@ import {
 } from "@heroicons/react/24/outline";
 // @ts-expect-error konsta typing
 import { Block, Card } from "konsta/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import TinderCard from "react-tinder-card";
 
-import useStore, { ImageProps } from "../store";
-import { useFetch } from "../utils/useFetch";
-import utils from "../utils/utils";
+import useStore from "../store";
 import { SwipeButton } from "./SwipeButton";
 
 export interface ImageElement {
@@ -38,55 +36,12 @@ interface SwipeAPI {
 
 function Selection() {
   const { t } = useTranslation();
-  const { addToImageList, imageList, removeFromImageList, likeImage } =
+  const { imageList, removeFromImageList, likeImage } =
     useStore();
-  const { data } = useFetch();
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const currentIndexRef = useRef<number>(currentIndex);
   const childRef = useRef<SwipeAPI | null>(null);
-
-  useEffect(() => {
-    const validateData = async (elements: ImageElement[]) => {
-      if (!elements) return;
-      const imagePromises = await Promise.all(
-        elements.map(async (element) => {
-          try {
-            const imageURL = await utils.fetchIIIFIdentifier(
-              element.iiifManifest.value,
-            );
-            if (imageURL) {
-              return {
-                id: element.item.value,
-                name: element.itemLabel?.value || "",
-                year: element.year?.value || "",
-                country: element.countryLabel?.value || "",
-                location: element.locationLabel?.value || "",
-                creator: element.creatorLabel?.value || "",
-                url: element.iiifManifest.value,
-                identifier: imageURL,
-                image: `${imageURL}/full/400,/0/default.jpg`,
-                thumbnail: `${imageURL}/full/100,100/0/default.jpg`,
-              };
-            }
-            return null;
-          } catch (error) {
-            console.error("Error processing image:", error);
-            return null;
-          }
-        }),
-      );
-
-      const fulfilledImages = imagePromises.filter(
-        (result): result is ImageProps => result !== null,
-      );
-      addToImageList(fulfilledImages);
-    };
-
-    if (data.length > 0) {
-      validateData(data);
-    }
-  }, [data, addToImageList]);
 
   const swiped = (direction: Direction) => {
     if (direction === "right" && currentIndex < imageList.length) {

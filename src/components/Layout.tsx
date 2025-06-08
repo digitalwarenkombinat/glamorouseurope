@@ -19,7 +19,6 @@ function Layout() {
   const [activeItem, setActiveItem] = useState<any | undefined>(null);
 
   function handleDragStart(event: DragStartEvent) {
-    console.log(event.active);
     setActiveItem(event.active.data.current);
   }
 
