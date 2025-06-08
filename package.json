@@ -11,7 +11,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint-staged": "npx eslint --fix && npx prettier --write",
     "preview": "vite preview",
-    "update-data": "node server/fetchData.js"
+    "update-data": "node server/fetchData.cjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
