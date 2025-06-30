@@ -36,7 +36,7 @@
     "use-image": "^1.1.1",
     "uuid": "^9.0.1",
     "wikibase-sdk": "^9.2.4",
-    "zustand": "^4.5.1"
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@tensorflow/tfjs-backend-cpu": "^3.18.0",
