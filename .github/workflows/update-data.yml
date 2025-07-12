@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   update-data:
@@ -16,13 +17,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18" # or another version
+          node-version: "18"
 
       - name: Install dependencies
         run: npm install
@@ -30,12 +29,17 @@ jobs:
       - name: Run script to retrieve data
         run: npm run update-data
 
-      - name: Commit and push changes
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/data.json
-          git commit -m "Update data.json"
-          git push
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PAT_FOR_AUTOMERGE }}
+          commit-message: "Update data.json"
+          title: "Update Wikidata JSON"
+          body: "Automated data update via scheduled workflow."
+          branch: update-data-json
+          base: main
+          add-paths: src/data.json
+          delete-branch: true
+          draft: false
+          labels: automated-update
+          auto-merge: true
