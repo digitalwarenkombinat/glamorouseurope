@@ -158,7 +158,18 @@ const useStore = create<State & Actions>()(
             return {};
           }),
       }),
-      { name: "glamStore", version: 2 },
+      {
+        name: "glamStore",
+        version: 3,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        migrate: (persistedState: any, version) => {
+          if (version === 2) {
+            return initialState;
+          }
+
+          return persistedState;
+        },
+      },
     ),
   ),
 );
