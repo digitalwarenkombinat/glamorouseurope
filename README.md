@@ -1,14 +1,14 @@
 <p align="center">
-  <a href="https://www.glam-europe.de/">
+  <a href="https://digitalwarenkombinat.github.io/glamorouseurope/">
     <img alt="Logo of 'GLAMorous Europe!'" src="public/maskable-icon-512x512.png">
   </a>
 </p>
 
 ---
 
-[![Screenshot of _GLAMorous Europe_](glamorouseurope.png)](https://www.glam-europe.de/)
+[![Screenshot of _GLAMorous Europe_](glamorouseurope.png)](https://digitalwarenkombinat.github.io/glamorouseurope/)
 
-## About [_GLAMorous Europe_](https://www.glam-europe.de/)
+## About [_GLAMorous Europe_](https://digitalwarenkombinat.github.io/glamorouseurope/)
 
 **GLAMorous Europe** is a project within the Prototype Fund Round 14 (September 2023 to February 2024).
 
