@@ -24,6 +24,9 @@ const router = createBrowserRouter(
       <Route path="legal" element={<Legal />} />
     </Route>,
   ),
+  {
+    basename: "/glamorouseurope",
+  },
 );
 
 function App() {
